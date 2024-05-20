@@ -13,7 +13,7 @@ export const getMe: RequestHandler = async (req, res, next) => {
         password: true,
       },
     })
-    res.status(400).json({ data: user })
+    res.status(200).json({ data: user })
   } catch (err) {
     next(err)
   }
