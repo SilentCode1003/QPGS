@@ -5,7 +5,7 @@
   "private": "true",
   "type": "module",
   "scripts": {
-    "build": "tsup src/index.ts",
+    "build": "tsup src/index.ts --minify",
     "start": "node --env-file=.env dist/index.cjs",
     "dev": "tsup src/index.ts --watch --onSuccess \"node --env-file=.env dist/index.cjs\"",
     "lint": "tsc",
