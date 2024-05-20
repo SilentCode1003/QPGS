@@ -1,6 +1,7 @@
 import type { RequestHandler } from 'express'
 import { z } from 'zod'
 import { prisma } from '../db/prisma.js'
+import bcrypt from 'bcrypt'
 
 // I can type the req body, params, and query but I don't know if its worth the time, readability, and complexity
 // I can also type the response body but it's the same issue as above
@@ -36,8 +37,14 @@ export const createUser: RequestHandler = async (req, res, next) => {
   // I will just create schemas for handlers that need it
   const bodySchema = z
     .object({
+      first_name: z.string().min(3),
+      last_name: z.string().min(2).optional(),
+      email: z.string().email(),
       username: z.string().min(3),
       password: z.string().min(3),
+      role_id: z.number(),
+      signature: z.string().min(1).optional(),
+      job_title: z.string().min(1),
     })
     .strict() // Make it strict because why not
 
@@ -53,6 +60,7 @@ export const createUser: RequestHandler = async (req, res, next) => {
     const user = await prisma.user.create({
       data: {
         ...validatedBody.data,
+        password: await bcrypt.hash(validatedBody.data.password, 10),
       },
       omit: {
         password: true,
