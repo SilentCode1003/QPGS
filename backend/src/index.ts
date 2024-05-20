@@ -2,13 +2,14 @@ import express from 'express'
 import './config/env.config.js'
 import { config } from './config/env.config.js'
 import './db/prisma.js'
+import { prisma } from './db/prisma.js'
 import { notFoundHandler } from './middlewares/404.middleware.js'
 import { errorHandler } from './middlewares/error.middleware.js'
 import { loggerMiddleware } from './middlewares/logger.middleware.js'
 import { initCors } from './startup/cors.startup.js'
 import { initRoutes } from './startup/route.startup.js'
+import { initSession } from './startup/session.startup.js'
 import { logger } from './utils/logger.util.js'
-import { prisma } from './db/prisma.js'
 
 const app = express()
 
@@ -17,6 +18,9 @@ const startServer = () => {
 
   logger.info('   Adding CORS middleware')
   initCors(app)
+
+  logger.info('   Adding Session middlware')
+  initSession(app)
 
   logger.info('   Adding JSON parser middleware')
   app.use(express.json())
