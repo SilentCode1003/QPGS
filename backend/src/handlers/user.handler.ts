@@ -120,7 +120,13 @@ export const updateUser: RequestHandler = async (req, res, next) => {
 
   const bodySchema = z
     .object({
+      first_name: z.string().min(3),
+      last_name: z.string().min(2).optional(),
+      email: z.string().email(),
       username: z.string().min(3),
+      role_id: z.number(),
+      signature: z.string().min(1).optional(),
+      job_title: z.string().min(1),
       // Making fields optional really depends on the requirements of the application
       // Imagine if we always require a password to update a user's username, then we will always need to get the previous password and that's not ideal
       password: z.string().min(3).optional(),
