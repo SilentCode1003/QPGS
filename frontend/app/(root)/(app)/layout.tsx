@@ -1,7 +1,7 @@
 'use client'
 import { AppShell, Burger } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import AuthLoaderProvider from '../components/AuthLoaderProvider'
+import AuthLoaderProvider from '../../components/AuthLoaderProvider'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [opened, { toggle }] = useDisclosure()
