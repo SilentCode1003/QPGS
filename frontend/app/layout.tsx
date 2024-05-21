@@ -1,6 +1,8 @@
 import '@mantine/core/styles.css'
+import '@mantine/notifications/styles.css'
 
 import { ColorSchemeScript, MantineProvider } from '@mantine/core'
+import { Notifications } from '@mantine/notifications'
 import type { Metadata } from 'next'
 import AppProvider from './components/AppProvider'
 
@@ -21,6 +23,7 @@ export default function RootLayout({
       </head>
       <body>
         <MantineProvider>
+          <Notifications />
           <AppProvider>{children}</AppProvider>
         </MantineProvider>
       </body>

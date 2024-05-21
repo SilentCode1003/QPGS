@@ -12,6 +12,9 @@ import {
   Title,
 } from '@mantine/core'
 import { useForm, zodResolver } from '@mantine/form'
+import { notifications } from '@mantine/notifications'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 import { z } from 'zod'
 import { useLogin } from '../lib/auth'
 
@@ -21,6 +24,12 @@ const schema = z.object({
 })
 
 export default function Login() {
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const login = useLogin()
+
+  const router = useRouter()
+
   const form = useForm({
     mode: 'uncontrolled',
     initialValues: {
@@ -30,11 +39,21 @@ export default function Login() {
     validate: zodResolver(schema),
   })
 
-  const login = useLogin()
-
   const onSubmit = async (values: typeof form.values) => {
-    const user = await login.mutateAsync(values)
-    console.log(user)
+    setIsSubmitting(true)
+    try {
+      await login.mutateAsync(values)
+      notifications.show({
+        title: 'Success',
+        message: 'Login successful',
+        color: 'green',
+      })
+      setIsSubmitting(false)
+      router.push('/login')
+    } catch (err) {
+      // No need to show the error notifications because it is handled by the axios interceptor
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -68,7 +87,7 @@ export default function Login() {
             <Checkbox label="Remember me" />
             <Anchor size="sm">Forgot password?</Anchor>
           </Group>
-          <Button type="submit" fullWidth mt="xl">
+          <Button type="submit" fullWidth mt="xl" disabled={isSubmitting}>
             Sign in
           </Button>
         </form>
