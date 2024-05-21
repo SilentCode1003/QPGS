@@ -1,20 +1,68 @@
-import { useUser } from '@/app/lib/auth'
-import { ActionIcon, Avatar, Burger, Drawer, Group, useMantineColorScheme } from '@mantine/core'
+import { useLogout, useUser } from '@/app/lib/auth'
+import { Anchor, Avatar, Burger, Drawer, Flex, Group, List, Text } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import Logo from './Logo'
-import { IconMoon } from '@tabler/icons-react'
+import { useRouter } from 'next/navigation'
 import ColorSchemeButton from './ColorSchemeButton'
+import Logo from './Logo'
 import NotificationButton from './NotificationButton'
+
+function DrawerTitle({
+  data,
+}: {
+  data: { first_name: string; username: string; last_name: string }
+}) {
+  return (
+    <Group w="100%" wrap="nowrap">
+      <Avatar size={32}>{data.first_name}</Avatar>
+      <Flex gap={0} flex={1} direction="column" miw={0}>
+        <Text span size="xs" fw={700} truncate="end">
+          {data.username}
+        </Text>
+        <Text span size="xs" truncate="end">
+          {data.first_name} {data.last_name}
+        </Text>
+      </Flex>
+    </Group>
+  )
+}
 
 export default function Header({ opened, toggle }: { opened: boolean; toggle: () => void }) {
   const { data } = useUser()
 
   const [isDrawerOpened, { open, close }] = useDisclosure(false)
 
+  const logout = useLogout()
+
+  const router = useRouter()
+
   return (
     <>
-      <Drawer opened={isDrawerOpened} onClose={close} position="right">
-        <h1>Hi everyone, markiplier here</h1>
+      <Drawer
+        opened={isDrawerOpened}
+        onClose={close}
+        position="right"
+        radius="md"
+        size={320}
+        styles={{
+          title: {
+            width: '75%',
+          },
+        }}
+        title={<DrawerTitle data={data} />}
+      >
+        <List>
+          <List.Item>
+            <Anchor
+              onClick={() => {
+                logout.mutate()
+              }}
+            >
+              <Text span size="sm">
+                Log out
+              </Text>
+            </Anchor>
+          </List.Item>
+        </List>
       </Drawer>
 
       <Group h="100%" px="md" justify="space-between">
