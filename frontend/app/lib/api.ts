@@ -15,11 +15,21 @@ api.interceptors.response.use(
     return response
   },
   (error: AxiosError<ErrorResponse>) => {
-    notifications.show({
-      title: 'Error',
-      message: error.response?.data.message,
-      color: 'red',
-    })
+    if (!error.response) {
+      // if network error
+      notifications.show({
+        title: 'Error',
+        message: error.message,
+        color: 'red',
+      })
+    } else {
+      // if the error is not a network error
+      notifications.show({
+        title: 'Error',
+        message: error.response?.data.message,
+        color: 'red',
+      })
+    }
 
     return Promise.reject(error)
   },
