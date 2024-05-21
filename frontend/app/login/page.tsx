@@ -49,7 +49,7 @@ export default function Login() {
         color: 'green',
       })
       setIsSubmitting(false)
-      router.push('/login')
+      router.push('/')
     } catch (err) {
       // No need to show the error notifications because it is handled by the axios interceptor
       setIsSubmitting(false)
