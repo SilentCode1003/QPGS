@@ -5,9 +5,9 @@ const options: cors.CorsOptions = {
   // Only allow these clients
   // This is mainly what url the frontend in the browser sees
   // You can also add the ip of another server
-  origin: ['http://localhost:3000', 'http://localhost:5173'],
+  origin: ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:3001'],
   // Set to true if you want the client to send cookies
-  // credentials: true,
+  credentials: true,
 }
 
 export const initCors = (app: Express) => {
