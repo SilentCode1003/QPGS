@@ -20,6 +20,9 @@ dependencies:
   '@mantine/notifications':
     specifier: ^7.9.2
     version: 7.9.2(@mantine/core@7.9.2)(@mantine/hooks@7.9.2)(react-dom@18.3.1)(react@18.3.1)
+  '@tabler/icons-react':
+    specifier: ^3.4.0
+    version: 3.4.0(react@18.3.1)
   '@tanstack/react-query':
     specifier: ^5.37.1
     version: 5.37.1(react@18.3.1)
@@ -412,6 +415,19 @@ packages:
     dependencies:
       '@swc/counter': 0.1.3
       tslib: 2.6.2
+    dev: false
+
+  /@tabler/icons-react@3.4.0(react@18.3.1):
+    resolution: {integrity: sha512-hwRXZ//7B3d8FSb2loMj67s8UZeneCsOCs+Acv0KllWXS15brpFjdi6ROf/Vq5+vr1brFf+xmSTiQkKlEF1Yaw==}
+    peerDependencies:
+      react: '>= 16'
+    dependencies:
+      '@tabler/icons': 3.4.0
+      react: 18.3.1
+    dev: false
+
+  /@tabler/icons@3.4.0:
+    resolution: {integrity: sha512-6gYHXG0xAJgt2KPcTYDqhe3xYoJMTgz/ZfYup4EUHsxzYsz6rBlt8WgavHsGaWckaqH7ApR/epYslfXZjK27yw==}
     dev: false
 
   /@tanstack/eslint-plugin-query@5.35.6(eslint@8.57.0)(typescript@5.4.5):
