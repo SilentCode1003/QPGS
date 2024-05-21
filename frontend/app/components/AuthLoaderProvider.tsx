@@ -1,5 +1,5 @@
 import { useUser } from '../lib/auth'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 
 type NavigateProps = { to: string; replace?: boolean }
@@ -20,6 +20,7 @@ export function Navigate({ to, replace = false }: NavigateProps): null {
 
 export default function AuthLoaderProvider({ children }: { children: React.ReactNode }) {
   const { data, isPending, isError, error } = useUser()
+  const pathname = usePathname()
 
   if (isPending) {
     return <div>AuthLoader loading...</div>
@@ -30,7 +31,7 @@ export default function AuthLoaderProvider({ children }: { children: React.React
   }
 
   if (!data) {
-    return <Navigate to="/login" replace={true} />
+    return <Navigate to={`/login?redirectTo=${encodeURIComponent(pathname)}`} replace={true} />
   } else {
     return children
   }

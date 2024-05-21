@@ -23,8 +23,14 @@ const schema = z.object({
   password: z.string().min(3),
 })
 
-export default function Login() {
+export default function Login({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | undefined }
+}) {
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const redirectTo = searchParams.redirectTo
 
   const login = useLogin()
 
@@ -49,7 +55,7 @@ export default function Login() {
         color: 'green',
       })
       setIsSubmitting(false)
-      router.push('/')
+      router.replace(redirectTo ? redirectTo : '/')
     } catch (err) {
       // No need to show the error notifications because it is handled by the axios interceptor
       setIsSubmitting(false)
