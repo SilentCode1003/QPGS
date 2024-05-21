@@ -17,6 +17,6 @@ const options: cors.CorsOptions = {
 }
 
 export const initCors = (app: Express) => {
-  logger.info(`Adding frontend url: ${frontendUrl} to allowed origins`)
+  logger.info(`Allowed origins are ${origin}`)
   app.use(cors(options))
 }

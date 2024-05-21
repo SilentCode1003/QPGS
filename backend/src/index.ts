@@ -49,7 +49,7 @@ const startServer = () => {
   // PM2 sends SIGINT signal to stop a process, change the signal type depending on your implementation
   process.on('SIGINT', async () => {
     logger.info('---------- SIGINT signal recieved, Closing the application ----------')
-    await prisma.$disconnect()
+    await prisma.$disconnect().then(() => logger.info('Prisma disconnected'))
     server.close()
   })
 }
