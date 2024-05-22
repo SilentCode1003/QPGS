@@ -17,7 +17,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           breakpoint: 'sm',
           collapsed: { mobile: !opened },
         }}
-        padding="md"
+        padding="xl"
       >
         <AppShell.Header>
           <Header opened={opened} toggle={toggle} />
