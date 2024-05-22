@@ -22,8 +22,15 @@ api.interceptors.response.use(
         message: error.message,
         color: 'red',
       })
+    } else if (error.response?.status >= 500) {
+      // if server error
+      notifications.show({
+        title: 'Error',
+        message: 'Server error',
+        color: 'red',
+      })
     } else {
-      // if the error is not a network error
+      // if the error is not a network error (e.g. wrong credentials)
       notifications.show({
         title: 'Error',
         message: error.response?.data.message,
