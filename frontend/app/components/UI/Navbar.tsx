@@ -8,6 +8,7 @@ import {
 } from '@tabler/icons-react'
 import NavbarLinksGroup from '../navbar/NavbarLinksGroup'
 import { ScrollArea, Stack } from '@mantine/core'
+import { usePathname } from 'next/navigation'
 
 const navbarLinks = [
   {
@@ -62,7 +63,11 @@ const navbarLinks = [
 ]
 
 export default function Navbar() {
-  const links = navbarLinks.map((item) => <NavbarLinksGroup {...item} key={item.label} />)
+  const pathname = usePathname()
+
+  const links = navbarLinks.map((item) => (
+    <NavbarLinksGroup {...item} pathname={pathname} key={item.label} />
+  ))
   return (
     <ScrollArea pt="xl" p="lg">
       <Stack gap="sm">{links}</Stack>
