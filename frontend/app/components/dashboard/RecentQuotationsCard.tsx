@@ -1,6 +1,7 @@
 import { Button, Stack } from '@mantine/core'
 import DashboardCard from './DashboardCard'
 import RecentQuotationItem from './RecentQuotationItem'
+import Link from 'next/link'
 
 const mockData = {
   pendingQuotations: 3,
@@ -41,7 +42,7 @@ export default function RecentQuotationsCard() {
           <RecentQuotationItem key={quotation.id} quotation={quotation} />
         ))}
 
-        <Button variant="default" component="a" href="#">
+        <Button variant="default" component={Link} href="/quotations/all">
           View all
         </Button>
       </Stack>

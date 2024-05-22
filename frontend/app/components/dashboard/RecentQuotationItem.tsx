@@ -1,5 +1,6 @@
 import { formatDate, timeFromNow } from '@/app/utils/format'
 import { Badge, Card, Grid, GridCol, Text, Tooltip } from '@mantine/core'
+import Link from 'next/link'
 
 interface Props {
   quotation: {
@@ -11,7 +12,7 @@ interface Props {
 
 export default function RecentQuotationItem({ quotation }: Props) {
   return (
-    <Card key={quotation.id} p="xs" component="a" href="#">
+    <Card key={quotation.id} p="xs" component={Link} href={`/quotation/${quotation.id}`}>
       <Grid gutter="sm">
         <GridCol span={6}>
           <Text size="xs">{quotation.id}</Text>
