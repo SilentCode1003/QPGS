@@ -1,7 +1,6 @@
 import { useLogout, useUser } from '@/app/lib/auth'
 import { Anchor, Avatar, Burger, Drawer, Flex, Group, List, Text } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import { useRouter } from 'next/navigation'
 import ColorSchemeButton from './ColorSchemeButton'
 import Logo from './Logo'
 import NotificationButton from './NotificationButton'
@@ -32,8 +31,6 @@ export default function Header({ opened, toggle }: { opened: boolean; toggle: ()
   const [isDrawerOpened, { open, close }] = useDisclosure(false)
 
   const logout = useLogout()
-
-  const router = useRouter()
 
   return (
     <>
