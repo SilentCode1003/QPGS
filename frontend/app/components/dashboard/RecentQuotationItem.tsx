@@ -1,16 +1,5 @@
-import { currencyNumber, formatDate, timeFromNow } from '@/app/utils/format'
-import {
-  Badge,
-  Card,
-  Grid,
-  GridCol,
-  Group,
-  SimpleGrid,
-  Stack,
-  Text,
-  Tooltip,
-  px,
-} from '@mantine/core'
+import { formatDate, timeFromNow } from '@/app/utils/format'
+import { Badge, Card, Grid, GridCol, Text, Tooltip } from '@mantine/core'
 
 interface Props {
   quotation: {

@@ -1,8 +1,7 @@
 import ChartCard from '@/app/components/dashboard/ChartCard'
 import OverviewCard from '@/app/components/dashboard/OverviewCard'
 import RecentQuotationsCard from '@/app/components/dashboard/RecentQuotationsCard'
-import { currencyNumber } from '@/app/utils/format'
-import { Badge, Button, Card, Grid, GridCol, Group, Stack, Text, Title, px } from '@mantine/core'
+import { Grid, GridCol, Stack, Title } from '@mantine/core'
 
 export default function Dashboard() {
   return (

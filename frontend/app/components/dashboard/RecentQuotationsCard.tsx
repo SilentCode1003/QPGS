@@ -1,5 +1,4 @@
-import { currencyNumber } from '@/app/utils/format'
-import { Badge, Button, Card, Grid, GridCol, Group, Stack, Text, px } from '@mantine/core'
+import { Button, Stack } from '@mantine/core'
 import DashboardCard from './DashboardCard'
 import RecentQuotationItem from './RecentQuotationItem'
 
