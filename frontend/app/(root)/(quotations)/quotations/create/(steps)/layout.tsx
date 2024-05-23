@@ -1,5 +1,5 @@
 'use client'
-import { Button, Group, Stepper } from '@mantine/core'
+import { Box, Button, Flex, Grid, GridCol, Group, Stack, Stepper } from '@mantine/core'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
@@ -9,7 +9,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const router = useRouter()
 
   const nextStep = () => {
-    setActive((current) => (current < 6 ? current + 1 : current))
+    setActive((current) => (current < 7 ? current + 1 : current))
   }
 
   const prevStep = () => {
@@ -17,12 +17,23 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   }
 
   useEffect(() => {
-    router.push(`/quotations/create/step-${active + 1}`)
+    if (active < 7) {
+      const link = `/quotations/create/step-${active + 1}`
+      router.push(link)
+    } else {
+      router.push('/dashboard')
+    }
   }, [active, router])
 
   return (
-    <>
-      <Stepper active={active} onStepClick={setActive}>
+    <div
+      style={{
+        display: 'grid',
+        minHeight: '100vh',
+        gridTemplateRows: 'auto 1fr auto',
+      }}
+    >
+      <Stepper active={active} onStepClick={setActive} p="sm" size="xs">
         <Stepper.Step label="First step" description="Type selection"></Stepper.Step>
         <Stepper.Step label="Second step" description="Quotation details"></Stepper.Step>
         <Stepper.Step label="Third step" description="Client information"></Stepper.Step>
@@ -33,14 +44,16 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <Stepper.Completed>Completed, click back button to get to previous step</Stepper.Completed>
       </Stepper>
 
-      {children}
+      <Box p="lg" maw="100vw" style={{ overflowX: 'auto' }}>
+        {children}
+      </Box>
 
-      <Group justify="center" mt="xl">
+      <Group justify="center" p="sm">
         <Button variant="default" onClick={prevStep}>
           Back
         </Button>
         <Button onClick={nextStep}>Next step</Button>
       </Group>
-    </>
+    </div>
   )
 }
