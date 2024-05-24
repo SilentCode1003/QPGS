@@ -33,9 +33,9 @@ const mockProductNames = mockProducts.map((product) => product.name)
 export default function ProductItem({ form, item, index }: Props) {
   const currentItem = `products.${index}`
 
-  const [price, setPrice] = useState(0)
-  const [duration, setDuration] = useState(0)
-  const [quantity, setQuantity] = useState(0)
+  const [price, setPrice] = useState(form.getValues().products[index].price)
+  const [duration, setDuration] = useState(form.getValues().products[index].duration)
+  const [quantity, setQuantity] = useState(form.getValues().products[index].quantity)
 
   form.watch(`products.${index}.name`, ({ value }) => {
     const product = mockProducts.find((product) => product.name === value)
@@ -51,12 +51,15 @@ export default function ProductItem({ form, item, index }: Props) {
   }, [totalAmount, form, currentItem])
 
   form.watch(`${currentItem}.price`, ({ value }) => {
+    console.log('price', value)
     setPrice(value as number)
   })
   form.watch(`${currentItem}.duration`, ({ value }) => {
+    console.log('duration', value)
     setDuration(value as number)
   })
   form.watch(`${currentItem}.quantity`, ({ value }) => {
+    console.log('quantity', value)
     setQuantity(value as number)
   })
 

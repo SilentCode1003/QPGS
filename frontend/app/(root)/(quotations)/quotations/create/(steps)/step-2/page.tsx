@@ -1,5 +1,5 @@
 'use client'
-import { useStepper } from '@/app/contexts/stepper'
+import { LOCAL_STORAGE_KEY, useStepper } from '@/app/contexts/stepper'
 import { Box, Button, TextInput, Textarea } from '@mantine/core'
 import { DatePickerInput } from '@mantine/dates'
 import { useForm, zodResolver } from '@mantine/form'
@@ -19,12 +19,20 @@ export type Step2Values = z.infer<typeof step2Schema>
 export default function Step2() {
   const { updateData, incrementActive } = useStepper()
 
-  const form = useForm<Step2Values>({
+  const storageValues = readLocalStorageValue<Step2Values | undefined>({ key: LOCAL_STORAGE_KEY })
+
+  const form = useForm({
     mode: 'uncontrolled',
+    initialValues: {
+      ...storageValues,
+      date: storageValues?.date ? new Date(storageValues.date) : undefined,
+      expiry_date: storageValues?.expiry_date ? new Date(storageValues.expiry_date) : undefined,
+    },
     validate: zodResolver(step2Schema),
   })
 
-  const onSubmit = (values: Step2Values) => {
+  // @ts-ignore
+  const onSubmit = (values) => {
     updateData(values)
     incrementActive()
   }

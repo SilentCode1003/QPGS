@@ -1,6 +1,6 @@
 'use client'
 import ProductItem from '@/app/components/wizard/ProductItem'
-import { useStepper } from '@/app/contexts/stepper'
+import { LOCAL_STORAGE_KEY, useStepper } from '@/app/contexts/stepper'
 import { useUser } from '@/app/lib/auth'
 import {
   ActionIcon,
@@ -40,6 +40,8 @@ export type Step5Values = z.infer<typeof step5Schema>
 export default function Step5() {
   const { updateData, incrementActive } = useStepper()
 
+  const storageValues = readLocalStorageValue<Step5Values | undefined>({ key: LOCAL_STORAGE_KEY })
+
   const emptyProduct = {
     key: randomId(),
     name: '',
@@ -51,18 +53,18 @@ export default function Step5() {
     total_amount: 0,
   }
 
+  const initialProducts = storageValues?.products ? storageValues.products : [emptyProduct]
+
   const form = useForm<Step5Values>({
     mode: 'uncontrolled',
     initialValues: {
-      products: [emptyProduct],
-      grand_total: 0,
+      products: initialProducts,
+      grand_total: storageValues?.grand_total ? storageValues.grand_total : 0,
     },
     validate: zodResolver(step5Schema),
   })
 
   const onSubmit = (values: Step5Values) => {
-    console.log(values)
-    // console.log(JSON.stringify(values))
     updateData(values)
     incrementActive()
   }

@@ -1,5 +1,5 @@
 'use client'
-import { useStepper } from '@/app/contexts/stepper'
+import { LOCAL_STORAGE_KEY, useStepper } from '@/app/contexts/stepper'
 import { Box, Button, TextInput, Textarea } from '@mantine/core'
 import { useForm, zodResolver } from '@mantine/form'
 import { readLocalStorageValue } from '@mantine/hooks'
@@ -18,12 +18,18 @@ export type Step3Values = z.infer<typeof step3Schema>
 export default function Step3() {
   const { updateData, incrementActive } = useStepper()
 
-  const form = useForm<Step3Values>({
+  const storageValues = readLocalStorageValue<Step3Values | undefined>({ key: LOCAL_STORAGE_KEY })
+
+  const form = useForm({
     mode: 'uncontrolled',
+    initialValues: {
+      ...storageValues,
+    },
     validate: zodResolver(step3Schema),
   })
 
-  const onSubmit = (values: Step3Values) => {
+  // @ts-ignore
+  const onSubmit = (values) => {
     updateData(values)
     incrementActive()
   }

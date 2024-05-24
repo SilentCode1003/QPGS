@@ -1,8 +1,9 @@
 'use client'
-import { useStepper } from '@/app/contexts/stepper'
+import { LOCAL_STORAGE_KEY, useStepper } from '@/app/contexts/stepper'
 import { useUser } from '@/app/lib/auth'
 import { Box, Button, TextInput } from '@mantine/core'
 import { useForm, zodResolver } from '@mantine/form'
+import { readLocalStorageValue } from '@mantine/hooks'
 import { z } from 'zod'
 
 const step4Schema = z.object({
@@ -18,17 +19,23 @@ export type Step4Values = z.infer<typeof step4Schema>
 export default function Step4() {
   const { updateData, incrementActive } = useStepper()
 
+  const storageValues = readLocalStorageValue<Step4Values | undefined>({ key: LOCAL_STORAGE_KEY })
+
   const user = useUser()
+
+  const initialValues = storageValues?.first_name
+    ? { ...storageValues }
+    : {
+        first_name: user.data?.first_name,
+        last_name: user.data?.last_name,
+        email: user.data?.email,
+        username: user.data?.username,
+        job_title: user.data?.job_title,
+      }
 
   const form = useForm<Step4Values>({
     mode: 'uncontrolled',
-    initialValues: {
-      first_name: user.data?.first_name,
-      last_name: user.data?.last_name,
-      email: user.data?.email,
-      username: user.data?.username,
-      job_title: user.data?.job_title,
-    },
+    initialValues,
     validate: zodResolver(step4Schema),
   })
 

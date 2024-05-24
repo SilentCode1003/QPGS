@@ -1,3 +1,4 @@
+'use client'
 import { useStepper } from '@/app/contexts/stepper'
 import { Button } from '@mantine/core'
 
