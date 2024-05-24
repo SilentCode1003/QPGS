@@ -1,3 +1,5 @@
+'use client'
+import { useStepper } from '@/app/contexts/stepper'
 import { Button, Group } from '@mantine/core'
 
 const mockTypes = [
@@ -7,7 +9,19 @@ const mockTypes = [
 ]
 
 export default function Step1() {
-  const buttons = mockTypes.map((type) => <Button key={type.id}>{type.name}</Button>)
+  const { incrementActive, updateData } = useStepper()
+
+  const buttons = mockTypes.map((type) => (
+    <Button
+      key={type.id}
+      onClick={() => {
+        updateData({ type: type.name })
+        incrementActive()
+      }}
+    >
+      {type.name}
+    </Button>
+  ))
 
   return <Group>{buttons}</Group>
 }

@@ -1,6 +1,6 @@
 import {
   Product,
-  Step5Schema,
+  Step5Values,
 } from '@/app/(root)/(quotations)/quotations/create/(steps)/step-5/page'
 import { ActionIcon, Group, NumberInput, Select, TextInput } from '@mantine/core'
 import { UseFormReturnType } from '@mantine/form'
@@ -8,7 +8,7 @@ import { IconTrash } from '@tabler/icons-react'
 import { useEffect, useState } from 'react'
 
 interface Props {
-  form: UseFormReturnType<Step5Schema>
+  form: UseFormReturnType<Step5Values>
   item: Product
   index: number
 }

@@ -1,4 +1,5 @@
 'use client'
+import { useStepper } from '@/app/contexts/stepper'
 import { useUser } from '@/app/lib/auth'
 import { Box, Button, TextInput } from '@mantine/core'
 import { useForm, zodResolver } from '@mantine/form'
@@ -12,12 +13,14 @@ const step4Schema = z.object({
   job_title: z.string().min(1),
 })
 
-type Step4Schema = z.infer<typeof step4Schema>
+export type Step4Values = z.infer<typeof step4Schema>
 
 export default function Step4() {
+  const { updateData, incrementActive } = useStepper()
+
   const user = useUser()
 
-  const form = useForm<Step4Schema>({
+  const form = useForm<Step4Values>({
     mode: 'uncontrolled',
     initialValues: {
       first_name: user.data?.first_name,
@@ -29,9 +32,9 @@ export default function Step4() {
     validate: zodResolver(step4Schema),
   })
 
-  const onSubmit = (values: Step4Schema) => {
-    console.log(values)
-    // console.log(JSON.stringify(values))
+  const onSubmit = (values: Step4Values) => {
+    updateData(values)
+    incrementActive()
   }
 
   return (

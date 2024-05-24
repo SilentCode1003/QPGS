@@ -1,27 +1,31 @@
 'use client'
+import { useStepper } from '@/app/contexts/stepper'
 import { Box, Button, TextInput, Textarea } from '@mantine/core'
 import { useForm, zodResolver } from '@mantine/form'
+import { readLocalStorageValue } from '@mantine/hooks'
 import { z } from 'zod'
 
 const step3Schema = z.object({
-  name: z.string().min(2),
+  company_name: z.string().min(2),
   tel_no: z.string().optional(),
   contact_no: z.string(),
   email: z.string().email(),
   address: z.string().min(5),
 })
 
-type Step3Values = z.infer<typeof step3Schema>
+export type Step3Values = z.infer<typeof step3Schema>
 
 export default function Step3() {
+  const { updateData, incrementActive } = useStepper()
+
   const form = useForm<Step3Values>({
     mode: 'uncontrolled',
     validate: zodResolver(step3Schema),
   })
 
   const onSubmit = (values: Step3Values) => {
-    console.log(values)
-    // console.log(JSON.stringify(values))
+    updateData(values)
+    incrementActive()
   }
 
   return (
@@ -30,8 +34,8 @@ export default function Step3() {
         <TextInput
           withAsterisk
           label="Company name"
-          key={form.key('name')}
-          {...form.getInputProps('name')}
+          key={form.key('company_name')}
+          {...form.getInputProps('company_name')}
         />
 
         <TextInput

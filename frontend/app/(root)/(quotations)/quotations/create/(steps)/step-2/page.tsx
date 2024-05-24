@@ -1,7 +1,9 @@
 'use client'
+import { useStepper } from '@/app/contexts/stepper'
 import { Box, Button, TextInput, Textarea } from '@mantine/core'
 import { DatePickerInput } from '@mantine/dates'
 import { useForm, zodResolver } from '@mantine/form'
+import { readLocalStorageValue } from '@mantine/hooks'
 import { z } from 'zod'
 
 const step2Schema = z.object({
@@ -12,17 +14,19 @@ const step2Schema = z.object({
   terms_and_conditions: z.string().min(3),
 })
 
-type Step2Values = z.infer<typeof step2Schema>
+export type Step2Values = z.infer<typeof step2Schema>
 
 export default function Step2() {
+  const { updateData, incrementActive } = useStepper()
+
   const form = useForm<Step2Values>({
     mode: 'uncontrolled',
     validate: zodResolver(step2Schema),
   })
 
   const onSubmit = (values: Step2Values) => {
-    console.log(values)
-    // console.log(JSON.stringify(values))
+    updateData(values)
+    incrementActive()
   }
 
   return (
