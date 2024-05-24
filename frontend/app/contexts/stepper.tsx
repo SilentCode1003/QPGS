@@ -39,11 +39,14 @@ export const LOCAL_STORAGE_KEY = 'quotation-system-progress'
 export const StepperContextProvider = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter()
 
-  const [active, setActive] = useState(0)
+  const [active, setActive] = useLocalStorage<number>({ key: 'qs-active', defaultValue: 0 })
 
   const [data, setData, removeData] = useLocalStorage<Partial<Values>>({ key: LOCAL_STORAGE_KEY })
 
-  const [highestStepVisited, setHighestStepVisited] = useState(active)
+  const [highestStepVisited, setHighestStepVisited] = useLocalStorage({
+    key: 'qs-highest',
+    defaultValue: active,
+  })
 
   const handleStepChange = (nextStep: number) => {
     const isOutOfBounds = nextStep > MAX_STEPS - 1 || nextStep < 0
