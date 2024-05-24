@@ -6,18 +6,19 @@ import { useRouter } from 'next/navigation'
 export default function Step7() {
   const router = useRouter()
 
-  const { removeData } = useStepper()
+  const { data, removeData } = useStepper()
 
   return (
     <div>
       <Skeleton h={11 * 80} w={8.5 * 80} animate={false} />
       <Button
         onClick={() => {
-          router.push('/dashboard')
-          removeData()
+          // router.push('/dashboard')
+          console.log(data)
+          // removeData()
         }}
       >
-        Next
+        Submit
       </Button>
     </div>
   )
