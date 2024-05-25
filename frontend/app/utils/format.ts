@@ -27,3 +27,8 @@ export const formatDate = (date: Date) => {
 export const timeFromNow = (date: Date) => {
   return dayjs(date).fromNow()
 }
+
+export const convertSnakeToTitleCase = (s: string): string =>
+  s
+    .replace(/^[-_]*(.)/, (_, c: string) => c.toUpperCase())
+    .replace(/[-_]+(.)/g, (_, c: string) => ' ' + c.toUpperCase())
