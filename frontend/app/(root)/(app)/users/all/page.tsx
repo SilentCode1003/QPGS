@@ -1,16 +1,19 @@
 'use client'
 import { api } from '@/app/lib/api'
 import { convertSnakeToTitleCase, formatDate } from '@/app/utils/format'
-import { ActionIcon, Stack, Table, Title } from '@mantine/core'
-import { IconArrowRight } from '@tabler/icons-react'
+import { ActionIcon, Group, Stack, Table, Title } from '@mantine/core'
+import { IconArrowRight, IconSortAscending, IconSortDescending } from '@tabler/icons-react'
 import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
 import {
+  SortingState,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
+  getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
+import { useState } from 'react'
 
 interface UsersResponse {
   data: User[]
@@ -77,6 +80,7 @@ const columns = [
         component={Link}
         href={`/users/${encodeURIComponent(props.row.original.id)}`}
         size={24}
+        variant="default"
       >
         <IconArrowRight size={16} stroke={1.5} />
       </ActionIcon>
@@ -97,10 +101,17 @@ export default function AllUsers() {
     initialData: [],
   })
 
+  const [sorting, setSorting] = useState<SortingState>([])
+
   const table = useReactTable({
     data: users.data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    onSortingChange: setSorting,
+    state: {
+      sorting,
+    },
   })
 
   // TODO: Handle pending state
@@ -124,9 +135,15 @@ export default function AllUsers() {
               <Table.Tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <Table.Th key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(header.column.columnDef.header, header.getContext())}
+                    {header.isPlaceholder ? null : (
+                      <Group onClick={header.column.getToggleSortingHandler()}>
+                        {flexRender(header.column.columnDef.header, header.getContext())}
+                        {{
+                          asc: <IconSortAscending size={16} />,
+                          desc: <IconSortDescending size={16} />,
+                        }[header.column.getIsSorted() as string] ?? null}
+                      </Group>
+                    )}
                   </Table.Th>
                 ))}
               </Table.Tr>
