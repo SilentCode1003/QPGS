@@ -4,6 +4,7 @@ import { useDisclosure } from '@mantine/hooks'
 import ColorSchemeButton from './ColorSchemeButton'
 import Logo from './Logo'
 import NotificationButton from './NotificationButton'
+import Link from 'next/link'
 
 function DrawerTitle({
   data,
@@ -33,7 +34,7 @@ export default function Header({ opened, toggle }: { opened: boolean; toggle: ()
   const logout = useLogout()
 
   return (
-    <>
+    <Group h="100%" px="md" justify="space-between">
       <Drawer
         opened={isDrawerOpened}
         onClose={close}
@@ -49,6 +50,14 @@ export default function Header({ opened, toggle }: { opened: boolean; toggle: ()
       >
         <List>
           <List.Item>
+            <Anchor component={Link} href="/profile" onClick={() => close()}>
+              <Text span size="sm">
+                Your profile
+              </Text>
+            </Anchor>
+          </List.Item>
+
+          <List.Item>
             <Anchor
               onClick={() => {
                 logout.mutate()
@@ -61,31 +70,28 @@ export default function Header({ opened, toggle }: { opened: boolean; toggle: ()
           </List.Item>
         </List>
       </Drawer>
-
-      <Group h="100%" px="md" justify="space-between">
-        <Group gap="xs">
-          <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-          <Logo size={32} />
-        </Group>
-
-        <Group gap={8}>
-          <NotificationButton actionSize={32} iconSize={16} />
-
-          <ColorSchemeButton actionSize={32} iconSize={16} />
-
-          <Avatar
-            alt={`${data.first_name} ${data.last_name}`}
-            variant="light"
-            size={32}
-            onClick={open}
-            style={{
-              cursor: 'pointer',
-            }}
-          >
-            {data.first_name}
-          </Avatar>
-        </Group>
+      <Group gap="xs">
+        <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
+        <Logo size={32} />
       </Group>
-    </>
+
+      <Group gap={8}>
+        <NotificationButton actionSize={32} iconSize={16} />
+
+        <ColorSchemeButton actionSize={32} iconSize={16} />
+
+        <Avatar
+          alt={`${data.first_name} ${data.last_name}`}
+          variant="light"
+          size={32}
+          onClick={open}
+          style={{
+            cursor: 'pointer',
+          }}
+        >
+          {data.first_name}
+        </Avatar>
+      </Group>
+    </Group>
   )
 }
