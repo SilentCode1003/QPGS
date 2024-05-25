@@ -1,10 +1,16 @@
 'use client'
 import { api } from '@/app/lib/api'
 import { convertSnakeToTitleCase, formatDate } from '@/app/utils/format'
-import { ActionIcon, ButtonGroup, Stack, Table, Title } from '@mantine/core'
-import { IconArrowRight, IconEdit, IconEye } from '@tabler/icons-react'
+import { ActionIcon, Stack, Table, Title } from '@mantine/core'
+import { IconArrowRight } from '@tabler/icons-react'
 import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
+import {
+  createColumnHelper,
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+} from '@tanstack/react-table'
 
 interface UsersResponse {
   data: User[]
@@ -25,13 +31,77 @@ interface User {
   }
 }
 
+const columnHelper = createColumnHelper<User>()
+
+const columns = [
+  columnHelper.accessor('id', {
+    cell: (info) => info.getValue(),
+    header: (info) => convertSnakeToTitleCase(info.column.id),
+  }),
+  columnHelper.accessor('first_name', {
+    cell: (info) => info.getValue(),
+    header: (info) => convertSnakeToTitleCase(info.column.id),
+  }),
+  columnHelper.accessor('last_name', {
+    cell: (info) => info.getValue(),
+    header: (info) => convertSnakeToTitleCase(info.column.id),
+  }),
+  columnHelper.accessor('role.name', {
+    cell: (info) => info.getValue(),
+    header: 'Role',
+  }),
+  columnHelper.accessor('email', {
+    cell: (info) => info.getValue(),
+    header: (info) => convertSnakeToTitleCase(info.column.id),
+  }),
+  columnHelper.accessor('username', {
+    cell: (info) => info.getValue(),
+    header: (info) => convertSnakeToTitleCase(info.column.id),
+  }),
+  columnHelper.accessor('signature', {
+    cell: (info) => info.getValue(),
+    header: (info) => convertSnakeToTitleCase(info.column.id),
+  }),
+  columnHelper.accessor('created_at', {
+    cell: (info) => formatDate(new Date(info.getValue())),
+    header: (info) => convertSnakeToTitleCase(info.column.id),
+  }),
+  columnHelper.accessor('updated_at', {
+    cell: (info) => formatDate(new Date(info.getValue())),
+    header: (info) => convertSnakeToTitleCase(info.column.id),
+  }),
+  columnHelper.display({
+    id: 'actions',
+    cell: (props) => (
+      <ActionIcon
+        component={Link}
+        href={`/users/${encodeURIComponent(props.row.original.id)}`}
+        size={24}
+      >
+        <IconArrowRight size={16} stroke={1.5} />
+      </ActionIcon>
+    ),
+  }),
+]
+
 async function fetchUsers() {
   const data = await api.get<UsersResponse>(`/users`)
   return data.data.data
 }
 
 export default function AllUsers() {
-  const users = useQuery({ queryKey: ['users'], queryFn: fetchUsers, staleTime: 0 })
+  const users = useQuery({
+    queryKey: ['users'],
+    queryFn: fetchUsers,
+    staleTime: 0,
+    initialData: [],
+  })
+
+  const table = useReactTable({
+    data: users.data,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  })
 
   // TODO: Handle pending state
   if (users.isPending) {
@@ -43,53 +113,37 @@ export default function AllUsers() {
     return <span>Error: {users.error.message}</span>
   }
 
-  // Loop over header row
-  const tableHeaderRows = Object.keys(users.data[0]).map((key) => {
-    return <Table.Th key={key}>{convertSnakeToTitleCase(key)}</Table.Th>
-  })
-
-  // Loop over rows
-  const rows = users.data.map((user) => {
-    // Loop over user keys to dynamically create data
-    const columns = Object.keys(user).map((key) => {
-      // Add conditions to format data
-      if (key === 'created_at' || key === 'updated_at') {
-        return <Table.Td key={key}>{formatDate(user[key as keyof User])}</Table.Td>
-      } else if (key === 'role') {
-        return <Table.Td key={key}>{user[key].name}</Table.Td>
-      } else {
-        return <Table.Td key={key}>{user[key as keyof User]}</Table.Td>
-      }
-    })
-
-    return (
-      <Table.Tr key={user.id}>
-        {columns}
-        <Table.Td>
-          <ActionIcon
-            component={Link}
-            href={`/users/${encodeURIComponent(user.id)}`}
-            size={24}
-            variant="default"
-          >
-            <IconArrowRight size={16} stroke={1.5} />
-          </ActionIcon>
-        </Table.Td>
-      </Table.Tr>
-    )
-  })
-
   return (
     <Stack>
       <Title>All users</Title>
 
       <Table.ScrollContainer minWidth={950}>
-        <Table>
+        <Table withTableBorder>
           <Table.Thead>
-            <Table.Tr>{tableHeaderRows}</Table.Tr>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <Table.Tr key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <Table.Th key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(header.column.columnDef.header, header.getContext())}
+                  </Table.Th>
+                ))}
+              </Table.Tr>
+            ))}
           </Table.Thead>
 
-          <Table.Tbody>{rows}</Table.Tbody>
+          <Table.Tbody>
+            {table.getRowModel().rows.map((row) => (
+              <Table.Tr key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <Table.Td key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </Table.Td>
+                ))}
+              </Table.Tr>
+            ))}
+          </Table.Tbody>
         </Table>
       </Table.ScrollContainer>
     </Stack>
