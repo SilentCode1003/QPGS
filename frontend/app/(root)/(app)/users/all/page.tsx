@@ -14,6 +14,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import { useState } from 'react'
+import { AxiosError } from 'axios'
 
 interface UsersResponse {
   data: User[]
@@ -89,8 +90,8 @@ const columns = [
 ]
 
 async function fetchUsers() {
-  const data = await api.get<UsersResponse>(`/users`)
-  return data.data.data
+  const res = await api.get<UsersResponse>(`/users`)
+  return res.data.data
 }
 
 export default function AllUsers() {
@@ -121,6 +122,10 @@ export default function AllUsers() {
 
   // TODO: Handle error state
   if (users.isError) {
+    if (users.error instanceof AxiosError) {
+      return <span>Error: {users.error.response?.data.message}</span>
+    }
+
     return <span>Error: {users.error.message}</span>
   }
 
