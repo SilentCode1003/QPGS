@@ -1,7 +1,7 @@
 'use client'
 import { api } from '@/app/lib/api'
 import { convertSnakeToTitleCase, formatDate } from '@/app/utils/format'
-import { ActionIcon, Group, Stack, Table, Title } from '@mantine/core'
+import { ActionIcon, Center, Group, Stack, Table, Text, Title } from '@mantine/core'
 import { IconArrowRight, IconSortAscending, IconSortDescending } from '@tabler/icons-react'
 import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
@@ -160,6 +160,13 @@ export default function AllUsers() {
                 ))}
               </Table.Tr>
             ))}
+            {!users.data.length && (
+              <Table.Tr>
+                <Table.Td colSpan={9} align="center">
+                  <Text>No users</Text>
+                </Table.Td>
+              </Table.Tr>
+            )}
           </Table.Tbody>
         </Table>
       </Table.ScrollContainer>
