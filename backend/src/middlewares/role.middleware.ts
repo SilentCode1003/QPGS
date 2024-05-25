@@ -1,13 +1,15 @@
 import type { RequestHandler } from 'express'
 import { z } from 'zod'
 
+const ADMIN_ROLE_ID = 1
+
 export const isAdmin: RequestHandler = (req, res, next) => {
   if (!req.session.user) {
     throw new Error('isAdmin middleware is used without using the isLoggedIn middleware first')
   }
 
   // TODO: Make the magic number a config
-  if (req.session.user.role_id !== 3) {
+  if (req.session.user.role_id !== ADMIN_ROLE_ID) {
     return res.status(403).json({ message: 'Not authorized' })
   }
 
@@ -20,7 +22,7 @@ export const isAuthorized: RequestHandler = (req, res, next) => {
   }
 
   // If the logged in user is an admin
-  if (req.session.user.role_id === 3) {
+  if (req.session.user.role_id === ADMIN_ROLE_ID) {
     return next()
   }
 
