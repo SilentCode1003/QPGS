@@ -11,6 +11,14 @@ export const getUsers: RequestHandler = async (req, res, next) => {
     const users = await prisma.user.findMany({
       omit: {
         password: true,
+        role_id: true,
+      },
+      include: {
+        role: {
+          select: {
+            name: true,
+          },
+        },
       },
     })
 
