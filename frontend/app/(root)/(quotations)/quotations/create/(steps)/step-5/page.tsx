@@ -1,20 +1,9 @@
 'use client'
 import ProductItem from '@/app/components/wizard/ProductItem'
 import { LOCAL_STORAGE_KEY, useStepper } from '@/app/contexts/stepper'
-import { useUser } from '@/app/lib/auth'
-import {
-  ActionIcon,
-  Box,
-  Button,
-  Group,
-  NumberInput,
-  Select,
-  TextInput,
-  Textarea,
-} from '@mantine/core'
+import { Box, Button, NumberInput } from '@mantine/core'
 import { useForm, zodResolver } from '@mantine/form'
 import { randomId, readLocalStorageValue } from '@mantine/hooks'
-import { IconTrash } from '@tabler/icons-react'
 import { useEffect } from 'react'
 import { z } from 'zod'
 
@@ -26,6 +15,10 @@ const productSchema = z.object({
   payment_type: z.string().min(3),
   duration: z.number().gt(0),
   quantity: z.number().gt(0),
+  markup: z.number().nonnegative(),
+  vatEx: z.number(),
+  vatInc: z.number(),
+  vat_type: z.enum(['vatEx', 'vatInc']),
   total_amount: z.number().gt(0),
 })
 
@@ -50,6 +43,10 @@ export default function Step5() {
     price: 0,
     duration: 0,
     quantity: 0,
+    markup: 0,
+    vatEx: 0,
+    vatInc: 0,
+    vat_type: 'vatEx' as const,
     total_amount: 0,
   }
 
