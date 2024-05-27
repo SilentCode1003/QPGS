@@ -12,7 +12,7 @@ const options: session.SessionOptions = {
     httpOnly: true,
     sameSite: 'lax', // The best setting would be 'strict' but that requires the frontend to have the same domain as the backend(this api)
     // lax only sends cookie to GET, and HEAD requests to different origin
-    // none always sends cookie to a different origin but needs sameSite: true
+    // none always sends cookie to a different origin but needs secure: true
     secure: false, // This depends if the domain this server will be deployed have https
     maxAge,
   },
