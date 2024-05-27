@@ -2,7 +2,7 @@ import {
   Product,
   Step5Values,
 } from '@/app/(root)/(quotations)/quotations/create/(steps)/step-5/page'
-import { ActionIcon, Group, NumberInput, Radio, Select, Stack, TextInput } from '@mantine/core'
+import { ActionIcon, Box, Group, NumberInput, Radio, Select, Stack, TextInput } from '@mantine/core'
 import { UseFormReturnType } from '@mantine/form'
 import { IconTrash } from '@tabler/icons-react'
 import { useEffect, useState } from 'react'
@@ -77,110 +77,132 @@ export default function ProductItem({ form, item, index }: Props) {
   }, [form, currentItem, totalAmount])
 
   return (
-    <Group key={item.key}>
-      <Select
-        label="Product name"
-        data={mockProductNames}
-        searchable
-        key={form.key(`${currentItem}.name`)}
-        {...form.getInputProps(`${currentItem}.name`)}
-      />
+    <Group key={item.key} wrap="nowrap">
+      <Box miw={200} h={100}>
+        <Select
+          label="Product name"
+          data={mockProductNames}
+          searchable
+          key={form.key(`${currentItem}.name`)}
+          {...form.getInputProps(`${currentItem}.name`)}
+        />
+      </Box>
 
-      <TextInput
-        disabled
-        label="Description"
-        key={form.key(`${currentItem}.description`)}
-        {...form.getInputProps(`${currentItem}.description`)}
-      />
+      <Box miw={200} h={100}>
+        <TextInput
+          disabled
+          label="Description"
+          key={form.key(`${currentItem}.description`)}
+          {...form.getInputProps(`${currentItem}.description`)}
+        />
+      </Box>
 
-      <TextInput
-        label="Payment type"
-        key={form.key(`${currentItem}.payment_type`)}
-        {...form.getInputProps(`${currentItem}.payment_type`)}
-      />
+      <Box miw={200} h={100}>
+        <TextInput
+          label="Payment type"
+          key={form.key(`${currentItem}.payment_type`)}
+          {...form.getInputProps(`${currentItem}.payment_type`)}
+        />
+      </Box>
 
-      <NumberInput
-        disabled
-        label="Price"
-        prefix="₱"
-        thousandSeparator=","
-        decimalScale={2}
-        fixedDecimalScale
-        key={form.key(`${currentItem}.price`)}
-        {...form.getInputProps(`${currentItem}.price`)}
-      />
+      <Box miw={200} h={100}>
+        <NumberInput
+          disabled
+          label="Price"
+          prefix="₱"
+          thousandSeparator=","
+          decimalScale={2}
+          fixedDecimalScale
+          key={form.key(`${currentItem}.price`)}
+          {...form.getInputProps(`${currentItem}.price`)}
+        />
+      </Box>
 
-      <NumberInput
-        label="Markup"
-        min={0}
-        suffix="%"
-        thousandSeparator=","
-        key={form.key(`${currentItem}.markup`)}
-        {...form.getInputProps(`${currentItem}.markup`)}
-      />
+      <Box miw={200} h={100}>
+        <NumberInput
+          label="Markup"
+          min={0}
+          suffix="%"
+          thousandSeparator=","
+          key={form.key(`${currentItem}.markup`)}
+          {...form.getInputProps(`${currentItem}.markup`)}
+        />
+      </Box>
 
-      <NumberInput
-        disabled
-        label="VAT Excluded"
-        min={0}
-        prefix="₱"
-        thousandSeparator=","
-        decimalScale={2}
-        fixedDecimalScale
-        key={form.key(`${currentItem}.vatEx`)}
-        {...form.getInputProps(`${currentItem}.vatEx`)}
-      />
+      <Box miw={200} h={100}>
+        <NumberInput
+          disabled
+          label="VAT Excluded"
+          min={0}
+          prefix="₱"
+          thousandSeparator=","
+          decimalScale={2}
+          fixedDecimalScale
+          key={form.key(`${currentItem}.vatEx`)}
+          {...form.getInputProps(`${currentItem}.vatEx`)}
+        />
+      </Box>
 
-      <NumberInput
-        disabled
-        label="VAT Included"
-        min={0}
-        prefix="₱"
-        thousandSeparator=","
-        decimalScale={2}
-        fixedDecimalScale
-        key={form.key(`${currentItem}.vatInc`)}
-        {...form.getInputProps(`${currentItem}.vatInc`)}
-      />
+      <Box miw={200} h={100}>
+        <NumberInput
+          disabled
+          label="VAT Included"
+          min={0}
+          prefix="₱"
+          thousandSeparator=","
+          decimalScale={2}
+          fixedDecimalScale
+          key={form.key(`${currentItem}.vatInc`)}
+          {...form.getInputProps(`${currentItem}.vatInc`)}
+        />
+      </Box>
 
-      <NumberInput
-        label="Duration"
-        min={0}
-        thousandSeparator=","
-        key={form.key(`${currentItem}.duration`)}
-        {...form.getInputProps(`${currentItem}.duration`)}
-      />
+      <Box miw={200} h={100}>
+        <NumberInput
+          label="Duration"
+          min={0}
+          thousandSeparator=","
+          key={form.key(`${currentItem}.duration`)}
+          {...form.getInputProps(`${currentItem}.duration`)}
+        />
+      </Box>
 
-      <NumberInput
-        label="Quantity"
-        min={0}
-        thousandSeparator=","
-        key={form.key(`${currentItem}.quantity`)}
-        {...form.getInputProps(`${currentItem}.quantity`)}
-      />
+      <Box miw={200} h={100}>
+        <NumberInput
+          label="Quantity"
+          min={0}
+          thousandSeparator=","
+          key={form.key(`${currentItem}.quantity`)}
+          {...form.getInputProps(`${currentItem}.quantity`)}
+        />
+      </Box>
 
-      <Radio.Group
-        label="VAT Type"
-        key={form.key(`${currentItem}.vat_type`)}
-        {...form.getInputProps(`${currentItem}.vat_type`)}
-      >
-        <Stack>
-          <Radio value="vatEx" label="VAT Excluded" />
-          <Radio value="vatInc" label="VAT Included" />
-        </Stack>
-      </Radio.Group>
+      <Box miw={200} h={100}>
+        <Radio.Group
+          label="VAT Type"
+          key={form.key(`${currentItem}.vat_type`)}
+          {...form.getInputProps(`${currentItem}.vat_type`)}
+        >
+          <Stack>
+            <Radio value="vatEx" label="VAT Excluded" />
+            <Radio value="vatInc" label="VAT Included" />
+          </Stack>
+        </Radio.Group>
+      </Box>
 
-      <NumberInput
-        disabled
-        label="Total amount"
-        min={0}
-        prefix="₱"
-        thousandSeparator=","
-        decimalScale={2}
-        fixedDecimalScale
-        key={form.key(`${currentItem}.total_amount`)}
-        {...form.getInputProps(`${currentItem}.total_amount`)}
-      />
+      <Box miw={200} h={100}>
+        <NumberInput
+          disabled
+          label="Total amount"
+          min={0}
+          prefix="₱"
+          thousandSeparator=","
+          decimalScale={2}
+          fixedDecimalScale
+          key={form.key(`${currentItem}.total_amount`)}
+          {...form.getInputProps(`${currentItem}.total_amount`)}
+        />
+      </Box>
 
       <ActionIcon
         color="red"

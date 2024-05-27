@@ -10,7 +10,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         style={{
           display: 'grid',
           minHeight: '100vh',
-          gridTemplateRows: 'auto 1fr auto',
+          gridTemplateRows: 'auto 1fr',
         }}
       >
         <StepperHeader />

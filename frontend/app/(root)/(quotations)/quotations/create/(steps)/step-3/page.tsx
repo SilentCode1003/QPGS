@@ -1,6 +1,6 @@
 'use client'
 import { LOCAL_STORAGE_KEY, useStepper } from '@/app/contexts/stepper'
-import { Box, Button, TextInput, Textarea } from '@mantine/core'
+import { Box, Button, Container, Stack, TextInput, Textarea } from '@mantine/core'
 import { useForm, zodResolver } from '@mantine/form'
 import { readLocalStorageValue } from '@mantine/hooks'
 import { z } from 'zod'
@@ -35,45 +35,47 @@ export default function Step3() {
   }
 
   return (
-    <Box>
+    <Container size="sm">
       <form onSubmit={form.onSubmit(onSubmit)}>
-        <TextInput
-          withAsterisk
-          label="Company name"
-          key={form.key('company_name')}
-          {...form.getInputProps('company_name')}
-        />
+        <Stack>
+          <TextInput
+            withAsterisk
+            label="Company name"
+            key={form.key('company_name')}
+            {...form.getInputProps('company_name')}
+          />
 
-        <TextInput
-          withAsterisk
-          label="Telephone no."
-          key={form.key('tel_no')}
-          {...form.getInputProps('tel_no')}
-        />
+          <TextInput
+            withAsterisk
+            label="Telephone no."
+            key={form.key('tel_no')}
+            {...form.getInputProps('tel_no')}
+          />
 
-        <TextInput
-          withAsterisk
-          label="Contact no."
-          key={form.key('contact_no')}
-          {...form.getInputProps('contact_no')}
-        />
+          <TextInput
+            withAsterisk
+            label="Contact no."
+            key={form.key('contact_no')}
+            {...form.getInputProps('contact_no')}
+          />
 
-        <TextInput
-          withAsterisk
-          label="Email"
-          key={form.key('email')}
-          {...form.getInputProps('email')}
-        />
+          <TextInput
+            withAsterisk
+            label="Email"
+            key={form.key('email')}
+            {...form.getInputProps('email')}
+          />
 
-        <Textarea
-          withAsterisk
-          label="Address"
-          key={form.key('address')}
-          {...form.getInputProps('address')}
-        />
+          <Textarea
+            withAsterisk
+            label="Address"
+            key={form.key('address')}
+            {...form.getInputProps('address')}
+          />
 
-        <Button type="submit">Next</Button>
+          <Button type="submit">Next</Button>
+        </Stack>
       </form>
-    </Box>
+    </Container>
   )
 }

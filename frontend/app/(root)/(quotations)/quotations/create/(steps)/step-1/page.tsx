@@ -13,6 +13,7 @@ export default function Step1() {
 
   const buttons = mockTypes.map((type) => (
     <Button
+      size="xl"
       key={type.id}
       onClick={() => {
         updateData({ type: type.name })
@@ -23,5 +24,9 @@ export default function Step1() {
     </Button>
   ))
 
-  return <Group>{buttons}</Group>
+  return (
+    <Group h="100%" justify="center" gap="lg">
+      {buttons}
+    </Group>
+  )
 }

@@ -1,7 +1,7 @@
 'use client'
 import { LOCAL_STORAGE_KEY, useStepper } from '@/app/contexts/stepper'
 import { useUser } from '@/app/lib/auth'
-import { Box, Button, TextInput } from '@mantine/core'
+import { Box, Button, Container, Stack, TextInput } from '@mantine/core'
 import { useForm, zodResolver } from '@mantine/form'
 import { readLocalStorageValue } from '@mantine/hooks'
 import { z } from 'zod'
@@ -45,36 +45,38 @@ export default function Step4() {
   }
 
   return (
-    <Box>
+    <Container size="sm">
       <form onSubmit={form.onSubmit(onSubmit)}>
-        <TextInput
-          label="First name"
-          key={form.key('first_name')}
-          {...form.getInputProps('first_name')}
-        />
+        <Stack>
+          <TextInput
+            label="First name"
+            key={form.key('first_name')}
+            {...form.getInputProps('first_name')}
+          />
 
-        <TextInput
-          label="Last name"
-          key={form.key('last_name')}
-          {...form.getInputProps('last_name')}
-        />
+          <TextInput
+            label="Last name"
+            key={form.key('last_name')}
+            {...form.getInputProps('last_name')}
+          />
 
-        <TextInput label="Email" key={form.key('email')} {...form.getInputProps('email')} />
+          <TextInput label="Email" key={form.key('email')} {...form.getInputProps('email')} />
 
-        <TextInput
-          label="Username"
-          key={form.key('username')}
-          {...form.getInputProps('username')}
-        />
+          <TextInput
+            label="Username"
+            key={form.key('username')}
+            {...form.getInputProps('username')}
+          />
 
-        <TextInput
-          label="Job title"
-          key={form.key('job_title')}
-          {...form.getInputProps('job_title')}
-        />
+          <TextInput
+            label="Job title"
+            key={form.key('job_title')}
+            {...form.getInputProps('job_title')}
+          />
 
-        <Button type="submit">Next</Button>
+          <Button type="submit">Next</Button>
+        </Stack>
       </form>
-    </Box>
+    </Container>
   )
 }

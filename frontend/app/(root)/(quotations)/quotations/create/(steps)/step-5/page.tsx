@@ -1,9 +1,19 @@
 'use client'
 import ProductItem from '@/app/components/wizard/ProductItem'
 import { LOCAL_STORAGE_KEY, useStepper } from '@/app/contexts/stepper'
-import { Box, Button, NumberInput } from '@mantine/core'
+import {
+  ActionIcon,
+  Box,
+  Button,
+  Container,
+  Group,
+  NumberInput,
+  ScrollArea,
+  Stack,
+} from '@mantine/core'
 import { useForm, zodResolver } from '@mantine/form'
 import { randomId, readLocalStorageValue } from '@mantine/hooks'
+import { IconPlus } from '@tabler/icons-react'
 import { useEffect } from 'react'
 import { z } from 'zod'
 
@@ -82,25 +92,44 @@ export default function Step5() {
   }, [form])
 
   return (
-    <Box>
+    <Container size="sm">
       <form onSubmit={form.onSubmit(onSubmit)}>
-        {fields}
+        <Stack gap="xl">
+          <Group justify="end">
+            <ActionIcon
+              size={32}
+              onClick={() => form.insertListItem('products', emptyProduct)}
+              style={{ justifySelf: 'end' }}
+            >
+              <IconPlus size={16} />
+            </ActionIcon>
+          </Group>
 
-        <Button onClick={() => form.insertListItem('products', emptyProduct)}>Add product</Button>
+          <ScrollArea py="lg" maw="100vw">
+            {fields}
+          </ScrollArea>
 
-        <NumberInput
-          disabled
-          prefix="₱"
-          thousandSeparator=","
-          label="Grand total"
-          decimalScale={2}
-          fixedDecimalScale
-          key={form.key('grand_total')}
-          {...form.getInputProps('grand_total')}
-        />
+          <NumberInput
+            size="lg"
+            disabled
+            prefix="₱"
+            thousandSeparator=","
+            label="Grand total"
+            decimalScale={2}
+            fixedDecimalScale
+            key={form.key('grand_total')}
+            {...form.getInputProps('grand_total')}
+            styles={{
+              input: {
+                textAlign: 'center',
+                color: 'var(--mantine-color-text)',
+              },
+            }}
+          />
 
-        <Button type="submit">Next</Button>
+          <Button type="submit">Next</Button>
+        </Stack>
       </form>
-    </Box>
+    </Container>
   )
 }
