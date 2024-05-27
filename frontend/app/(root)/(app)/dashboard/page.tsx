@@ -10,7 +10,7 @@ export default function Dashboard() {
 
       <Grid>
         {/* Left card */}
-        <GridCol span={{ base: 12, lg: 9 }}>
+        <GridCol span={{ base: 12, lg: 8 }}>
           <Stack>
             <OverviewCard />
             <ChartCard />
@@ -18,7 +18,7 @@ export default function Dashboard() {
         </GridCol>
 
         {/* Right card */}
-        <GridCol span={{ base: 12, lg: 3 }}>
+        <GridCol span={{ base: 12, lg: 4 }}>
           <Stack>
             <RecentQuotationsCard />
           </Stack>
