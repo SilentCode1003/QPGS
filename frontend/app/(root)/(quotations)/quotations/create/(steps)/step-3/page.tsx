@@ -39,7 +39,7 @@ export default function Step3() {
   return (
     <Container size="sm">
       <Center>
-        <Title>Please enter the client&apos;s details</Title>
+        <Title>Enter client information</Title>
       </Center>
 
       <Box mt={50}>

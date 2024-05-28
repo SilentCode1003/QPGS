@@ -26,7 +26,7 @@ export default function Step1() {
 
   return (
     <Stack align="center">
-      <Title>Please select the type of product</Title>
+      <Title>Please choose your product type</Title>
       <Group h="100%" justify="center" gap="lg" mt={100}>
         {buttons}
       </Group>

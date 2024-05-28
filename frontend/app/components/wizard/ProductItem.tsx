@@ -125,6 +125,7 @@ export default function ProductItem({ form, item, index }: Props) {
           label="Product name"
           data={mockProductNames}
           searchable
+          nothingFoundMessage="Nothing found..."
           key={form.key(`${currentItem}.name`)}
           {...form.getInputProps(`${currentItem}.name`)}
         />

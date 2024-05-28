@@ -40,7 +40,7 @@ export default function Step2() {
   return (
     <Container size="sm">
       <Center>
-        <Title>Please enter the quotation details</Title>
+        <Title>Enter quotations details</Title>
       </Center>
 
       <Box mt={50}>
