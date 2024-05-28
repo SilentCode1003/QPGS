@@ -5,6 +5,7 @@ import ColorSchemeButton from './ColorSchemeButton'
 import Logo from './Logo'
 import NotificationButton from './NotificationButton'
 import Link from 'next/link'
+import NotificationMenu from '../dashboard/NotificationMenu'
 
 function DrawerTitle({
   data,
@@ -70,13 +71,15 @@ export default function Header({ opened, toggle }: { opened: boolean; toggle: ()
           </List.Item>
         </List>
       </Drawer>
+
       <Group gap="xs">
         <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
         <Logo size={32} />
       </Group>
 
       <Group gap={8}>
-        <NotificationButton actionSize={32} iconSize={16} />
+        {/* <NotificationButton actionSize={32} iconSize={16} /> */}
+        <NotificationMenu />
 
         <ColorSchemeButton actionSize={32} iconSize={16} />
 
