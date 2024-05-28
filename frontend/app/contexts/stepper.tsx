@@ -1,18 +1,16 @@
 'use client'
 import { useLocalStorage } from '@mantine/hooks'
 import { useRouter } from 'next/navigation'
-import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, createContext, useContext, useEffect } from 'react'
 import { Step2Values } from '../(root)/(quotations)/quotations/create/(steps)/step-2/page'
 import { Step3Values } from '../(root)/(quotations)/quotations/create/(steps)/step-3/page'
 import { Step4Values } from '../(root)/(quotations)/quotations/create/(steps)/step-4/page'
-import { Step5Values } from '../(root)/(quotations)/quotations/create/(steps)/step-5/page'
 
 type Values = {
   type: string
 } & Step2Values &
   Step3Values &
-  Step4Values &
-  Step5Values
+  Step4Values
 
 type Ctx = {
   active: number
@@ -33,7 +31,7 @@ export const useStepper = () => {
   return context
 }
 
-const MAX_STEPS = 7
+const MAX_STEPS = 6
 export const LOCAL_STORAGE_KEY = 'quotation-system-progress'
 
 export const StepperContextProvider = ({ children }: { children: React.ReactNode }) => {
@@ -45,14 +43,6 @@ export const StepperContextProvider = ({ children }: { children: React.ReactNode
     key: LOCAL_STORAGE_KEY,
     defaultValue: {
       client: { address: '', contact_no: '', email: '', name: '', tel_no: '' },
-      user: {
-        id: 0,
-        email: '',
-        first_name: '',
-        job_title: '',
-        username: '',
-        last_name: '',
-      },
     },
   })
 

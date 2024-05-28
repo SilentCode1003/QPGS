@@ -1,14 +1,16 @@
 import {
   Product,
-  Step5Values,
-} from '@/app/(root)/(quotations)/quotations/create/(steps)/step-5/page'
+  Step4Values,
+} from '@/app/(root)/(quotations)/quotations/create/(steps)/step-4/page'
+import { api } from '@/app/lib/api'
 import { ActionIcon, Box, Group, NumberInput, Radio, Select, Stack, TextInput } from '@mantine/core'
 import { UseFormReturnType } from '@mantine/form'
 import { IconTrash } from '@tabler/icons-react'
+import { useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 
 interface Props {
-  form: UseFormReturnType<Step5Values>
+  form: UseFormReturnType<Step4Values>
   item: Product
   index: number
 }
@@ -30,7 +32,29 @@ const mockProducts = [
 
 const mockProductNames = mockProducts.map((product) => product.name)
 
+type PaymentType = {
+  id: string
+  name: string
+  created_at: string
+}
+
+type PaymentTypesResponse = {
+  data: PaymentType[]
+}
+
+function useGetPaymentTypes() {
+  return useQuery({
+    queryKey: ['payment_type'],
+    queryFn: async () => {
+      const res = await api.get<PaymentTypesResponse>('/payment-types')
+      return res.data.data
+    },
+  })
+}
+
 export default function ProductItem({ form, item, index }: Props) {
+  const { data: paymentTypes, isLoading, isError, error } = useGetPaymentTypes()
+
   const currentItem = `products.${index}`
 
   const [price, setPrice] = useState(form.getValues().products[index].price)
@@ -67,6 +91,20 @@ export default function ProductItem({ form, item, index }: Props) {
     setVatType(value as 'vatEx' | 'vatInc')
   })
 
+  const [durationShouldDisable, setDurationShouldDisable] = useState(
+    () => form.getValues().products[index].payment_type === 'One-time',
+  )
+
+  form.watch(`${currentItem}.payment_type`, ({ value }) => {
+    // TODO: make this a config
+    if (value === 'One-time') {
+      form.setFieldValue(`${currentItem}.duration`, 1)
+      setDurationShouldDisable(true)
+    } else {
+      setDurationShouldDisable(false)
+    }
+  })
+
   useEffect(() => {
     form.setFieldValue(`${currentItem}.vatEx`, vatExTotal)
     form.setFieldValue(`${currentItem}.vatInc`, vatIncTotal)
@@ -75,6 +113,10 @@ export default function ProductItem({ form, item, index }: Props) {
   useEffect(() => {
     form.setFieldValue(`${currentItem}.total_amount`, totalAmount)
   }, [form, currentItem, totalAmount])
+
+  if (isLoading) {
+    return <span>Payment type is loading...</span>
+  }
 
   return (
     <Group key={item.key} wrap="nowrap">
@@ -98,8 +140,10 @@ export default function ProductItem({ form, item, index }: Props) {
       </Box>
 
       <Box miw={200} h={100}>
-        <TextInput
+        <Select
           label="Payment type"
+          data={paymentTypes ? paymentTypes.map((paymentType) => paymentType.name) : []}
+          allowDeselect={false}
           key={form.key(`${currentItem}.payment_type`)}
           {...form.getInputProps(`${currentItem}.payment_type`)}
         />
@@ -159,6 +203,7 @@ export default function ProductItem({ form, item, index }: Props) {
 
       <Box miw={200} h={100}>
         <NumberInput
+          disabled={durationShouldDisable}
           label="Duration"
           min={0}
           thousandSeparator=","
