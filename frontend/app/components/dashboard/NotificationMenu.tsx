@@ -2,6 +2,7 @@ import { timeFromNow } from '@/app/utils/format'
 import { ActionIcon, Badge, Divider, Menu, Stack, Text } from '@mantine/core'
 import { IconBell } from '@tabler/icons-react'
 import Link from 'next/link'
+import React from 'react'
 
 interface Notification {
   id: number
@@ -37,8 +38,8 @@ export default function NotificationMenu() {
     mockNotifications.map((notification, index) => {
       if (notification.status === 'unread') {
         return (
-          <>
-            <Menu.Item key={notification.id} component={Link} href={notification.link}>
+          <React.Fragment key={notification.id}>
+            <Menu.Item component={Link} href={notification.link}>
               <Stack gap="xs">
                 <Text size="xs">{notification.content}</Text>
                 <Text size="xs" c="dimmed">
@@ -47,7 +48,7 @@ export default function NotificationMenu() {
               </Stack>
             </Menu.Item>
             {index !== mockNotifications.length - 1 && <Divider my={4} />}
-          </>
+          </React.Fragment>
         )
       }
     })
