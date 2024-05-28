@@ -1,13 +1,10 @@
 'use client'
 import { useStepper } from '@/app/contexts/stepper'
-import { useUser } from '@/app/lib/auth'
 import { Button, Center, Container, ScrollArea, Skeleton, Stack, Title } from '@mantine/core'
 import { useRouter } from 'next/navigation'
 
 export default function Step7() {
   const router = useRouter()
-
-  const user = useUser()
 
   const { data, removeData } = useStepper()
 
@@ -24,7 +21,7 @@ export default function Step7() {
         <Button
           onClick={() => {
             // router.push('/dashboard')
-            console.log({ ...data, user_id: user.data.id })
+            console.log(data)
             // removeData()
           }}
         >
