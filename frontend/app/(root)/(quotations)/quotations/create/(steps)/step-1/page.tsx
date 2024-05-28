@@ -1,6 +1,6 @@
 'use client'
 import { useStepper } from '@/app/contexts/stepper'
-import { Button, Group } from '@mantine/core'
+import { Button, Group, Stack, Title } from '@mantine/core'
 
 const mockTypes = [
   { id: 1, name: 'Hardware' },
@@ -25,8 +25,11 @@ export default function Step1() {
   ))
 
   return (
-    <Group h="100%" justify="center" gap="lg">
-      {buttons}
-    </Group>
+    <Stack align="center">
+      <Title>Please select the type of product</Title>
+      <Group h="100%" justify="center" gap="lg" mt={100}>
+        {buttons}
+      </Group>
+    </Stack>
   )
 }

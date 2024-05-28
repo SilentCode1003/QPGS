@@ -5,11 +5,13 @@ import {
   ActionIcon,
   Box,
   Button,
+  Center,
   Container,
   Group,
   NumberInput,
   ScrollArea,
   Stack,
+  Title,
 } from '@mantine/core'
 import { useForm, zodResolver } from '@mantine/form'
 import { randomId, readLocalStorageValue } from '@mantine/hooks'
@@ -92,44 +94,50 @@ export default function Step5() {
   }, [form])
 
   return (
-    <Container size="sm">
-      <form onSubmit={form.onSubmit(onSubmit)}>
-        <Stack gap="xl">
-          <Group justify="end">
-            <ActionIcon
-              size={32}
-              onClick={() => form.insertListItem('products', emptyProduct)}
-              style={{ justifySelf: 'end' }}
-            >
-              <IconPlus size={16} />
-            </ActionIcon>
-          </Group>
+    <Container size="md">
+      <Center>
+        <Title>Line items</Title>
+      </Center>
 
-          <ScrollArea py="lg" maw="100vw">
-            {fields}
-          </ScrollArea>
+      <Box>
+        <form onSubmit={form.onSubmit(onSubmit)}>
+          <Stack gap="xl">
+            <Group justify="end">
+              <ActionIcon
+                size={32}
+                onClick={() => form.insertListItem('products', emptyProduct)}
+                style={{ justifySelf: 'end' }}
+              >
+                <IconPlus size={16} />
+              </ActionIcon>
+            </Group>
 
-          <NumberInput
-            readOnly
-            size="lg"
-            prefix="₱"
-            thousandSeparator=","
-            label="Grand total"
-            decimalScale={2}
-            fixedDecimalScale
-            key={form.key('grand_total')}
-            {...form.getInputProps('grand_total')}
-            styles={{
-              input: {
-                textAlign: 'center',
-                color: 'var(--mantine-color-text)',
-              },
-            }}
-          />
+            <ScrollArea py="lg" maw="100vw">
+              {fields}
+            </ScrollArea>
 
-          <Button type="submit">Next</Button>
-        </Stack>
-      </form>
+            <NumberInput
+              readOnly
+              size="lg"
+              prefix="₱"
+              thousandSeparator=","
+              label="Grand total"
+              decimalScale={2}
+              fixedDecimalScale
+              key={form.key('grand_total')}
+              {...form.getInputProps('grand_total')}
+              styles={{
+                input: {
+                  textAlign: 'center',
+                  color: 'var(--mantine-color-text)',
+                },
+              }}
+            />
+
+            <Button type="submit">Next</Button>
+          </Stack>
+        </form>
+      </Box>
     </Container>
   )
 }

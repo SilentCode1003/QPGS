@@ -1,6 +1,6 @@
 'use client'
 import { LOCAL_STORAGE_KEY, useStepper } from '@/app/contexts/stepper'
-import { Box, Button, Container, Stack, TextInput, Textarea } from '@mantine/core'
+import { Box, Button, Center, Container, Stack, TextInput, Textarea, Title } from '@mantine/core'
 import { useForm, zodResolver } from '@mantine/form'
 import { readLocalStorageValue } from '@mantine/hooks'
 import { z } from 'zod'
@@ -38,46 +38,52 @@ export default function Step3() {
 
   return (
     <Container size="sm">
-      <form onSubmit={form.onSubmit(onSubmit)}>
-        <Stack>
-          <TextInput
-            withAsterisk
-            label="Company name"
-            key={form.key('client.name')}
-            {...form.getInputProps('client.name')}
-          />
+      <Center>
+        <Title>Please enter the client&apos;s details</Title>
+      </Center>
 
-          <TextInput
-            withAsterisk
-            label="Telephone no."
-            key={form.key('client.tel_no')}
-            {...form.getInputProps('client.tel_no')}
-          />
+      <Box mt={50}>
+        <form onSubmit={form.onSubmit(onSubmit)}>
+          <Stack>
+            <TextInput
+              withAsterisk
+              label="Company name"
+              key={form.key('client.name')}
+              {...form.getInputProps('client.name')}
+            />
 
-          <TextInput
-            withAsterisk
-            label="Contact no."
-            key={form.key('client.contact_no')}
-            {...form.getInputProps('client.contact_no')}
-          />
+            <TextInput
+              withAsterisk
+              label="Telephone no."
+              key={form.key('client.tel_no')}
+              {...form.getInputProps('client.tel_no')}
+            />
 
-          <TextInput
-            withAsterisk
-            label="Email"
-            key={form.key('client.email')}
-            {...form.getInputProps('client.email')}
-          />
+            <TextInput
+              withAsterisk
+              label="Contact no."
+              key={form.key('client.contact_no')}
+              {...form.getInputProps('client.contact_no')}
+            />
 
-          <Textarea
-            withAsterisk
-            label="Address"
-            key={form.key('client.address')}
-            {...form.getInputProps('client.address')}
-          />
+            <TextInput
+              withAsterisk
+              label="Email"
+              key={form.key('client.email')}
+              {...form.getInputProps('client.email')}
+            />
 
-          <Button type="submit">Next</Button>
-        </Stack>
-      </form>
+            <Textarea
+              withAsterisk
+              label="Address"
+              key={form.key('client.address')}
+              {...form.getInputProps('client.address')}
+            />
+
+            <Button type="submit">Next</Button>
+          </Stack>
+        </form>
+      </Box>
     </Container>
   )
 }

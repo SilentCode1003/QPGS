@@ -8,6 +8,7 @@ import { Step4Values } from '../(root)/(quotations)/quotations/create/(steps)/st
 
 type Values = {
   type: string
+  user_id: number
 } & Step2Values &
   Step3Values &
   Step4Values

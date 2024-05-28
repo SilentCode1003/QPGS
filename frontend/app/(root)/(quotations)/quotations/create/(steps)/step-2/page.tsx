@@ -1,6 +1,6 @@
 'use client'
 import { LOCAL_STORAGE_KEY, useStepper } from '@/app/contexts/stepper'
-import { Box, Button, Container, Stack, TextInput, Textarea } from '@mantine/core'
+import { Box, Button, Center, Container, Stack, TextInput, Textarea, Title } from '@mantine/core'
 import { DatePickerInput } from '@mantine/dates'
 import { useForm, zodResolver } from '@mantine/form'
 import { readLocalStorageValue } from '@mantine/hooks'
@@ -39,41 +39,47 @@ export default function Step2() {
 
   return (
     <Container size="sm">
-      <form onSubmit={form.onSubmit(onSubmit)}>
-        <Stack>
-          <TextInput
-            withAsterisk
-            label="Subject"
-            key={form.key('subject')}
-            {...form.getInputProps('subject')}
-          />
+      <Center>
+        <Title>Please enter the quotation details</Title>
+      </Center>
 
-          <DatePickerInput
-            withAsterisk
-            label="Date"
-            key={form.key('date')}
-            {...form.getInputProps('date')}
-          />
+      <Box mt={50}>
+        <form onSubmit={form.onSubmit(onSubmit)}>
+          <Stack>
+            <TextInput
+              withAsterisk
+              label="Subject"
+              key={form.key('subject')}
+              {...form.getInputProps('subject')}
+            />
 
-          <DatePickerInput
-            withAsterisk
-            label="Expiry date"
-            key={form.key('expiry_date')}
-            {...form.getInputProps('expiry_date')}
-          />
+            <DatePickerInput
+              withAsterisk
+              label="Date"
+              key={form.key('date')}
+              {...form.getInputProps('date')}
+            />
 
-          <Textarea label="Notes" key={form.key('notes')} {...form.getInputProps('notes')} />
+            <DatePickerInput
+              withAsterisk
+              label="Expiry date"
+              key={form.key('expiry_date')}
+              {...form.getInputProps('expiry_date')}
+            />
 
-          <Textarea
-            withAsterisk
-            label="Terms and conditions"
-            key={form.key('terms_and_conditions')}
-            {...form.getInputProps('terms_and_conditions')}
-          />
+            <Textarea label="Notes" key={form.key('notes')} {...form.getInputProps('notes')} />
 
-          <Button type="submit">Next</Button>
-        </Stack>
-      </form>
+            <Textarea
+              withAsterisk
+              label="Terms and conditions"
+              key={form.key('terms_and_conditions')}
+              {...form.getInputProps('terms_and_conditions')}
+            />
+
+            <Button type="submit">Next</Button>
+          </Stack>
+        </form>
+      </Box>
     </Container>
   )
 }
