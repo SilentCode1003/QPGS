@@ -90,7 +90,7 @@ export default function ProductItem({ form, item, index }: Props) {
 
       <Box miw={200} h={100}>
         <TextInput
-          disabled
+          readOnly
           label="Description"
           key={form.key(`${currentItem}.description`)}
           {...form.getInputProps(`${currentItem}.description`)}
@@ -107,7 +107,7 @@ export default function ProductItem({ form, item, index }: Props) {
 
       <Box miw={200} h={100}>
         <NumberInput
-          disabled
+          readOnly
           label="Price"
           prefix="₱"
           thousandSeparator=","
@@ -131,7 +131,7 @@ export default function ProductItem({ form, item, index }: Props) {
 
       <Box miw={200} h={100}>
         <NumberInput
-          disabled
+          readOnly
           label="VAT Excluded"
           min={0}
           prefix="₱"
@@ -145,7 +145,7 @@ export default function ProductItem({ form, item, index }: Props) {
 
       <Box miw={200} h={100}>
         <NumberInput
-          disabled
+          readOnly
           label="VAT Included"
           min={0}
           prefix="₱"
@@ -192,7 +192,7 @@ export default function ProductItem({ form, item, index }: Props) {
 
       <Box miw={200} h={100}>
         <NumberInput
-          disabled
+          readOnly
           label="Total amount"
           min={0}
           prefix="₱"

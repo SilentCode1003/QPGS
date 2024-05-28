@@ -110,8 +110,8 @@ export default function Step5() {
           </ScrollArea>
 
           <NumberInput
+            readOnly
             size="lg"
-            disabled
             prefix="₱"
             thousandSeparator=","
             label="Grand total"

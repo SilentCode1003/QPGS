@@ -41,7 +41,20 @@ export const StepperContextProvider = ({ children }: { children: React.ReactNode
 
   const [active, setActive] = useLocalStorage<number>({ key: 'qs-active', defaultValue: 0 })
 
-  const [data, setData, removeData] = useLocalStorage<Partial<Values>>({ key: LOCAL_STORAGE_KEY })
+  const [data, setData, removeData] = useLocalStorage<Partial<Values>>({
+    key: LOCAL_STORAGE_KEY,
+    defaultValue: {
+      client: { address: '', contact_no: '', email: '', name: '', tel_no: '' },
+      user: {
+        id: 0,
+        email: '',
+        first_name: '',
+        job_title: '',
+        username: '',
+        last_name: '',
+      },
+    },
+  })
 
   const [highestStepVisited, setHighestStepVisited] = useLocalStorage({
     key: 'qs-highest',

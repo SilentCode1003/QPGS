@@ -6,11 +6,13 @@ import { readLocalStorageValue } from '@mantine/hooks'
 import { z } from 'zod'
 
 const step3Schema = z.object({
-  company_name: z.string().min(2),
-  tel_no: z.string().optional(),
-  contact_no: z.string(),
-  email: z.string().email(),
-  address: z.string().min(5),
+  client: z.object({
+    name: z.string().min(2),
+    tel_no: z.string().optional(),
+    contact_no: z.string(),
+    email: z.string().email(),
+    address: z.string().min(5),
+  }),
 })
 
 export type Step3Values = z.infer<typeof step3Schema>
@@ -41,36 +43,36 @@ export default function Step3() {
           <TextInput
             withAsterisk
             label="Company name"
-            key={form.key('company_name')}
-            {...form.getInputProps('company_name')}
+            key={form.key('client.name')}
+            {...form.getInputProps('client.name')}
           />
 
           <TextInput
             withAsterisk
             label="Telephone no."
-            key={form.key('tel_no')}
-            {...form.getInputProps('tel_no')}
+            key={form.key('client.tel_no')}
+            {...form.getInputProps('client.tel_no')}
           />
 
           <TextInput
             withAsterisk
             label="Contact no."
-            key={form.key('contact_no')}
-            {...form.getInputProps('contact_no')}
+            key={form.key('client.contact_no')}
+            {...form.getInputProps('client.contact_no')}
           />
 
           <TextInput
             withAsterisk
             label="Email"
-            key={form.key('email')}
-            {...form.getInputProps('email')}
+            key={form.key('client.email')}
+            {...form.getInputProps('client.email')}
           />
 
           <Textarea
             withAsterisk
             label="Address"
-            key={form.key('address')}
-            {...form.getInputProps('address')}
+            key={form.key('client.address')}
+            {...form.getInputProps('client.address')}
           />
 
           <Button type="submit">Next</Button>
