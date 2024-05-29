@@ -8,7 +8,7 @@ async function createRoles() {
   await prisma.role.createMany({
     data: [
       {
-        id: 1,
+        id: 1, // Admin needs to have an id of 1 (used in backend middlewares)
         name: 'ADMIN',
       },
       {
@@ -80,10 +80,37 @@ async function createTermsAndConditions() {
   })
 }
 
+async function createClient() {
+  await prisma.client.create({
+    data: {
+      name: faker.company.name(),
+      tel_no: faker.phone.number(),
+      contact_no: faker.phone.number(),
+      email: faker.internet.email(),
+      address: faker.location.streetAddress({ useFullAddress: true }) + ' ' + faker.location.city(),
+    },
+  })
+}
+
+async function createPaymentTypes() {
+  await prisma.payment_type.createMany({
+    data: [
+      {
+        name: 'One-time', // Needs to be 'One-time' literal (used in ProductItem component frontend)
+      },
+      {
+        name: 'Subscription',
+      },
+    ],
+  })
+}
+
 const main = async () => {
   await createRoles()
   await createUsers()
   await createTermsAndConditions()
+  await createClient()
+  await createPaymentTypes()
 }
 
 main()
