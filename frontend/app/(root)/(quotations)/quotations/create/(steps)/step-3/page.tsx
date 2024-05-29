@@ -196,5 +196,13 @@ function useCreateClient() {
         color: 'green',
       })
     },
+    onError: (err) => {
+      console.error(err)
+      notifications.show({
+        title: 'Error',
+        message: 'Something went wrong',
+        color: 'red',
+      })
+    },
   })
 }
