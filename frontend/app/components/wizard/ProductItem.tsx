@@ -205,7 +205,7 @@ export default function ProductItem({ form, item, index }: Props) {
       <Box miw={200} h={100}>
         <NumberInput
           disabled={durationShouldDisable}
-          label="Duration"
+          label="Duration (Months)"
           min={0}
           thousandSeparator=","
           key={form.key(`${currentItem}.duration`)}
