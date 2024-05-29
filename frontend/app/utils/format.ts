@@ -24,6 +24,10 @@ export const formatDate = (date: Date) => {
   return dayjs(date).format('LLL')
 }
 
+export const formatDateWithoutTime = (date: Date) => {
+  return dayjs(date).format('LL')
+}
+
 export const timeFromNow = (date: Date) => {
   return dayjs(date).fromNow()
 }
