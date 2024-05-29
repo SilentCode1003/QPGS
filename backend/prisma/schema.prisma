@@ -47,6 +47,7 @@ model payment_type {
 
 model terms_and_conditions {
   id         Int      @id @default(autoincrement())
+  summary    String
   body       String   @db.Text
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt

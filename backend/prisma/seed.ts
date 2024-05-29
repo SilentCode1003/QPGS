@@ -51,7 +51,6 @@ async function createUsers() {
         created_at: faker.date.past({ years: 3 }),
       } as user
     })
-  console.log(seededUsers)
 
   await prisma.user.createMany({
     data: [
@@ -69,9 +68,30 @@ async function createUsers() {
   })
 }
 
+async function createTermsAndConditions() {
+  await prisma.terms_and_conditions.create({
+    data: {
+      summary: '50% Down payment required',
+      body: `PAYMENT/DELIVERY
+      A. PAYMENT
+      50% DOWN PAYMENT REQUIRED UPON RECEIPT OF P.O. FULL PAYMENT IS DUE UPON DELIVERY
+      `,
+    },
+  })
+}
+
 const main = async () => {
   await createRoles()
   await createUsers()
+  await createTermsAndConditions()
 }
 
 main()
+  .then(async () => {
+    console.log('Finished seeding')
+    await prisma.$disconnect()
+  })
+  .catch(async (err) => {
+    console.error(err)
+    await prisma.$disconnect()
+  })
