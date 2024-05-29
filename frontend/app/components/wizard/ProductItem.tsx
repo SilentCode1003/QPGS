@@ -106,8 +106,8 @@ export default function ProductItem({ form, item, index }: Props) {
   })
 
   useEffect(() => {
-    form.setFieldValue(`${currentItem}.vatEx`, vatExTotal)
-    form.setFieldValue(`${currentItem}.vatInc`, vatIncTotal)
+    form.setFieldValue(`${currentItem}.vat_ex`, vatExTotal)
+    form.setFieldValue(`${currentItem}.vat_inc`, vatIncTotal)
   }, [form, currentItem, vatExTotal, vatIncTotal])
 
   useEffect(() => {
@@ -183,8 +183,8 @@ export default function ProductItem({ form, item, index }: Props) {
           thousandSeparator=","
           decimalScale={2}
           fixedDecimalScale
-          key={form.key(`${currentItem}.vatEx`)}
-          {...form.getInputProps(`${currentItem}.vatEx`)}
+          key={form.key(`${currentItem}.vat_ex`)}
+          {...form.getInputProps(`${currentItem}.vat_ex`)}
         />
       </Box>
 
@@ -197,8 +197,8 @@ export default function ProductItem({ form, item, index }: Props) {
           thousandSeparator=","
           decimalScale={2}
           fixedDecimalScale
-          key={form.key(`${currentItem}.vatInc`)}
-          {...form.getInputProps(`${currentItem}.vatInc`)}
+          key={form.key(`${currentItem}.vat_inc`)}
+          {...form.getInputProps(`${currentItem}.vat_inc`)}
         />
       </Box>
 

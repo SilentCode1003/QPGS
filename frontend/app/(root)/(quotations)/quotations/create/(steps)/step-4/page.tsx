@@ -28,8 +28,8 @@ const productSchema = z.object({
   duration: z.number().gt(0),
   quantity: z.number().gt(0),
   markup: z.number().nonnegative(),
-  vatEx: z.number(),
-  vatInc: z.number(),
+  vat_ex: z.number(),
+  vat_inc: z.number(),
   vat_type: z.enum(['vatEx', 'vatInc']),
   total_amount: z.number().gt(0),
 })
@@ -56,8 +56,8 @@ export default function Step5() {
     duration: 0,
     quantity: 0,
     markup: 0,
-    vatEx: 0,
-    vatInc: 0,
+    vat_ex: 0,
+    vat_inc: 0,
     vat_type: 'vatEx' as const,
     total_amount: 0,
   }
