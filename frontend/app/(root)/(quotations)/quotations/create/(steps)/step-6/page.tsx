@@ -1,5 +1,6 @@
 'use client'
-import { useStepper } from '@/app/contexts/stepper'
+import { Values, useStepper } from '@/app/contexts/stepper'
+import { api } from '@/app/lib/api'
 import { formatDateWithoutTime } from '@/app/utils/format'
 import {
   Box,
@@ -14,15 +15,23 @@ import {
   Textarea,
   Title,
 } from '@mantine/core'
+import { notifications } from '@mantine/notifications'
+import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 
 export default function Step7() {
   const router = useRouter()
 
+  const mutation = useCreateQuotation()
+
   const { data, removeData } = useStepper()
 
   const submitQuotation = () => {
     console.log(data)
+
+    // Data should be complete here
+    // @ts-ignore
+    mutation.mutate(data)
   }
 
   return (
@@ -243,4 +252,27 @@ export default function Step7() {
       </Stack>
     </Container>
   )
+}
+
+function useCreateQuotation() {
+  return useMutation({
+    mutationFn: (data: Values) => {
+      return api.post('/quotations', data)
+    },
+    onSuccess: () => {
+      notifications.show({
+        title: 'Success',
+        message: 'Quotation request successfully submitted',
+        color: 'green',
+      })
+    },
+    onError: (err) => {
+      console.error(err)
+      notifications.show({
+        title: 'Error',
+        message: 'Cannot submit quotation request',
+        color: 'red',
+      })
+    },
+  })
 }
