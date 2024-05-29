@@ -14,6 +14,7 @@ import {
 } from '@mantine/core'
 import { useForm, zodResolver } from '@mantine/form'
 import { readLocalStorageValue } from '@mantine/hooks'
+import { notifications } from '@mantine/notifications'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { z } from 'zod'
@@ -187,6 +188,13 @@ function useCreateClient() {
       tel_no?: string | undefined
     }) => {
       return api.post('/clients', newClient)
+    },
+    onSuccess: () => {
+      notifications.show({
+        title: 'Success',
+        message: 'Client successfully created',
+        color: 'green',
+      })
     },
   })
 }
