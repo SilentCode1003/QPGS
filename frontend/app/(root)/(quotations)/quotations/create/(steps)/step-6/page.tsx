@@ -11,6 +11,7 @@ import {
   Stack,
   Table,
   Text,
+  Textarea,
   Title,
 } from '@mantine/core'
 import { useRouter } from 'next/navigation'
@@ -69,14 +70,28 @@ export default function Step7() {
               <Text c="dimmed" size="sm">
                 Notes
               </Text>
-              <Text size="lg">{data.notes}</Text>
+              <Textarea
+                size="lg"
+                readOnly
+                autosize
+                minRows={2}
+                maxRows={5}
+                value={data.notes || 'N/A'}
+              />
             </Box>
 
             <Box>
               <Text c="dimmed" size="sm">
                 Terms and conditions
               </Text>
-              <Text size="lg">{data.terms_and_conditions}</Text>
+              <Textarea
+                size="lg"
+                readOnly
+                autosize
+                minRows={2}
+                maxRows={5}
+                value={data.terms_and_conditions}
+              />
             </Box>
           </Stack>
         </Card>
@@ -141,7 +156,7 @@ export default function Step7() {
                     <Table.Th>Markup</Table.Th>
                     <Table.Th>VAT Excluded price</Table.Th>
                     <Table.Th>VAT Included price</Table.Th>
-                    <Table.Th>Duration</Table.Th>
+                    <Table.Th>Duration (Months)</Table.Th>
                     <Table.Th>Quantity</Table.Th>
                     <Table.Th>Selected VAT Type</Table.Th>
                     <Table.Th>Total amount</Table.Th>
