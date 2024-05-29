@@ -1,9 +1,21 @@
 'use client'
 import { LOCAL_STORAGE_KEY, useStepper } from '@/app/contexts/stepper'
-import { Box, Button, Center, Container, Stack, TextInput, Textarea, Title } from '@mantine/core'
+import { api } from '@/app/lib/api'
+import {
+  Box,
+  Button,
+  Center,
+  Container,
+  Select,
+  Stack,
+  TextInput,
+  Textarea,
+  Title,
+} from '@mantine/core'
 import { DatePickerInput } from '@mantine/dates'
 import { useForm, zodResolver } from '@mantine/form'
 import { readLocalStorageValue } from '@mantine/hooks'
+import { useQuery } from '@tanstack/react-query'
 import { z } from 'zod'
 
 const step2Schema = z.object({
@@ -17,6 +29,9 @@ const step2Schema = z.object({
 export type Step2Values = z.infer<typeof step2Schema>
 
 export default function Step2() {
+  const { data: termsAndConditions } = useGetTermsAndConditions()
+  const selectData = termsAndConditions?.map((tac) => tac.summary)
+
   const { updateData, incrementActive } = useStepper()
 
   const storageValues = readLocalStorageValue<Step2Values | undefined>({ key: LOCAL_STORAGE_KEY })
@@ -35,6 +50,11 @@ export default function Step2() {
   const onSubmit = (values) => {
     updateData(values)
     incrementActive()
+  }
+
+  const onPresetChange = (e: string | null) => {
+    const preset = termsAndConditions?.find((preset) => preset.summary === e)
+    form.setFieldValue('terms_and_conditions', preset?.body)
   }
 
   return (
@@ -67,9 +87,25 @@ export default function Step2() {
               {...form.getInputProps('expiry_date')}
             />
 
-            <Textarea label="Notes" key={form.key('notes')} {...form.getInputProps('notes')} />
+            <Textarea
+              autosize
+              minRows={2}
+              maxRows={5}
+              label="Notes"
+              key={form.key('notes')}
+              {...form.getInputProps('notes')}
+            />
+
+            <Select
+              label="Select terms and conditions preset"
+              data={selectData}
+              onChange={onPresetChange}
+            />
 
             <Textarea
+              autosize
+              minRows={5}
+              maxRows={10}
               withAsterisk
               label="Terms and conditions"
               key={form.key('terms_and_conditions')}
@@ -82,4 +118,26 @@ export default function Step2() {
       </Box>
     </Container>
   )
+}
+
+type TermsAndConditions = {
+  id: number
+  summary: string
+  body: string
+  created_at: string
+  updated_at: string
+}
+
+type TermsAndConditionsResponse = {
+  data: TermsAndConditions[]
+}
+
+function useGetTermsAndConditions() {
+  return useQuery({
+    queryKey: ['terms_and_conditions'],
+    queryFn: async () => {
+      const res = await api.get<TermsAndConditionsResponse>('/terms-and-conditions')
+      return res.data.data
+    },
+  })
 }
