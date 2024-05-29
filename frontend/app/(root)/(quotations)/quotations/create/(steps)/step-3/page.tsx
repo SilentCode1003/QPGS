@@ -6,21 +6,25 @@ import {
   Button,
   Center,
   Container,
+  NumberInput,
   Select,
   Stack,
   TextInput,
   Textarea,
   Title,
+  VisuallyHidden,
 } from '@mantine/core'
 import { useForm, zodResolver } from '@mantine/form'
 import { readLocalStorageValue } from '@mantine/hooks'
 import { notifications } from '@mantine/notifications'
 import { useMutation, useQuery } from '@tanstack/react-query'
+import { AxiosResponse } from 'axios'
 import { useState } from 'react'
 import { z } from 'zod'
 
 const step3Schema = z.object({
   client: z.object({
+    id: z.number(),
     name: z.string().min(2),
     tel_no: z.string().optional(),
     contact_no: z.string().min(1),
@@ -60,6 +64,7 @@ export default function Step3() {
   const onCompanyNameSelect = (value: string | null) => {
     if (value === 'Create new') {
       setIsNew(true)
+      form.setFieldValue('client.id', -1)
       form.setFieldValue('client.name', '')
       form.setFieldValue('client.tel_no', '')
       form.setFieldValue('client.contact_no', '')
@@ -68,6 +73,7 @@ export default function Step3() {
     } else {
       setIsNew(false)
       const client = clients?.find((client) => client.name === value)
+      form.setFieldValue('client.id', client?.id)
       form.setFieldValue('client.name', client?.name)
       form.setFieldValue('client.tel_no', client?.tel_no)
       form.setFieldValue('client.contact_no', client?.contact_no)
@@ -76,15 +82,19 @@ export default function Step3() {
     }
   }
 
-  const onCreate = () => {
+  const onCreate = async () => {
     form.validate()
 
     if (!form.isValid()) {
       return
     }
 
-    mutation.mutate(form.getValues().client!)
-    updateData(form.getValues())
+    const { id, ...rest } = form.getValues().client!
+
+    const res: AxiosResponse<CreateClientResponse> = await mutation.mutateAsync(rest)
+    const { created_at, updated_at, ...others } = res.data.data
+
+    updateData({ client: others })
     incrementActive()
   }
 
@@ -105,7 +115,16 @@ export default function Step3() {
       <Box mt={50}>
         <form onSubmit={form.onSubmit(onSubmit)}>
           <Stack>
+            <VisuallyHidden>
+              <NumberInput
+                key={form.key('client.id')}
+                {...form.getInputProps('client.id')}
+                readOnly
+              />
+            </VisuallyHidden>
+
             <TextInput
+              readOnly={!isNew}
               withAsterisk
               label="Client name"
               key={form.key('client.name')}
@@ -113,12 +132,14 @@ export default function Step3() {
             />
 
             <TextInput
+              readOnly={!isNew}
               label="Telephone no."
               key={form.key('client.tel_no')}
               {...form.getInputProps('client.tel_no')}
             />
 
             <TextInput
+              readOnly={!isNew}
               withAsterisk
               label="Contact no."
               key={form.key('client.contact_no')}
@@ -126,6 +147,7 @@ export default function Step3() {
             />
 
             <TextInput
+              readOnly={!isNew}
               withAsterisk
               label="Email"
               key={form.key('client.email')}
@@ -133,6 +155,7 @@ export default function Step3() {
             />
 
             <Textarea
+              readOnly={!isNew}
               withAsterisk
               label="Address"
               key={form.key('client.address')}
@@ -161,6 +184,10 @@ type Client = {
   address: string
   created_at: string
   updated_at: string
+}
+
+type CreateClientResponse = {
+  data: Client
 }
 
 type ClientsResponse = {

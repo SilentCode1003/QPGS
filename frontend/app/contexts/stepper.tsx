@@ -6,7 +6,7 @@ import { Step2Values } from '../(root)/(quotations)/quotations/create/(steps)/st
 import { Step3Values } from '../(root)/(quotations)/quotations/create/(steps)/step-3/page'
 import { Step4Values } from '../(root)/(quotations)/quotations/create/(steps)/step-4/page'
 
-type Values = {
+export type Values = {
   type: string
   user_id: number
 } & Step2Values &
@@ -43,7 +43,7 @@ export const StepperContextProvider = ({ children }: { children: React.ReactNode
   const [data, setData, removeData] = useLocalStorage<Partial<Values>>({
     key: LOCAL_STORAGE_KEY,
     defaultValue: {
-      client: { address: '', contact_no: '', email: '', name: '', tel_no: '' },
+      client: { id: -1, address: '', contact_no: '', email: '', name: '', tel_no: '' },
     },
   })
 
