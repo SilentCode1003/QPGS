@@ -16,27 +16,27 @@ datasource db {
 
 model role {
   id         Int      @id @default(autoincrement())
-  name       String
+  name       String   @unique
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   user       user[]
 }
 
 model user {
-  id         Int         @id @default(autoincrement())
-  first_name String
-  last_name  String?
-  email      String      @unique
-  username   String      @unique
-  password   String      @db.Text
-  role_id    Int
-  role       role        @relation(fields: [role_id], references: [id])
-  signature  String?
-  job_title  String
-  created_at DateTime    @default(now())
-  updated_at DateTime    @updatedAt
-  creator    quotation[] @relation("creator")
-  signatory  quotation[] @relation("signatory")
+  id                  Int         @id @default(autoincrement())
+  first_name          String
+  last_name           String?
+  email               String      @unique
+  username            String      @unique
+  password            String      @db.Text
+  role_id             Int
+  role                role        @relation(fields: [role_id], references: [id])
+  signature           String?
+  job_title           String
+  created_at          DateTime    @default(now())
+  updated_at          DateTime    @updatedAt
+  created_quotations  quotation[] @relation("created_quotations")
+  approved_quotations quotation[] @relation("approved_quotations")
 }
 
 model payment_type {
@@ -47,81 +47,109 @@ model payment_type {
 
 model terms_and_conditions {
   id         Int      @id @default(autoincrement())
-  summary    String
+  summary    String   @unique
   body       String   @db.Text
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 }
 
 model client {
-  id         Int         @id @default(autoincrement())
-  name       String
+  id         Int      @id @default(autoincrement())
+  name       String   @unique
   tel_no     String?
   contact_no String
   email      String
-  address    String      @db.Text
-  created_at DateTime    @default(now())
-  updated_at DateTime    @updatedAt
-  quotation  quotation[]
+  address    String   @db.Text
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 }
 
 model quotation_status {
   id         Int         @id @default(autoincrement())
-  name       String
+  name       String      @unique
   created_at DateTime    @default(now())
   updated_at DateTime    @updatedAt
   quotation  quotation[]
 }
 
 model quotation {
-  id                   String               @id
-  subject              String
+  id                   String           @id
+  month_year           String
+  type                 String
   date                 DateTime
   expiry_date          DateTime
-  note                 String?              @db.Text
-  terms_and_conditions String               @db.Text
-  client_id            Int
-  client               client               @relation(fields: [client_id], references: [id])
-  creator_user_id      Int
-  creator_user         user                 @relation("creator", fields: [creator_user_id], references: [id])
-  signatory_user_id    Int?
-  signatory_user       user?                @relation("signatory", fields: [signatory_user_id], references: [id])
+  note                 String?          @db.Text
+  terms_and_conditions String           @db.Text
+  client               Json
+  products             Json
+  grand_total          Decimal          @db.Decimal(10, 2)
   quotation_status_id  Int
-  quotation_status     quotation_status     @relation(fields: [quotation_status_id], references: [id])
-  grand_total          Decimal              @db.Decimal(10, 2)
-  month_year           String
-  created_at           DateTime             @default(now())
-  quotation_products   quotation_products[]
-  quotation_comment    quotation_comment[]
+  quotation_status     quotation_status @relation(fields: [quotation_status_id], references: [id])
+  created_by           Int
+  created_by_user      user             @relation("created_quotations", fields: [created_by], references: [id])
+  approved_by          Int?
+  approved_by_user     user?            @relation("approved_quotations", fields: [approved_by], references: [id])
+  created_at           DateTime         @default(now())
+  updated_at           DateTime         @updatedAt
 }
 
-model product {
-  id                 Int                  @id @default(autoincrement())
-  name               String
-  description        String               @db.Text
-  price              Decimal              @db.Decimal(10, 2)
-  created_at         DateTime             @default(now())
-  quotation_products quotation_products[]
-}
+// model quotation_status {
+//   id         Int         @id @default(autoincrement())
+//   name       String
+//   created_at DateTime    @default(now())
+//   updated_at DateTime    @updatedAt
+//   quotation  quotation[]
+// }
 
-model quotation_products {
-  id           Int       @id @default(autoincrement())
-  quotation_id String
-  quotation    quotation @relation(fields: [quotation_id], references: [id])
-  product_id   Int
-  product      product   @relation(fields: [product_id], references: [id])
-  payment_type String
-  duration     Int?
-  quantity     Int
-  total_amount Decimal   @db.Decimal()
-  created_at   DateTime  @default(now())
-}
+// model quotation {
+//   id                   String               @id
+//   subject              String
+//   date                 DateTime
+//   expiry_date          DateTime
+//   note                 String?              @db.Text
+//   terms_and_conditions String               @db.Text
+//   client_id            Int
+//   client               client               @relation(fields: [client_id], references: [id])
+//   creator_user_id      Int
+//   creator_user         user                 @relation("creator", fields: [creator_user_id], references: [id])
+//   signatory_user_id    Int?
+//   signatory_user       user?                @relation("signatory", fields: [signatory_user_id], references: [id])
+//   quotation_status_id  Int
+//   quotation_status     quotation_status     @relation(fields: [quotation_status_id], references: [id])
+//   grand_total          Decimal              @db.Decimal(10, 2)
+//   month_year           String
+//   created_at           DateTime             @default(now())
+//   quotation_products   quotation_products[]
+//   quotation_comment    quotation_comment[]
+// }
 
-model quotation_comment {
-  id           Int       @id @default(autoincrement())
-  quotation_id String
-  quotation    quotation @relation(fields: [quotation_id], references: [id])
-  comment      String    @db.Text
-  created_at   DateTime  @default(now())
-  updated_at   DateTime  @updatedAt
-}
+// model product {
+//   id                 Int                  @id @default(autoincrement())
+//   name               String
+//   description        String               @db.Text
+//   price              Decimal              @db.Decimal(10, 2)
+//   created_at         DateTime             @default(now())
+//   quotation_products quotation_products[]
+// }
+
+// model quotation_products {
+//   id           Int       @id @default(autoincrement())
+//   quotation_id String
+//   quotation    quotation @relation(fields: [quotation_id], references: [id])
+//   product_id   Int
+//   product      product   @relation(fields: [product_id], references: [id])
+//   payment_type String
+//   duration     Int?
+//   quantity     Int
+//   total_amount Decimal   @db.Decimal()
+//   created_at   DateTime  @default(now())
+// }
+
+// model quotation_comment {
+//   id           Int       @id @default(autoincrement())
+//   quotation_id String
+//   quotation    quotation @relation(fields: [quotation_id], references: [id])
+//   comment      String    @db.Text
+//   created_at   DateTime  @default(now())
+//   updated_at   DateTime  @updatedAt
+// }

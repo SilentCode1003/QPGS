@@ -1,6 +1,7 @@
-import { PrismaClient, type user } from '@prisma/client'
 import { faker } from '@faker-js/faker'
+import { Prisma, PrismaClient, type user } from '@prisma/client'
 import bcrypt from 'bcrypt'
+import { generateQuotationId } from '../src/utils/gen.util'
 
 const prisma = new PrismaClient()
 
@@ -105,12 +106,76 @@ async function createPaymentTypes() {
   })
 }
 
+async function createQuotationStatus() {
+  await prisma.quotation_status.createMany({
+    data: [
+      {
+        name: 'pending',
+      },
+      {
+        name: 'approved',
+      },
+    ],
+  })
+}
+
+async function createQuotation() {
+  const client = {
+    id: 1,
+    name: 'Grady - Langos',
+    tel_no: 'from seed',
+    contact_no: 'from seed',
+    email: 'from@seed.com',
+    address: 'from seed',
+  } as Prisma.JsonObject
+
+  const products = [
+    {
+      description: 'Point of sales',
+      duration: 1,
+      key: 'mantine-4lnxd4zao',
+      markup: 0,
+      name: 'POS',
+      payment_type: 'One-time',
+      price: 99.99,
+      quantity: 5,
+      total_amount: 559.9440000000001,
+      vat_ex: 99.99,
+      vat_inc: 111.98880000000001,
+      vat_type: 'vatInc',
+    },
+  ] as Prisma.JsonArray
+
+  const { id, monthYear } = await generateQuotationId()
+
+  await prisma.quotation.create({
+    data: {
+      id,
+      month_year: monthYear,
+      type: 'Hardware',
+      date: new Date(),
+      expiry_date: new Date(),
+      note: 'test note',
+      terms_and_conditions: `PAYMENT/DELIVERY
+      A. PAYMENT
+      50% DOWN PAYMENT REQUIRED UPON RECEIPT OF P.O. FULL PAYMENT IS DUE UPON DELIVERY`,
+      client,
+      products,
+      grand_total: 559.9440000000001,
+      quotation_status_id: 1,
+      created_by: 1,
+    },
+  })
+}
+
 const main = async () => {
   await createRoles()
   await createUsers()
+  await createPaymentTypes()
   await createTermsAndConditions()
   await createClient()
-  await createPaymentTypes()
+  await createQuotationStatus()
+  await createQuotation()
 }
 
 main()
