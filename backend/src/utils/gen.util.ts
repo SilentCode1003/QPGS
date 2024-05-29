@@ -16,7 +16,8 @@ export const generateQuotationId = async () => {
   })
 
   const idString = (count + 1).toString().padStart(4, '0')
-  const id = `103-${currentDate.year()}-${idString}`
+  const monthString = (currentDate.month() + 1).toString().padStart(2, '0')
+  const id = `1${monthString}-${currentDate.year()}-${idString}`
 
   return { id, monthYear }
 }
