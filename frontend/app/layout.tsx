@@ -2,6 +2,7 @@ import '@mantine/charts/styles.css'
 import '@mantine/core/styles.css'
 import '@mantine/dates/styles.css'
 import '@mantine/notifications/styles.css'
+import '@mantine/tiptap/styles.css'
 
 import { ColorSchemeScript, MantineProvider } from '@mantine/core'
 import { Notifications } from '@mantine/notifications'
