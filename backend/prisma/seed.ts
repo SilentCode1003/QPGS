@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { Prisma, PrismaClient, type user } from '@prisma/client'
+import { Prisma, PrismaClient, type product, type user } from '@prisma/client'
 import bcrypt from 'bcrypt'
 import { generateQuotationId } from '../src/utils/gen.util'
 
@@ -107,11 +107,11 @@ async function createPaymentTypes() {
 }
 
 async function createProduct() {
-  await prisma.product.create({
+  return prisma.product.create({
     data: {
-      name: 'POS',
+      name: 'SWAN 1 Package',
       description:
-        'Android 11\n4-Core Quad Cortex-A55, 2.0Ghz\n15.6" 1920x1080 FHD Touch Screen\nWiFi & Bluetooth\nNo second display',
+        '<ul><li><p>Android 11</p></li><li><p>4-Core Quad Cortex-A55, 2.0Ghz</p></li><li><p>15.6" 1920x1080 FHD Touch Screen</p></li><li><p>WiFi &amp; Bluetooth</p></li><li><p>No second display</p></li><li><p><strong>With Thermal Printer, With Wi-Fi, USB, Ethernet and Serial Port</strong></p></li></ul>',
       price: 41_132,
     },
   })
@@ -130,7 +130,7 @@ async function createQuotationStatus() {
   })
 }
 
-async function createQuotation() {
+async function createQuotation(product: product) {
   const client = {
     id: 1,
     name: 'Grady - Langos',
@@ -142,18 +142,18 @@ async function createQuotation() {
 
   const products = [
     {
-      description: 'Point of sales',
+      description: product.description,
       duration: 1,
       key: 'mantine-4lnxd4zao',
       markup: 0,
-      name: 'POS',
+      name: product.name,
       payment_type: 'One-time',
-      price: 99.99,
-      quantity: 5,
-      total_amount: 559.9440000000001,
-      vat_ex: 99.99,
-      vat_inc: 111.98880000000001,
-      vat_type: 'vatInc',
+      price: +product.price,
+      quantity: 1,
+      total_amount: +product.price,
+      vat_ex: +product.price,
+      vat_inc: +product.price * 1.12,
+      vat_type: 'vatEx',
     },
   ] as Prisma.JsonArray
 
@@ -173,9 +173,9 @@ async function createQuotation() {
       50% DOWN PAYMENT REQUIRED UPON RECEIPT OF P.O. FULL PAYMENT IS DUE UPON DELIVERY`,
       client,
       products,
-      grand_total: 559.9440000000001,
-      quotation_status_id: 1,
-      created_by: 1,
+      grand_total: product.price,
+      quotation_status_id: 1, // pending
+      created_by: 1, // john doe
     },
   })
 }
@@ -186,9 +186,9 @@ const main = async () => {
   await createPaymentTypes()
   await createTermsAndConditions()
   await createClient()
-  await createProduct()
+  const product = await createProduct()
   await createQuotationStatus()
-  await createQuotation()
+  await createQuotation(product)
 }
 
 main()
