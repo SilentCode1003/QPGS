@@ -106,6 +106,17 @@ async function createPaymentTypes() {
   })
 }
 
+async function createProduct() {
+  await prisma.product.create({
+    data: {
+      name: 'POS',
+      description:
+        'Android 11\n4-Core Quad Cortex-A55, 2.0Ghz\n15.6" 1920x1080 FHD Touch Screen\nWiFi & Bluetooth\nNo second display',
+      price: 41_132,
+    },
+  })
+}
+
 async function createQuotationStatus() {
   await prisma.quotation_status.createMany({
     data: [
@@ -174,6 +185,7 @@ const main = async () => {
   await createPaymentTypes()
   await createTermsAndConditions()
   await createClient()
+  await createProduct()
   await createQuotationStatus()
   await createQuotation()
 }
