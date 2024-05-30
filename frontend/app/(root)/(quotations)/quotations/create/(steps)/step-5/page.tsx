@@ -1,6 +1,7 @@
 'use client'
 import { useStepper } from '@/app/contexts/stepper'
 import { Button, Center, Container, Group, Stack, Text, Title } from '@mantine/core'
+import { useState } from 'react'
 
 const mockAdminUsers = [
   {
@@ -16,7 +17,14 @@ const mockAdminUsers = [
 ]
 
 export default function Step5() {
+  const [clicked, setClicked] = useState(false)
+
   const { incrementActive } = useStepper()
+
+  const nextStep = () => {
+    setClicked(true)
+    incrementActive()
+  }
 
   const list = mockAdminUsers.map((user) => (
     <Group key={user.id}>{`${user.first_name} ${user.last_name}`}</Group>
@@ -33,7 +41,9 @@ export default function Step5() {
 
         {list}
 
-        <Button onClick={incrementActive}>Next</Button>
+        <Button onClick={nextStep} disabled={clicked}>
+          Next
+        </Button>
       </Stack>
     </Container>
   )

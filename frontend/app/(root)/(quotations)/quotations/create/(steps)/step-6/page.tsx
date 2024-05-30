@@ -18,8 +18,11 @@ import {
 import { notifications } from '@mantine/notifications'
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 export default function Step7() {
+  const [clicked, setClicked] = useState(false)
+
   const router = useRouter()
 
   const mutation = useCreateQuotation()
@@ -28,12 +31,14 @@ export default function Step7() {
 
   const submitQuotation = async () => {
     try {
+      setClicked(true)
       // Data should be complete here
       // @ts-ignore
       const res = await mutation.mutateAsync(data)
       // Clear all localstorage values
       router.push('/dashboard')
     } catch (err) {
+      setClicked(false)
       // Do nothing because notification should show (onError)
       return
     }
@@ -256,7 +261,9 @@ export default function Step7() {
           </Stack>
         </Card>
 
-        <Button onClick={submitQuotation}>Submit</Button>
+        <Button onClick={submitQuotation} disabled={clicked}>
+          Submit
+        </Button>
       </Stack>
     </Container>
   )

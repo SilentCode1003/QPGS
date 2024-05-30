@@ -16,6 +16,7 @@ import { DatePickerInput } from '@mantine/dates'
 import { useForm, zodResolver } from '@mantine/form'
 import { readLocalStorageValue } from '@mantine/hooks'
 import { useQuery } from '@tanstack/react-query'
+import { useState } from 'react'
 import { z } from 'zod'
 
 const step2Schema = z.object({
@@ -29,6 +30,8 @@ const step2Schema = z.object({
 export type Step2Values = z.infer<typeof step2Schema>
 
 export default function Step2() {
+  const [clicked, setClicked] = useState(false)
+
   const { data: termsAndConditions } = useGetTermsAndConditions()
   const selectData = termsAndConditions?.map((tac) => tac.summary)
 
@@ -48,6 +51,7 @@ export default function Step2() {
 
   // @ts-ignore
   const onSubmit = (values) => {
+    setClicked(true)
     updateData(values)
     incrementActive()
   }
@@ -112,7 +116,9 @@ export default function Step2() {
               {...form.getInputProps('terms_and_conditions')}
             />
 
-            <Button type="submit">Next</Button>
+            <Button type="submit" disabled={clicked}>
+              Next
+            </Button>
           </Stack>
         </form>
       </Box>

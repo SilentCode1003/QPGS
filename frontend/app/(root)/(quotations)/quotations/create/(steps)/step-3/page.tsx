@@ -36,6 +36,8 @@ const step3Schema = z.object({
 export type Step3Values = z.infer<typeof step3Schema>
 
 export default function Step3() {
+  const [clicked, setClicked] = useState(false)
+
   const { data: clients, isLoading, isError, error } = useGetClients()
   const clientSearchData = clients?.map((client) => client.name).concat('Create new')
 
@@ -57,6 +59,7 @@ export default function Step3() {
 
   // @ts-ignore
   const onSubmit = (values) => {
+    setClicked(true)
     updateData(values)
     incrementActive()
   }
@@ -91,9 +94,9 @@ export default function Step3() {
 
     const { id, ...rest } = form.getValues().client!
 
+    setClicked(true)
     const res: AxiosResponse<CreateClientResponse> = await mutation.mutateAsync(rest)
     const { created_at, updated_at, ...others } = res.data.data
-
     updateData({ client: others })
     incrementActive()
   }
@@ -162,9 +165,13 @@ export default function Step3() {
               {...form.getInputProps('client.address')}
             />
 
-            {!isNew && <Button type="submit">Next</Button>}
+            {!isNew && (
+              <Button type="submit" disabled={clicked}>
+                Next
+              </Button>
+            )}
             {isNew && (
-              <Button type="button" onClick={onCreate}>
+              <Button type="button" onClick={onCreate} disabled={clicked}>
                 Create
               </Button>
             )}

@@ -16,7 +16,7 @@ import {
 import { useForm, zodResolver } from '@mantine/form'
 import { randomId, readLocalStorageValue } from '@mantine/hooks'
 import { IconPlus } from '@tabler/icons-react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { z } from 'zod'
 
 const productSchema = z.object({
@@ -43,6 +43,8 @@ export type Product = z.infer<typeof productSchema>
 export type Step4Values = z.infer<typeof step4Schema>
 
 export default function Step5() {
+  const [clicked, setClicked] = useState(false)
+
   const { updateData, incrementActive } = useStepper()
 
   const storageValues = readLocalStorageValue<Step4Values | undefined>({ key: LOCAL_STORAGE_KEY })
@@ -74,6 +76,7 @@ export default function Step5() {
   })
 
   const onSubmit = (values: Step4Values) => {
+    setClicked(true)
     updateData(values)
     incrementActive()
   }
@@ -134,7 +137,9 @@ export default function Step5() {
               }}
             />
 
-            <Button type="submit">Next</Button>
+            <Button type="submit" disabled={clicked}>
+              Next
+            </Button>
           </Stack>
         </form>
       </Box>

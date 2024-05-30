@@ -1,6 +1,7 @@
 'use client'
 import { useStepper } from '@/app/contexts/stepper'
 import { Button, Group, Stack, Title } from '@mantine/core'
+import { useState } from 'react'
 
 const mockTypes = [
   { id: 1, name: 'Hardware' },
@@ -9,13 +10,17 @@ const mockTypes = [
 ]
 
 export default function Step1() {
+  const [clicked, setClicked] = useState(false)
+
   const { incrementActive, updateData } = useStepper()
 
   const buttons = mockTypes.map((type) => (
     <Button
+      disabled={clicked}
       size="xl"
       key={type.id}
       onClick={() => {
+        setClicked(true)
         updateData({ type: type.name })
         incrementActive()
       }}
