@@ -64,6 +64,14 @@ model client {
   updated_at DateTime @updatedAt
 }
 
+model product {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String   @db.Text
+  price       Decimal  @db.Decimal(10, 2)
+  created_at  DateTime @default(now())
+}
+
 model quotation_status {
   id         Int         @id @default(autoincrement())
   name       String      @unique
