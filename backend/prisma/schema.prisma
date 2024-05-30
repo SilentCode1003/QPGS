@@ -84,6 +84,7 @@ model quotation {
   id                   String           @id
   month_year           String
   type                 String
+  subject              String
   date                 DateTime
   expiry_date          DateTime
   note                 String?          @db.Text

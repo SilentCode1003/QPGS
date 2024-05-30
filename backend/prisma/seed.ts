@@ -164,6 +164,7 @@ async function createQuotation() {
       id,
       month_year: monthYear,
       type: 'Hardware',
+      subject: 'Quotation for POS Hardware',
       date: new Date(),
       expiry_date: new Date(),
       note: 'test note',
