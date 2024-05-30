@@ -15,22 +15,28 @@ interface Props {
   index: number
 }
 
-const mockProducts = [
-  {
-    id: 1,
-    name: 'POS',
-    description: 'Point of sales',
-    price: 99.99,
-  },
-  {
-    id: 2,
-    name: 'Quotation System',
-    description: 'Web app',
-    price: 1_000_000,
-  },
-]
+type ProductType = {
+  id: number
+  name: string
+  description: string
+  price: string
+  created_at: string
+}
 
-const mockProductNames = mockProducts.map((product) => product.name)
+type ProductsResponse = {
+  data: ProductType[]
+}
+
+function useGetProducts() {
+  return useQuery({
+    queryKey: ['products'],
+    queryFn: async () => {
+      const res = await api.get<ProductsResponse>('/products')
+      return res.data.data
+    },
+    staleTime: 0,
+  })
+}
 
 type PaymentType = {
   id: string
@@ -44,7 +50,7 @@ type PaymentTypesResponse = {
 
 function useGetPaymentTypes() {
   return useQuery({
-    queryKey: ['payment_type'],
+    queryKey: ['payment_types'],
     queryFn: async () => {
       const res = await api.get<PaymentTypesResponse>('/payment-types')
       return res.data.data
@@ -54,6 +60,8 @@ function useGetPaymentTypes() {
 
 export default function ProductItem({ form, item, index }: Props) {
   const { data: paymentTypes, isLoading, isError, error } = useGetPaymentTypes()
+  const products = useGetProducts()
+  const selectData = products.data?.map((product) => product.name)
 
   const currentItem = `products.${index}`
 
@@ -69,10 +77,10 @@ export default function ProductItem({ form, item, index }: Props) {
     vatType === 'vatEx' ? vatExTotal * duration * quantity : vatIncTotal * duration * quantity
 
   form.watch(`products.${index}.name`, ({ value }) => {
-    const product = mockProducts.find((product) => product.name === value)
+    const product = products.data?.find((product) => product.name === value)
 
     form.setFieldValue(`${currentItem}.description`, product?.description)
-    form.setFieldValue(`${currentItem}.price`, product?.price)
+    form.setFieldValue(`${currentItem}.price`, Number(product?.price))
   })
 
   form.watch(`${currentItem}.price`, ({ value }) => {
@@ -118,12 +126,16 @@ export default function ProductItem({ form, item, index }: Props) {
     return <span>Payment type is loading...</span>
   }
 
+  if (products.isLoading) {
+    return <span>Products are loading...</span>
+  }
+
   return (
     <Group key={item.key} wrap="nowrap">
       <Box miw={200} h={100}>
         <Select
           label="Product name"
-          data={mockProductNames}
+          data={selectData}
           searchable
           nothingFoundMessage="Nothing found..."
           key={form.key(`${currentItem}.name`)}
