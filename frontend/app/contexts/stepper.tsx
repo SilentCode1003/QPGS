@@ -23,6 +23,8 @@ type Ctx = {
   data: Partial<Values>
   updateData: (values: Partial<Values>) => void
   removeData: () => void
+  removeActive: () => void
+  removeHighest: () => void
 }
 
 export const StepperContext = createContext<Ctx>({} as Ctx)
@@ -38,7 +40,10 @@ export const LOCAL_STORAGE_KEY = 'quotation-system-progress'
 export const StepperContextProvider = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter()
 
-  const [active, setActive] = useLocalStorage<number>({ key: 'qs-active', defaultValue: 0 })
+  const [active, setActive, removeActive] = useLocalStorage<number>({
+    key: 'qs-active',
+    defaultValue: 0,
+  })
 
   const [data, setData, removeData] = useLocalStorage<Partial<Values>>({
     key: LOCAL_STORAGE_KEY,
@@ -47,7 +52,7 @@ export const StepperContextProvider = ({ children }: { children: React.ReactNode
     },
   })
 
-  const [highestStepVisited, setHighestStepVisited] = useLocalStorage({
+  const [highestStepVisited, setHighestStepVisited, removeHighest] = useLocalStorage({
     key: 'qs-highest',
     defaultValue: active,
   })
@@ -85,8 +90,14 @@ export const StepperContextProvider = ({ children }: { children: React.ReactNode
   }, [data])
 
   useEffect(() => {
+    // !TECHNICAL DEBT
+    // THIS WHOLE CONTEXT IS A TECHNICAL DEBT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // Checks if data is cleared by remove data to avoid redirecting to step 1 again after clearing localstorage
+    if (!data.type) {
+      return
+    }
     router.push(`/quotations/create/step-${active + 1}`)
-  }, [active, router])
+  }, [active, router, data])
 
   return (
     <StepperContext.Provider
@@ -100,6 +111,8 @@ export const StepperContextProvider = ({ children }: { children: React.ReactNode
         data,
         updateData,
         removeData,
+        removeActive,
+        removeHighest,
       }}
     >
       {children}

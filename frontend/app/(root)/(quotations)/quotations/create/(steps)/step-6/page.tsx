@@ -24,14 +24,22 @@ export default function Step7() {
 
   const mutation = useCreateQuotation()
 
-  const { data, removeData } = useStepper()
+  const { data, removeData, removeActive, removeHighest } = useStepper()
 
-  const submitQuotation = () => {
-    console.log(data)
-
-    // Data should be complete here
-    // @ts-ignore
-    mutation.mutate(data)
+  const submitQuotation = async () => {
+    try {
+      // Data should be complete here
+      // @ts-ignore
+      const res = await mutation.mutateAsync(data)
+      // Clear all localstorage values
+      router.push('/dashboard')
+    } catch (err) {
+      // Do nothing because notification should show (onError)
+      return
+    }
+    removeData()
+    removeActive()
+    removeHighest()
   }
 
   return (
