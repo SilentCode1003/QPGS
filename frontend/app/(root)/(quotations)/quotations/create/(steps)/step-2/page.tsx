@@ -22,7 +22,7 @@ const step2Schema = z.object({
   subject: z.string().min(3),
   date: z.date(),
   expiry_date: z.date(),
-  notes: z.string().optional(),
+  note: z.string().optional(),
   terms_and_conditions: z.string().min(3),
 })
 
@@ -92,8 +92,8 @@ export default function Step2() {
               minRows={2}
               maxRows={5}
               label="Notes"
-              key={form.key('notes')}
-              {...form.getInputProps('notes')}
+              key={form.key('note')}
+              {...form.getInputProps('note')}
             />
 
             <Select

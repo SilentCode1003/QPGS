@@ -85,7 +85,7 @@ export default function Step7() {
                 autosize
                 minRows={2}
                 maxRows={5}
-                value={data.notes || 'N/A'}
+                value={data.note || 'N/A'}
               />
             </Box>
 
