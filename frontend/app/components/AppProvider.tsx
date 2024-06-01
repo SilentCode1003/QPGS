@@ -10,7 +10,7 @@ export const queryConfig = {
   },
 } satisfies DefaultOptions
 
-const queryClient = new QueryClient({
+export const queryClient = new QueryClient({
   defaultOptions: queryConfig,
 })
 

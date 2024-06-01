@@ -1,24 +1,86 @@
 'use client'
+import { queryClient } from '@/app/components/AppProvider'
+import ProductRow from '@/app/components/quotations/ProductRow'
 import { api } from '@/app/lib/api'
-import { formatDate, formatDateWithoutTime } from '@/app/utils/format'
+import { useUser } from '@/app/lib/auth'
+import { formatDate, formatDateWithoutTime, timeFromNow } from '@/app/utils/format'
 import {
+  Avatar,
   Badge,
   Box,
+  Button,
   Card,
   Center,
   Container,
   Group,
   NumberFormatter,
+  Paper,
   Stack,
   Table,
   Text,
   Textarea,
   Title,
 } from '@mantine/core'
-import { useQuery } from '@tanstack/react-query'
+import { useForm, zodResolver } from '@mantine/form'
+import { notifications } from '@mantine/notifications'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
-import { Quotation } from '../all/page'
-import ProductRow from '@/app/components/quotations/ProductRow'
+import { z } from 'zod'
+import { Product } from '../all/page'
+
+interface Comment {
+  id: string
+  quotation_id: string
+  body: string
+  commenter_id: number
+  commenter: {
+    id: number
+    first_name: string
+    last_name: string
+    role: {
+      name: string
+    }
+  }
+  created_at: string
+  updated_at: string
+}
+
+interface Quotation {
+  id: string
+  month_year: string
+  type: string
+  subject: string
+  date: string
+  expiry_date: string
+  note: string
+  terms_and_conditions: string
+  client: {
+    id: number
+    name: string
+    email: string
+    tel_no: string
+    address: string
+    contact_no: string
+  }
+  products: Product[]
+  grand_total: string
+  approved_by: number | null
+  approved_by_user: {
+    first_name: string
+    last_name: string
+  }
+  created_at: string
+  updated_at: string
+  quotation_status: {
+    name: string
+  }
+  created_by_user: {
+    id: number
+    first_name: string
+    last_name: string
+  }
+  quotation_comment: Comment[]
+}
 
 interface QuotationResponse {
   data: Quotation
@@ -29,12 +91,60 @@ async function fetchQuotation(id: string) {
   return res.data.data
 }
 
+const schema = z.object({
+  comment: z.string().min(1),
+})
+
+function useCreateComment(quotationId: string) {
+  return useMutation({
+    mutationFn: (data: { quotation_id: string; body: string; commenter_id: number }) => {
+      return api.post('/comments', data)
+    },
+    onSuccess: async () => {
+      notifications.show({
+        title: 'Success',
+        message: 'Successfully commented',
+        color: 'green',
+      })
+      queryClient.invalidateQueries({
+        queryKey: [`quotations/${quotationId}`],
+      })
+    },
+    onError: (err) => {
+      console.error(err)
+      notifications.show({
+        title: 'Error',
+        message: 'Cannot submit comment',
+        color: 'red',
+      })
+    },
+  })
+}
+
 export default function QuotationInfo({ params }: { params: { id: string } }) {
+  // unstable_noStore()
+
+  const user = useUser()
+
   const quotation = useQuery({
     queryKey: [`quotations/${params.id}`],
     queryFn: () => fetchQuotation(params.id),
     staleTime: 0,
   })
+
+  const comment = useCreateComment(params.id)
+
+  const form = useForm({
+    mode: 'uncontrolled',
+    initialValues: {
+      comment: '',
+    },
+    validate: zodResolver(schema),
+  })
+
+  if (!user.data) {
+    return <span>Please refresh</span>
+  }
 
   // TODO: Handle pending state
   if (quotation.isPending) {
@@ -329,6 +439,61 @@ export default function QuotationInfo({ params }: { params: { id: string } }) {
             </Box>
           </Stack>
         </Card>
+
+        {/**
+         *
+         *
+         *  Fourth card
+         *
+         *
+         *  */}
+        <Card p="xl" shadow="sm" radius="xl">
+          <Stack>
+            <Text size="lg" fw={700}>
+              Comments
+            </Text>
+
+            {q.quotation_comment.map((comment) => (
+              <Paper key={comment.id} p="lg" withBorder radius="md">
+                <Group>
+                  <Avatar>{comment.commenter.first_name}</Avatar>
+                  <Box>
+                    <Text fz="sm">{`${comment.commenter.first_name} ${comment.commenter.last_name}`}</Text>
+                    <Text fz="xs" c="dimmed">
+                      {timeFromNow(new Date(comment.created_at))}
+                    </Text>
+                  </Box>
+                </Group>
+
+                <Text mt="lg">{comment.body}</Text>
+              </Paper>
+            ))}
+
+            <form
+              onSubmit={form.onSubmit(async (e) => {
+                try {
+                  comment.mutateAsync({
+                    body: e.comment,
+                    commenter_id: user.data.id,
+                    quotation_id: params.id,
+                  })
+                  form.reset()
+                } catch (err) {}
+              })}
+            >
+              <Textarea
+                label="Add comment"
+                key={form.key('comment')}
+                {...form.getInputProps('comment')}
+              />
+              <Button mt="xs" type="submit" disabled={comment.isPending}>
+                Submit
+              </Button>
+            </form>
+          </Stack>
+        </Card>
+
+        <Button size="compact-xl">Approve</Button>
       </Stack>
     </Container>
   )
