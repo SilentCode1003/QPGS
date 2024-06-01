@@ -6,6 +6,7 @@ import {
   Box,
   Center,
   Container,
+  Group,
   NumberFormatter,
   Stack,
   Table,
@@ -63,75 +64,99 @@ export default function QuotationInfo({ params }: { params: { id: string } }) {
           <Text c="dimmed" size="sm">
             Id
           </Text>
-          <Text size="lg">{q.id}</Text>
+          <Text size="lg" truncate="end">
+            {q.id}
+          </Text>
         </Box>
 
         <Box>
-          <Text c="dimmed" size="sm">
-            Status
-          </Text>
-          {/* TODO: Make this a config */}
-          <Badge color={q.quotation_status.name === 'approved' ? 'green' : 'orange'}>
-            {q.quotation_status.name.toUpperCase()}
-          </Badge>
-        </Box>
+          <Group justify="space-evenly">
+            <Box>
+              <Text c="dimmed" size="sm">
+                Status
+              </Text>
+              {/* TODO: Make this a config */}
+              <Badge color={q.quotation_status.name === 'approved' ? 'green' : 'orange'}>
+                {q.quotation_status.name.toUpperCase()}
+              </Badge>
+            </Box>
 
-        {q.approved_by && (
-          <Box>
-            <Text c="dimmed" size="sm">
-              Approved by
-            </Text>
-            <Text size="lg">{`${q.approved_by_user.first_name} ${q.approved_by_user.last_name}`}</Text>
-          </Box>
-        )}
+            {q.approved_by && (
+              <Box>
+                <Text c="dimmed" size="sm">
+                  Approved by
+                </Text>
+                <Text
+                  size="lg"
+                  truncate="end"
+                >{`${q.approved_by_user.first_name} ${q.approved_by_user.last_name}`}</Text>
+              </Box>
+            )}
+          </Group>
+        </Box>
 
         <Box>
           <Text c="dimmed" size="sm">
             Created by
           </Text>
-          <Text size="lg">{`${q.created_by_user.first_name} ${q.created_by_user.last_name} `}</Text>
+          <Text
+            size="lg"
+            truncate="end"
+          >{`${q.created_by_user.first_name} ${q.created_by_user.last_name} `}</Text>
         </Box>
 
         <Box>
           <Text c="dimmed" size="sm">
             Created at
           </Text>
-          <Text size="lg">{formatDate(new Date(q.created_at))}</Text>
+          <Text size="lg" truncate="end">
+            {formatDate(new Date(q.created_at))}
+          </Text>
         </Box>
 
         <Box>
           <Text c="dimmed" size="sm">
             Updated at
           </Text>
-          <Text size="lg">{formatDate(new Date(q.updated_at))}</Text>
+          <Text size="lg" truncate="end">
+            {formatDate(new Date(q.updated_at))}
+          </Text>
         </Box>
 
         <Box>
           <Text c="dimmed" size="sm">
             Product type
           </Text>
-          <Text size="lg">{q.type}</Text>
+          <Text size="lg" truncate="end">
+            {q.type}
+          </Text>
         </Box>
 
         <Box>
           <Text c="dimmed" size="sm">
             Subject
           </Text>
-          <Text size="lg">{q.subject}</Text>
+          <Text size="lg" truncate="end">
+            {q.subject}
+          </Text>
         </Box>
 
         <Box>
           <Text c="dimmed" size="sm">
             Date
           </Text>
-          <Text size="lg">{formatDateWithoutTime(new Date(q.date!))}</Text>
+          <Text size="lg" truncate="end">
+            {formatDateWithoutTime(new Date(q.date!))}
+          </Text>
         </Box>
 
         <Box>
           <Text c="dimmed" size="sm">
             Expiry Date
           </Text>
-          <Text size="lg">{formatDateWithoutTime(new Date(q.expiry_date!))}</Text>
+          <Text size="lg" truncate="end">
+            {formatDateWithoutTime(new Date(q.expiry_date!))}
+          </Text>
         </Box>
 
         <Box>
@@ -163,35 +188,45 @@ export default function QuotationInfo({ params }: { params: { id: string } }) {
           <Text c="dimmed" size="sm">
             Client name
           </Text>
-          <Text size="lg">{q.client?.name}</Text>
+          <Text size="lg" truncate="end">
+            {q.client?.name}
+          </Text>
         </Box>
 
         <Box>
           <Text c="dimmed" size="sm">
             Telephone no.
           </Text>
-          <Text size="lg">{q.client?.tel_no || 'N/A'}</Text>
+          <Text size="lg" truncate="end">
+            {q.client?.tel_no || 'N/A'}
+          </Text>
         </Box>
 
         <Box>
           <Text c="dimmed" size="sm">
             Contact no.
           </Text>
-          <Text size="lg">{q.client?.contact_no}</Text>
+          <Text size="lg" truncate="end">
+            {q.client?.contact_no}
+          </Text>
         </Box>
 
         <Box>
           <Text c="dimmed" size="sm">
             Email
           </Text>
-          <Text size="lg">{q.client?.email}</Text>
+          <Text size="lg" truncate="end">
+            {q.client?.email}
+          </Text>
         </Box>
 
         <Box>
           <Text c="dimmed" size="sm">
             Address
           </Text>
-          <Text size="lg">{q.client?.address}</Text>
+          <Text size="lg" truncate="end">
+            {q.client?.address}
+          </Text>
         </Box>
 
         <Text size="lg" fw={700}>
