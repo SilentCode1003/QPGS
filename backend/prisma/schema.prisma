@@ -23,20 +23,21 @@ model role {
 }
 
 model user {
-  id                  Int         @id @default(autoincrement())
+  id                  Int                 @id @default(autoincrement())
   first_name          String
   last_name           String?
-  email               String      @unique
-  username            String      @unique
-  password            String      @db.Text
+  email               String              @unique
+  username            String              @unique
+  password            String              @db.Text
   role_id             Int
-  role                role        @relation(fields: [role_id], references: [id])
+  role                role                @relation(fields: [role_id], references: [id])
   signature           String?
   job_title           String
-  created_at          DateTime    @default(now())
-  updated_at          DateTime    @updatedAt
-  created_quotations  quotation[] @relation("created_quotations")
-  approved_quotations quotation[] @relation("approved_quotations")
+  created_at          DateTime            @default(now())
+  updated_at          DateTime            @updatedAt
+  created_quotations  quotation[]         @relation("created_quotations")
+  approved_quotations quotation[]         @relation("approved_quotations")
+  quotation_comment   quotation_comment[]
 }
 
 model payment_type {
@@ -81,25 +82,37 @@ model quotation_status {
 }
 
 model quotation {
-  id                   String           @id
+  id                   String              @id
   month_year           String
   type                 String
   subject              String
   date                 DateTime
   expiry_date          DateTime
-  note                 String?          @db.Text
-  terms_and_conditions String           @db.Text
+  note                 String?             @db.Text
+  terms_and_conditions String              @db.Text
   client               Json
   products             Json
-  grand_total          Decimal          @db.Decimal(10, 2)
+  grand_total          Decimal             @db.Decimal(10, 2)
   quotation_status_id  Int
-  quotation_status     quotation_status @relation(fields: [quotation_status_id], references: [id])
+  quotation_status     quotation_status    @relation(fields: [quotation_status_id], references: [id])
   created_by           Int
-  created_by_user      user             @relation("created_quotations", fields: [created_by], references: [id])
+  created_by_user      user                @relation("created_quotations", fields: [created_by], references: [id])
   approved_by          Int?
-  approved_by_user     user?            @relation("approved_quotations", fields: [approved_by], references: [id])
-  created_at           DateTime         @default(now())
-  updated_at           DateTime         @updatedAt
+  approved_by_user     user?               @relation("approved_quotations", fields: [approved_by], references: [id])
+  created_at           DateTime            @default(now())
+  updated_at           DateTime            @updatedAt
+  quotation_comment    quotation_comment[]
+}
+
+model quotation_comment {
+  id           Int       @id @default(autoincrement())
+  quotation_id String
+  quotation    quotation @relation(fields: [quotation_id], references: [id])
+  body         String    @db.Text
+  commenter_id Int
+  commenter    user      @relation(fields: [commenter_id], references: [id])
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @updatedAt
 }
 
 // model quotation_status {

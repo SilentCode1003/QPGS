@@ -180,6 +180,22 @@ export const getQuotation: RequestHandler = async (req, res, next) => {
             last_name: true,
           },
         },
+        quotation_comment: {
+          include: {
+            commenter: {
+              select: {
+                id: true,
+                first_name: true,
+                last_name: true,
+                role: {
+                  select: {
+                    name: true,
+                  },
+                },
+              },
+            },
+          },
+        },
       },
       omit: {
         quotation_status_id: true,
