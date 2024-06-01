@@ -110,7 +110,7 @@ export const createQuotation: RequestHandler = async (req, res, next) => {
         id,
         month_year: monthYear,
         // TODO: make this a config or make this the default value in schema
-        quotation_status_id: 2, //pending
+        quotation_status_id: 1, //pending
         created_by: req.session.user!.id,
       },
     })
