@@ -21,7 +21,7 @@ const navbarLinks = [
     icon: IconNotes,
     links: [
       { label: 'Create quotation', link: '/quotations/create' },
-      { label: 'Your quotations', link: '/quotations/quotations' },
+      { label: 'Your quotations', link: '/quotations/my-quotations' },
       { label: 'All quotations', link: '/quotations/all' },
     ],
   },
