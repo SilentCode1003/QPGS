@@ -17,11 +17,25 @@ import { AxiosError } from 'axios'
 import Link from 'next/link'
 import { useState } from 'react'
 
+export interface Product {
+  name: string
+  price: number
+  markup: number
+  vat_ex: number
+  vat_inc: number
+  duration: number
+  quantity: number
+  vat_type: string
+  description: string
+  payment_type: string
+  total_amount: number
+}
+
 interface QuotationsResponse {
   data: Quotation[]
 }
 
-interface Quotation {
+export interface Quotation {
   id: string
   month_year: string
   type: string
@@ -33,25 +47,18 @@ interface Quotation {
   client: {
     id: number
     name: string
+    email: string
     tel_no: string
     address: string
     contact_no: string
   }
-  products: {
-    name: string
-    price: number
-    markup: number
-    vat_ex: number
-    vat_inc: number
-    duration: number
-    quantity: number
-    vat_type: string
-    description: string
-    payment_type: string
-    total_amount: number
-  }[]
+  products: Product[]
   grand_total: string
   approved_by: number | null
+  approved_by_user: {
+    first_name: string
+    last_name: string
+  }
   created_at: string
   updated_at: string
   quotation_status: {
