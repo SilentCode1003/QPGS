@@ -161,6 +161,30 @@ export const getQuotation: RequestHandler = async (req, res, next) => {
       where: {
         id: validatedId.data.id,
       },
+      include: {
+        quotation_status: {
+          select: {
+            name: true,
+          },
+        },
+        approved_by_user: {
+          select: {
+            first_name: true,
+            last_name: true,
+          },
+        },
+        created_by_user: {
+          select: {
+            id: true,
+            first_name: true,
+            last_name: true,
+          },
+        },
+      },
+      omit: {
+        quotation_status_id: true,
+        created_by: true,
+      },
     })
 
     if (!quotation) {
