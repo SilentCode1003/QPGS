@@ -144,3 +144,31 @@ export const createQuotation: RequestHandler = async (req, res, next) => {
     next(err)
   }
 }
+
+export const getQuotation: RequestHandler = async (req, res, next) => {
+  const idSchema = z.object({
+    id: z.string(),
+  })
+
+  const validatedId = idSchema.safeParse(req.params)
+
+  if (!validatedId.success) {
+    return res.status(400).json({ message: validatedId.error.errors })
+  }
+
+  try {
+    const quotation = await prisma.quotation.findUnique({
+      where: {
+        id: validatedId.data.id,
+      },
+    })
+
+    if (!quotation) {
+      return res.status(404).json({ message: 'Quotation not found' })
+    }
+
+    res.status(200).json({ data: quotation })
+  } catch (err) {
+    next(err)
+  }
+}
