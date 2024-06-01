@@ -22,8 +22,6 @@ export const getQuotations: RequestHandler = async (req, res, next) => {
     return res.status(400).json({ message: validatedParams.error.errors })
   }
 
-  console.log(validatedParams.data)
-
   try {
     const quotations = await prisma.quotation.findMany({
       where: {
