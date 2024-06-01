@@ -1,4 +1,5 @@
 'use client'
+import ProductRow from '@/app/components/quotations/ProductRow'
 import { Values, useStepper } from '@/app/contexts/stepper'
 import { api } from '@/app/lib/api'
 import { formatDateWithoutTime } from '@/app/utils/format'
@@ -186,58 +187,7 @@ export default function Step7() {
                 </Table.Thead>
                 <Table.Tbody>
                   {data.products?.map((product) => (
-                    <Table.Tr key={product.key}>
-                      <Table.Td>{product.name}</Table.Td>
-                      <Table.Td>{product.description}</Table.Td>
-                      <Table.Td>{product.payment_type}</Table.Td>
-                      <Table.Td>
-                        <NumberFormatter
-                          prefix="₱"
-                          decimalScale={2}
-                          thousandSeparator=","
-                          value={product.price}
-                        />
-                      </Table.Td>
-                      <Table.Td>
-                        <NumberFormatter
-                          suffix="%"
-                          decimalScale={2}
-                          thousandSeparator=","
-                          value={product.markup}
-                        />
-                      </Table.Td>
-                      <Table.Td>
-                        <NumberFormatter
-                          prefix="₱"
-                          decimalScale={2}
-                          thousandSeparator=","
-                          value={product.vat_ex}
-                        />
-                      </Table.Td>
-                      <Table.Td>
-                        <NumberFormatter
-                          prefix="₱"
-                          decimalScale={2}
-                          thousandSeparator=","
-                          value={product.vat_inc}
-                        />
-                      </Table.Td>
-                      <Table.Td>
-                        <NumberFormatter thousandSeparator="," value={product.duration} />
-                      </Table.Td>
-                      <Table.Td>
-                        <NumberFormatter thousandSeparator="," value={product.quantity} />
-                      </Table.Td>
-                      <Table.Td>{product.vat_type}</Table.Td>
-                      <Table.Td>
-                        <NumberFormatter
-                          prefix="₱"
-                          decimalScale={2}
-                          thousandSeparator=","
-                          value={product.total_amount}
-                        />
-                      </Table.Td>
-                    </Table.Tr>
+                    <ProductRow key={product.key} product={product} />
                   ))}
                 </Table.Tbody>
               </Table>

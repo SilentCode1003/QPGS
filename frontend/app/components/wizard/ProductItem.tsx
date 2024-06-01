@@ -3,10 +3,23 @@ import {
   Step4Values,
 } from '@/app/(root)/(quotations)/quotations/create/(steps)/step-4/page'
 import { api } from '@/app/lib/api'
-import { ActionIcon, Box, Group, NumberInput, Radio, Select, Stack, TextInput } from '@mantine/core'
+import {
+  ActionIcon,
+  Box,
+  Group,
+  Input,
+  NumberInput,
+  Radio,
+  Select,
+  Stack,
+  TextInput,
+} from '@mantine/core'
 import { UseFormReturnType } from '@mantine/form'
+import { RichTextEditor } from '@mantine/tiptap'
 import { IconTrash } from '@tabler/icons-react'
 import { useQuery } from '@tanstack/react-query'
+import { useEditor } from '@tiptap/react'
+import StarterKit from '@tiptap/starter-kit'
 import { useEffect, useState } from 'react'
 
 interface Props {
@@ -65,6 +78,16 @@ export default function ProductItem({ form, item, index }: Props) {
 
   const currentItem = `products.${index}`
 
+  const editor = useEditor({
+    extensions: [StarterKit],
+    content: item.description,
+    editable: false,
+    onUpdate: (props) => {
+      const content = props.editor.getHTML()
+      form.setFieldValue(`${currentItem}.description`, content)
+    },
+  })
+
   const [price, setPrice] = useState(form.getValues().products[index].price)
   const [duration, setDuration] = useState(form.getValues().products[index].duration)
   const [quantity, setQuantity] = useState(form.getValues().products[index].quantity)
@@ -79,7 +102,8 @@ export default function ProductItem({ form, item, index }: Props) {
   form.watch(`products.${index}.name`, ({ value }) => {
     const product = products.data?.find((product) => product.name === value)
 
-    form.setFieldValue(`${currentItem}.description`, product?.description)
+    // form.setFieldValue(`${currentItem}.description`, product?.description)
+    editor?.commands.setContent(product!.description, true)
     form.setFieldValue(`${currentItem}.price`, Number(product?.price))
   })
 
@@ -122,6 +146,10 @@ export default function ProductItem({ form, item, index }: Props) {
     form.setFieldValue(`${currentItem}.total_amount`, totalAmount)
   }, [form, currentItem, totalAmount])
 
+  useEffect(() => {
+    console.log(form.errors)
+  }, [form])
+
   if (isLoading) {
     return <span>Payment type is loading...</span>
   }
@@ -144,12 +172,17 @@ export default function ProductItem({ form, item, index }: Props) {
       </Box>
 
       <Box miw={200} h={100}>
-        <TextInput
-          readOnly
-          label="Description"
-          key={form.key(`${currentItem}.description`)}
-          {...form.getInputProps(`${currentItem}.description`)}
-        />
+        <Input.Wrapper label="Description" error={form.errors.description}>
+          <RichTextEditor
+            editor={editor}
+            styles={{
+              root: { maxHeight: '36px', overflowX: 'auto' },
+              content: { fontSize: '14px' },
+            }}
+          >
+            <RichTextEditor.Content />
+          </RichTextEditor>
+        </Input.Wrapper>
       </Box>
 
       <Box miw={200} h={100}>
