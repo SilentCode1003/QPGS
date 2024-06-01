@@ -2,7 +2,7 @@
 import { api } from '@/app/lib/api'
 import { useUser } from '@/app/lib/auth'
 import { convertSnakeToTitleCase, currencyNumber, formatDate } from '@/app/utils/format'
-import { ActionIcon, Group, Stack, Table, Text, Title } from '@mantine/core'
+import { ActionIcon, Badge, Group, Stack, Table, Text, Title } from '@mantine/core'
 import { IconArrowRight, IconSortAscending, IconSortDescending } from '@tabler/icons-react'
 import { useQuery } from '@tanstack/react-query'
 import {
@@ -88,6 +88,14 @@ const columns = [
   }),
   columnHelper.accessor('grand_total', {
     cell: (info) => currencyNumber(+info.getValue()),
+    header: (info) => convertSnakeToTitleCase(info.column.id),
+  }),
+  columnHelper.accessor('quotation_status.name', {
+    cell: (info) => (
+      <Badge color={info.getValue() === 'approved' ? 'green' : 'orange'}>
+        {info.getValue().toUpperCase()}
+      </Badge>
+    ),
     header: (info) => convertSnakeToTitleCase(info.column.id),
   }),
   columnHelper.accessor('created_at', {
