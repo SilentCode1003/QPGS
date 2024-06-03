@@ -210,3 +210,95 @@ export const getQuotation: RequestHandler = async (req, res, next) => {
     next(err)
   }
 }
+
+// export const updateQuotation: RequestHandler = async (req, res, next) => {
+//   const idSchema = z.object({
+//     id: z.string()
+//   })
+
+//   const validatedId = idSchema.safeParse(req.params)
+
+//   if (!validatedId.success) {
+//     return res.status(400).json({ message: validatedId.error.errors })
+//   }
+
+//   const productSchema = z.object({
+//     name: z.string().min(1),
+//     description: z.string().min(1),
+//     payment_type: z.string().min(1),
+//     price: z.number().nonnegative(),
+//     markup: z.number().nonnegative(),
+//     vat_ex: z.number().nonnegative(),
+//     vat_inc: z.number().nonnegative(),
+//     duration: z.number().gt(0),
+//     quantity: z.number().gt(0),
+//     vat_type: z.string(),
+//     total_amount: z.number(),
+//   })
+
+//   type Product = z.infer<typeof productSchema>
+
+//   const bodySchema = z.object({
+//     type: z.string().min(1),
+//     subject: z.string().min(3),
+//     date: z.string(),
+//     expiry_date: z.string(),
+//     note: z.string().min(1).optional(),
+//     terms_and_conditions: z.string().min(3),
+//     client: z.object({
+//       id: z.number(),
+//       name: z.string().min(1),
+//       tel_no: z.string().optional(),
+//       contact_no: z.string().min(1),
+//       email: z.string().email(),
+//       address: z.string().min(3),
+//     }),
+//     products: z.array(productSchema),
+//     grand_total: z.number(),
+//   })
+
+//   try {
+//     const quotation = await prisma.quotation.update({
+//       where: {
+//         id: validatedId.data.id
+//       },
+//       data: {
+//         quotation_status: {
+//           connect:
+//         }
+//       }
+//     })
+//   } catch (err) {
+
+//   }
+
+// }
+
+export const approveQuotation: RequestHandler = async (req, res, next) => {
+  const idSchema = z.object({
+    id: z.string(),
+  })
+
+  const validatedId = idSchema.safeParse(req.params)
+
+  if (!validatedId.success) {
+    return res.status(400).json({ message: validatedId.error.errors })
+  }
+
+  try {
+    const quotation = await prisma.quotation.update({
+      where: {
+        id: validatedId.data.id,
+      },
+      data: {
+        approved_by: req.session.user!.id,
+        // TODO: Make this a config
+        quotation_status_id: 2, // approved
+      },
+    })
+
+    res.status(200).json({ data: quotation })
+  } catch (err) {
+    next(err)
+  }
+}

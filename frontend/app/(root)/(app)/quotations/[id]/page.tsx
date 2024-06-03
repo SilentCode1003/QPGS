@@ -27,6 +27,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { z } from 'zod'
 import { Product } from '../all/page'
+import { IconDownload } from '@tabler/icons-react'
 
 interface Comment {
   id: string
@@ -121,6 +122,32 @@ function useCreateComment(quotationId: string) {
   })
 }
 
+function useApproveQuotation(quotationId: string) {
+  return useMutation({
+    mutationFn: () => {
+      return api.patch(`/quotations/${encodeURIComponent(quotationId)}/approve`)
+    },
+    onSuccess: async () => {
+      notifications.show({
+        title: 'Success',
+        message: 'Successfully approved',
+        color: 'green',
+      })
+      queryClient.invalidateQueries({
+        queryKey: [`quotations/${quotationId}`],
+      })
+    },
+    onError: (err) => {
+      console.error(err)
+      notifications.show({
+        title: 'Error',
+        message: 'Cannot approve quotation',
+        color: 'red',
+      })
+    },
+  })
+}
+
 export default function QuotationInfo({ params }: { params: { id: string } }) {
   // unstable_noStore()
 
@@ -134,6 +161,8 @@ export default function QuotationInfo({ params }: { params: { id: string } }) {
 
   const comment = useCreateComment(params.id)
 
+  const approveMutation = useApproveQuotation(params.id)
+
   const form = useForm({
     mode: 'uncontrolled',
     initialValues: {
@@ -141,6 +170,12 @@ export default function QuotationInfo({ params }: { params: { id: string } }) {
     },
     validate: zodResolver(schema),
   })
+
+  const approveQuotation = async () => {
+    try {
+      await approveMutation.mutateAsync()
+    } catch (err) {}
+  }
 
   if (!user.data) {
     return <span>Please refresh</span>
@@ -493,7 +528,13 @@ export default function QuotationInfo({ params }: { params: { id: string } }) {
           </Stack>
         </Card>
 
-        <Button size="compact-xl">Approve</Button>
+        {q.quotation_status.name === 'pending' ? (
+          <Button size="compact-xl" onClick={approveQuotation}>
+            Approve
+          </Button>
+        ) : (
+          <IconDownload />
+        )}
       </Stack>
     </Container>
   )

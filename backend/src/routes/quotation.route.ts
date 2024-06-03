@@ -1,5 +1,10 @@
 import express from 'express'
-import { createQuotation, getQuotation, getQuotations } from '../handlers/quotation.handler'
+import {
+  approveQuotation,
+  createQuotation,
+  getQuotation,
+  getQuotations,
+} from '../handlers/quotation.handler'
 import { isLoggedIn } from '../middlewares/auth.middleware'
 import { isAdmin } from '../middlewares/role.middleware'
 
@@ -10,6 +15,8 @@ quotationRouter.post('/', isLoggedIn, createQuotation)
 quotationRouter.get('/:id', isLoggedIn, getQuotation)
 quotationRouter.put('/:id', isLoggedIn)
 quotationRouter.delete('/:id', isLoggedIn)
+
+quotationRouter.patch('/:id/approve', isLoggedIn, isAdmin, approveQuotation)
 
 // quotationRouter.get('/', getQuotations)
 // quotationRouter.post('/')
