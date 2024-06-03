@@ -9,6 +9,7 @@ import { loggerMiddleware } from './middlewares/logger.middleware.js'
 import { initCors } from './startup/cors.startup.js'
 import { initRoutes } from './startup/route.startup.js'
 import { initSession } from './startup/session.startup.js'
+import { initStatic } from './startup/static.startup.js'
 import { logger } from './utils/logger.util.js'
 
 const app = express()
@@ -31,6 +32,9 @@ const startServer = () => {
 
   logger.info('   Adding logger middleware')
   app.use(loggerMiddleware)
+
+  logger.info('   Adding static middleware')
+  initStatic(app)
 
   logger.info('   Adding routes')
   initRoutes(app)

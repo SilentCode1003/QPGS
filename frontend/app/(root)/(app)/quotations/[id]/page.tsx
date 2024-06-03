@@ -15,6 +15,7 @@ import {
   Group,
   NumberFormatter,
   Paper,
+  SimpleGrid,
   Stack,
   Table,
   Text,
@@ -23,11 +24,11 @@ import {
 } from '@mantine/core'
 import { useForm, zodResolver } from '@mantine/form'
 import { notifications } from '@mantine/notifications'
+import { IconDownload } from '@tabler/icons-react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { z } from 'zod'
 import { Product } from '../all/page'
-import { IconDownload } from '@tabler/icons-react'
 
 interface Comment {
   id: string
@@ -225,7 +226,7 @@ export default function QuotationInfo({ params }: { params: { id: string } }) {
             </Box>
 
             <Box>
-              <Group justify="space-evenly">
+              <SimpleGrid cols={2}>
                 <Box>
                   <Text c="dimmed" size="sm">
                     Status
@@ -247,7 +248,7 @@ export default function QuotationInfo({ params }: { params: { id: string } }) {
                     >{`${q.approved_by_user.first_name} ${q.approved_by_user.last_name}`}</Text>
                   </Box>
                 )}
-              </Group>
+              </SimpleGrid>
             </Box>
 
             <Box>
@@ -528,13 +529,19 @@ export default function QuotationInfo({ params }: { params: { id: string } }) {
           </Stack>
         </Card>
 
-        {q.quotation_status.name === 'pending' ? (
+        {q.quotation_status.name === 'pending' && (
           <Button size="compact-xl" onClick={approveQuotation}>
             Approve
           </Button>
-        ) : (
-          <IconDownload />
         )}
+
+        <Button
+          rightSection={<IconDownload size={14} />}
+          component="a"
+          href={`${process.env.NEXT_PUBLIC_API_URL}/reports/report-${params.id}.docx`}
+        >
+          Download
+        </Button>
       </Stack>
     </Container>
   )
