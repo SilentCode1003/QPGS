@@ -5,7 +5,7 @@ import { logger } from '../utils/logger.util.js'
 // We should format whatever error to the
 export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   if (err instanceof SyntaxError) {
-    return res.status(400).json({ message: err })
+    return res.status(400).json({ message: 'JSON Syntax error' })
   }
 
   // Handle Prisma errors
