@@ -1,0 +1,39 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "private": "true",
+  "type": "module",
+  "scripts": {
+    "build": "tsup src/index.ts",
+    "start": "node --env-file=.env dist/index.cjs",
+    "dev": "tsup src/index.ts --watch --onSuccess \"node --env-file=.env dist/index.cjs\"",
+    "format": "prettier --write \"./src/**/*.ts\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/express-session": "^1.18.0",
+    "@types/morgan": "^1.9.9",
+    "prettier": "^3.2.5",
+    "prisma": "^5.14.0",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.5"
+  },
+  "tsup": {
+    "clean": true
+  },
+  "dependencies": {
+    "@prisma/client": "5.14.0",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "morgan": "^1.10.0",
+    "winston": "^3.13.0",
+    "winston-daily-rotate-file": "^5.0.0",
+    "zod": "^3.23.8"
+  }
+}
