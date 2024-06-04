@@ -1,10 +1,12 @@
 import type { Express } from 'express'
 import session from 'express-session'
+import { CONSTANT } from '../config/constant.config.js'
 import { config } from '../config/env.config.js'
 
 const maxAge = 1000 * 60 * 60 * 9 // 9 Hours
 
 const options: session.SessionOptions = {
+  name: CONSTANT.SESSION_COOKIE_NAME,
   secret: config.API_SESSION_SECRET,
   resave: false,
   saveUninitialized: false,

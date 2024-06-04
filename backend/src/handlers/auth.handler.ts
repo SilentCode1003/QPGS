@@ -1,7 +1,8 @@
-import type { RequestHandler } from 'express'
-import { loginSchema } from '../schemas/auth.schema'
-import { prisma } from '../db/prisma'
 import bcrypt from 'bcrypt'
+import type { RequestHandler } from 'express'
+import { CONSTANT } from '../config/constant.config'
+import { prisma } from '../db/prisma'
+import { loginSchema } from '../schemas/auth.schema'
 
 export const getMe: RequestHandler = async (req, res, next) => {
   res.status(200).json({ data: req.session.user })
@@ -47,6 +48,8 @@ export const logout: RequestHandler = async (req, res, next) => {
     if (err) {
       console.error('Cannot destroy session')
     }
+
+    res.clearCookie(CONSTANT.SESSION_COOKIE_NAME)
 
     res.sendStatus(204)
   })
