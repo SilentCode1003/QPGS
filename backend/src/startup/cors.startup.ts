@@ -4,7 +4,9 @@ import { config } from '../config/env.config'
 import { logger } from '../utils/logger.util'
 
 const origin =
-  config.NODE_ENV === 'production' ? [config.FRONT_END_ORIGIN] : ['http://localhost:3000']
+  config.NODE_ENV === 'production'
+    ? [config.FRONT_END_ORIGIN]
+    : ['http://localhost:3000', 'http://localhost:3001']
 
 const options: cors.CorsOptions = {
   // Only allow these clients
