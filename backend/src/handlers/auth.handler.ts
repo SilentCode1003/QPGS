@@ -38,8 +38,7 @@ export const login: RequestHandler = async (req, res, next) => {
 
     res.status(200).json({ data: userWithoutPassword })
   } catch (err) {
-    console.error('Please handle: ', err)
-    res.status(400).json(err)
+    next(err)
   }
 }
 

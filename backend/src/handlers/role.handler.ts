@@ -10,8 +10,7 @@ export const getRoles: RequestHandler = async (req, res, next) => {
 
     res.status(200).json({ data: roles })
   } catch (err) {
-    console.error('Please handle: ', err)
-    res.status(400).json(err)
+    next(err)
   }
 }
 
@@ -31,19 +30,7 @@ export const createRole: RequestHandler = async (req, res, next) => {
 
     res.status(200).json({ data: role })
   } catch (err) {
-    if (err instanceof PrismaClientKnownRequestError) {
-      switch (err.code) {
-        case 'P2002':
-          console.log('Role name already exists')
-          return res.status(400).json({ message: 'Role name already exists' })
-        default:
-          console.log('Please handle: ', err)
-          return res.status(400).json(err)
-      }
-    }
-
-    console.error('Please handle: ', err)
-    res.status(400).json(err)
+    next(err)
   }
 }
 
@@ -67,7 +54,6 @@ export const getRole: RequestHandler = async (req, res, next) => {
 
     res.status(200).json({ data: role })
   } catch (err) {
-    console.error('Please handle: ', err)
-    res.status(400).json(err)
+    next(err)
   }
 }

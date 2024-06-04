@@ -10,8 +10,7 @@ export const getPresets: RequestHandler = async (req, res, next) => {
 
     res.status(200).json({ data: presets })
   } catch (err) {
-    console.error('Please handle: ', err)
-    res.status(400).json(err)
+    next(err)
   }
 }
 
@@ -31,8 +30,7 @@ export const createPreset: RequestHandler = async (req, res, next) => {
 
     res.status(200).json({ data: preset })
   } catch (err) {
-    console.error('Please handle: ', err)
-    res.status(400).json(err)
+    next(err)
   }
 }
 
@@ -56,8 +54,7 @@ export const getPreset: RequestHandler = async (req, res, next) => {
 
     res.status(200).json({ data: preset })
   } catch (err) {
-    console.error('Please handle: ', err)
-    res.status(400).json(err)
+    next(err)
   }
 }
 
@@ -86,21 +83,7 @@ export const updatePreset: RequestHandler = async (req, res, next) => {
 
     res.status(200).json({ data: preset })
   } catch (err) {
-    if (err instanceof PrismaClientKnownRequestError) {
-      switch (err.code) {
-        case 'P2025':
-          console.log('Preset to update not found')
-          return res
-            .status(404)
-            .json({ message: 'Terms and conditions preset to update is not found' })
-        default:
-          console.log('Please handle: ', err)
-          return res.status(400).json(err)
-      }
-    }
-
-    console.error('Please handle: ', err)
-    res.status(400).json(err)
+    next(err)
   }
 }
 
@@ -120,20 +103,6 @@ export const deletePreset: RequestHandler = async (req, res, next) => {
 
     res.status(200).json({ data: preset })
   } catch (err) {
-    if (err instanceof PrismaClientKnownRequestError) {
-      switch (err.code) {
-        case 'P2025':
-          console.log('Preset to delete not found')
-          return res
-            .status(404)
-            .json({ message: 'Terms and conditions preset to delete is not found' })
-        default:
-          console.log('Please handle: ', err)
-          return res.status(400).json(err)
-      }
-    }
-
-    console.error('Please handle: ', err)
-    res.status(400).json(err)
+    next(err)
   }
 }

@@ -15,8 +15,7 @@ export const getUsers: RequestHandler = async (req, res, next) => {
 
     res.status(200).json({ data: users })
   } catch (err) {
-    console.error('Please handle: ', err)
-    res.status(400).json(err)
+    next(err)
   }
 }
 
@@ -40,22 +39,7 @@ export const createUser: RequestHandler = async (req, res, next) => {
 
     res.status(200).json({ data: user })
   } catch (err) {
-    if (err instanceof PrismaClientKnownRequestError) {
-      switch (err.code) {
-        case 'P2002':
-          console.log('Username or email is already used')
-          return res.status(400).json({ message: 'Username or email is already used' })
-        case 'P2003':
-          console.log('Cannot create user because role id does not exist')
-          return res.status(400).json({ message: 'Role id does not exist' })
-        default:
-          console.log('Please handle: ', err)
-          return res.status(400).json(err)
-      }
-    }
-
-    console.error('Please handle: ', err)
-    res.status(400).json(err)
+    next(err)
   }
 }
 
@@ -79,8 +63,7 @@ export const getUser: RequestHandler = async (req, res, next) => {
 
     res.status(200).json({ data: user })
   } catch (err) {
-    console.error('Please handle: ', err)
-    res.status(400).json(err)
+    next(err)
   }
 }
 
@@ -113,25 +96,7 @@ export const updateUser: RequestHandler = async (req, res, next) => {
 
     res.status(200).json({ data: user })
   } catch (err) {
-    if (err instanceof PrismaClientKnownRequestError) {
-      switch (err.code) {
-        case 'P2002':
-          console.log('Username or email is already used')
-          return res.status(400).json({ message: 'Username or email is already used' })
-        case 'P2003':
-          console.log('Cannot create user because role id does not exist')
-          return res.status(400).json({ message: 'Role id does not exist' })
-        case 'P2025':
-          console.log('User to update not found')
-          return res.status(404).json({ message: 'User to update not found' })
-        default:
-          console.log('Please handle: ', err)
-          return res.status(400).json(err)
-      }
-    }
-
-    console.error('Please handle: ', err)
-    res.status(400).json(err)
+    next(err)
   }
 }
 
@@ -151,18 +116,6 @@ export const deleteUser: RequestHandler = async (req, res, next) => {
 
     res.status(200).json({ data: user })
   } catch (err) {
-    if (err instanceof PrismaClientKnownRequestError) {
-      switch (err.code) {
-        case 'P2025':
-          console.log('User to delete not found')
-          return res.status(404).json({ message: 'User to delete not found' })
-        default:
-          console.log('Please handle: ', err)
-          return res.status(400).json(err)
-      }
-    }
-
-    console.error('Please handle: ', err)
-    res.status(400).json(err)
+    next(err)
   }
 }
