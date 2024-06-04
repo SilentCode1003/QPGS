@@ -24,6 +24,7 @@ export const createClient: RequestHandler = async (req, res, next) => {
     const client = await prisma.client.create({
       data: {
         ...validatedBody.data,
+        created_by_id: req.session.user!.id,
       },
     })
 

@@ -6,7 +6,6 @@ export const createClientSchema = z.object({
   contact_no: z.string().trim().min(1, { message: 'Name is required' }),
   email: z.string().email(),
   address: z.string().trim().min(1, { message: 'Address is required' }),
-  created_by_id: z.number(),
 })
 
 export const updateClientSchema = z.object({
