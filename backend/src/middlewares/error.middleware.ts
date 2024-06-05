@@ -24,9 +24,11 @@ export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
           message: `${formatPrismaErrorTarget(err.meta?.target as string)} already exists`,
         })
       case 'P2003':
+        const word = formatPrismaErrorTarget(err.meta?.field_name as string)
         // Happens in create and update when a foreign key to insert does not exist
+        // Or when in delete where the current id is a foreign key of other record
         return res.status(400).json({
-          message: `${formatPrismaErrorTarget(err.meta?.field_name as string)} does not exist`,
+          message: `${word} does not exist or ${word} is currently being used`,
         })
       case 'P2025':
         // Happens if the resource going to be updated/deleted does not exist
