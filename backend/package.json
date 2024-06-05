@@ -8,7 +8,9 @@
     "build": "tsup src/index.ts",
     "start": "node --env-file=.env dist/index.cjs",
     "dev": "tsup src/index.ts --watch --onSuccess \"node --env-file=.env dist/index.cjs\"",
-    "format": "prettier --write \"./src/**/*.ts\""
+    "format": "prettier --write \"./src/**/*.ts\"",
+    "db:reset": "prisma migrate reset",
+    "db:seed": "prisma db seed"
   },
   "keywords": [],
   "author": "",
