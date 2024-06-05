@@ -3,7 +3,6 @@ import type { RequestHandler } from 'express'
 import { prisma } from '../db/prisma.js'
 import { numberIdParamSchema } from '../schemas/param.schema.js'
 import { createUserSchema, updateUserSchema } from '../schemas/user.schema.js'
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 
 export const getUsers: RequestHandler = async (req, res, next) => {
   try {
