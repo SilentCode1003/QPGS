@@ -14,10 +14,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum role {
-  ADMIN
-  DEVELOPER
-  USER
+model role {
+  id         Int      @id @default(autoincrement())
+  name       String   @unique
+  created_at DateTime @default(now())
+  user       user[]
 }
 
 model user {
@@ -27,7 +28,8 @@ model user {
   email               String              @unique
   username            String              @unique
   password            String              @db.Text
-  role                role                @default(USER)
+  role_id             Int
+  role                role                @relation(fields: [role_id], references: [id])
   job_title           String
   created_at          DateTime            @default(now())
   updated_at          DateTime            @updatedAt
@@ -77,9 +79,11 @@ model product {
   updated_at  DateTime @updatedAt
 }
 
-enum quotation_status {
-  PENDING
-  ACTIVE
+model quotation_status {
+  id         Int         @id @default(autoincrement())
+  name       String      @unique
+  created_at DateTime    @default(now())
+  quotation  quotation[]
 }
 
 model quotation {
@@ -95,7 +99,8 @@ model quotation {
   client               client              @relation(fields: [client_id], references: [id])
   products             Json
   grand_total          Decimal             @db.Decimal(10, 2)
-  quotation_status     quotation_status    @default(PENDING)
+  quotation_status_id  Int
+  quotation_status     quotation_status    @relation(fields: [quotation_status_id], references: [id])
   created_by           Int
   created_by_user      user                @relation("created_quotations", fields: [created_by], references: [id])
   approved_by          Int?

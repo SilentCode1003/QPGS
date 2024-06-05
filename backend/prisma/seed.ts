@@ -3,7 +3,29 @@ import { faker } from '@faker-js/faker'
 
 const prisma = new PrismaClient()
 
-async function createUser() {
+async function createRole() {
+  const [adminRole] = await prisma.$transaction([
+    prisma.role.create({
+      data: {
+        name: 'ADMIN',
+      },
+    }),
+    prisma.role.createMany({
+      data: [
+        {
+          name: 'DEVELOPER',
+        },
+        {
+          name: 'USER',
+        },
+      ],
+    }),
+  ])
+
+  return adminRole
+}
+
+async function createUser(adminRoleId: number) {
   return await prisma.user.create({
     data: {
       first_name: 'John',
@@ -12,7 +34,7 @@ async function createUser() {
       username: 'admin',
       password: 'password',
       job_title: 'Software Developer',
-      role: 'ADMIN',
+      role_id: adminRoleId,
     },
   })
 }
@@ -51,7 +73,8 @@ async function createClient(createdById: number) {
 }
 
 async function main() {
-  const user = await createUser()
+  const adminRole = await createRole()
+  const user = await createUser(adminRole.id)
   await createTermsAndConditionPreset()
   await createClient(user.id)
 }
