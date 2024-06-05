@@ -12,6 +12,7 @@ async function createUser() {
       username: 'admin',
       password: 'password',
       job_title: 'Software Developer',
+      role: 'ADMIN',
     },
   })
 }
