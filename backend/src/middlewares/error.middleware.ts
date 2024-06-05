@@ -32,7 +32,7 @@ export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
         })
       case 'P2025':
         // Happens if the resource going to be updated/deleted does not exist
-        return res.status(404).json({ message: 'Record to update/delete not found ' })
+        return res.status(404).json({ message: 'Record to update/delete not found' })
       default:
         return res.status(400).json({
           message: `Please handle prisma error code: ${err.code}`,
