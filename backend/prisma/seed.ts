@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client'
+import { faker } from '@faker-js/faker'
 
 const prisma = new PrismaClient()
 
@@ -25,7 +26,7 @@ async function createRole() {
 }
 
 async function createUser(adminRoleId: number) {
-  await prisma.user.create({
+  return await prisma.user.create({
     data: {
       first_name: 'John',
       last_name: 'Doe',
@@ -47,18 +48,35 @@ async function createTermsAndConditionPreset() {
   })
 }
 
-// async function createClient() {
-//   await prisma.client.create({
-//     data: {
-//       name:
-//     }
-//   })
-// }
+async function createClient(createdById: number) {
+  const name = faker.company.name()
+  const tel_no = faker.phone.number()
+  const contact_no = faker.phone.number()
+  const email = faker.internet.email()
+  const address =
+    faker.location.streetAddress(true) +
+    ' ' +
+    faker.location.city() +
+    ' ' +
+    faker.location.country()
+
+  await prisma.client.create({
+    data: {
+      name,
+      tel_no,
+      contact_no,
+      email,
+      address,
+      created_by_id: createdById,
+    },
+  })
+}
 
 async function main() {
   const adminRole = await createRole()
-  await createUser(adminRole.id)
+  const user = await createUser(adminRole.id)
   await createTermsAndConditionPreset()
+  await createClient(user.id)
 }
 
 main()
