@@ -3,6 +3,7 @@ import { authRouter } from '../routes/auth.route.js'
 import { categoryRouter } from '../routes/category.route.js'
 import { clientRouter } from '../routes/client.route.js'
 import { productRouter } from '../routes/product.route.js'
+import { quotationRouter } from '../routes/quotation.route.js'
 import { roleRouter } from '../routes/role.route.js'
 import { statusRouter } from '../routes/status.route.js'
 import { termsAndConditionsRouter } from '../routes/terms.route.js'
@@ -18,4 +19,5 @@ export const initRoutes = (app: Express) => {
   app.use('/categories', categoryRouter)
   app.use('/products', productRouter)
   app.use('/statuses', statusRouter)
+  app.use('/quotations', quotationRouter)
 }
