@@ -69,14 +69,15 @@ model category {
 }
 
 model product {
-  id          Int      @id @default(autoincrement())
-  name        String   @unique
-  description String   @db.Text
-  price       Decimal  @db.Decimal(10, 2)
-  category_id Int
-  category    category @relation(fields: [category_id], references: [id])
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
+  id                Int                 @id @default(autoincrement())
+  name              String              @unique
+  description       String              @db.Text
+  price             Decimal             @db.Decimal(10, 2)
+  category_id       Int
+  category          category            @relation(fields: [category_id], references: [id])
+  created_at        DateTime            @default(now())
+  updated_at        DateTime            @updatedAt
+  quotation_product quotation_product[]
 }
 
 model quotation_status {
@@ -97,7 +98,6 @@ model quotation {
   terms_and_conditions String              @db.Text
   client_id            Int
   client               client              @relation(fields: [client_id], references: [id])
-  products             Json
   grand_total          Decimal             @db.Decimal(10, 2)
   quotation_status_id  Int
   quotation_status     quotation_status    @relation(fields: [quotation_status_id], references: [id])
@@ -108,6 +108,33 @@ model quotation {
   created_at           DateTime            @default(now())
   updated_at           DateTime            @updatedAt
   quotation_comment    quotation_comment[]
+  quotation_product    quotation_product[]
+}
+
+enum vat_type {
+  vat_ex
+  vat_inc
+}
+
+model quotation_product {
+  id                Int       @id @default(autoincrement())
+  quotation_id      String
+  quotation         quotation @relation(fields: [quotation_id], references: [id])
+  product_id        Int
+  product           product   @relation(fields: [product_id], references: [id])
+  entry_name        String
+  entry_description String    @db.Text
+  entry_price       Decimal   @db.Decimal(10, 2)
+  entry_category_id Int
+  markup            Decimal   @db.Decimal(10, 2)
+  vat_ex            Decimal   @db.Decimal(10, 2)
+  vat_inc           Decimal   @db.Decimal(10, 2)
+  vat_type          vat_type
+  duration          Int
+  quantity          Int
+  total_amount      Decimal   @db.Decimal(10, 2)
+
+  @@unique([quotation_id, product_id])
 }
 
 model quotation_comment {

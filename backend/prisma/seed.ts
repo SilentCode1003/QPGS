@@ -72,11 +72,58 @@ async function createClient(createdById: number) {
   })
 }
 
+async function createCategory() {
+  await prisma.category.createMany({
+    data: [
+      {
+        name: 'hardware',
+      },
+      {
+        name: 'software',
+      },
+      {
+        name: 'service',
+      },
+    ],
+  })
+}
+
+async function createProduct() {
+  return await prisma.product.create({
+    data: {
+      name: 'SWAN 1 Package',
+      description: '<ul><li>Test</li><li>Another test</li></ul>',
+      price: 41132.0,
+      category_id: 1,
+    },
+  })
+}
+
+async function createQuotationStatuses() {
+  const [pendingStatus] = await prisma.$transaction([
+    prisma.quotation_status.create({
+      data: {
+        name: 'PENDING',
+      },
+    }),
+    prisma.quotation_status.create({
+      data: {
+        name: 'APPROVED',
+      },
+    }),
+  ])
+
+  return pendingStatus
+}
+
 async function main() {
   const adminRole = await createRole()
   const user = await createUser(adminRole.id)
   await createTermsAndConditionPreset()
   await createClient(user.id)
+  await createCategory()
+  await createProduct()
+  await createQuotationStatuses()
 }
 
 main()

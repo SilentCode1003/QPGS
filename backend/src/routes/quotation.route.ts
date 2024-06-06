@@ -1,10 +1,11 @@
 import express from 'express'
-import { userRouter } from './user.route'
 import {
+  createQuotation,
   getApprovedQuotationsByUserId,
   getCreatedQuotationsByUserId,
   getQuotations,
 } from '../handlers/quotation.handler'
+import { userRouter } from './user.route'
 
 export const quotationRouter = express.Router()
 
@@ -19,14 +20,14 @@ userRouter.get('/:userId/created-quotations', getCreatedQuotationsByUserId) // /
 userRouter.get('/:userId/approved-quotations', getApprovedQuotationsByUserId) // /users/1/approved-quotations
 
 // Anyone can create a quotation
-quotationRouter.post('/')
+quotationRouter.post('/', createQuotation)
 
 // Admin can view anyone's quotation
 // User can only view his/her own quotation
 quotationRouter.get('/:id')
 
 // Admin can edit anyone's quotation
-// User can only edit his/her own quotation
+// User can only edit his/her own PENDING quotation
 quotationRouter.put('/:id')
 
 // Only admin can approve
