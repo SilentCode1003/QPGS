@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker'
 import { PrismaClient, type product } from '@prisma/client'
+import bcrypt from 'bcrypt'
 import { generateQuotationId } from '../src/utils/generate.util'
 
 const prisma = new PrismaClient()
@@ -33,7 +34,7 @@ async function createUser(adminRoleId: number) {
       last_name: 'Doe',
       email: 'johndoe@example.com',
       username: 'admin',
-      password: 'password',
+      password: await bcrypt.hash('password', 10),
       job_title: 'Software Developer',
       role_id: adminRoleId,
     },
