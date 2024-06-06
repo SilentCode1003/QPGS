@@ -2,7 +2,6 @@ import type { RequestHandler } from 'express'
 import { prisma } from '../db/prisma'
 import { numberIdParamSchema } from '../schemas/param.schema'
 import { createRoleSchema } from '../schemas/role.schema'
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 
 export const getRoles: RequestHandler = async (req, res, next) => {
   try {
