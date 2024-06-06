@@ -1,10 +1,15 @@
+import { createReport } from 'docx-templates'
 import type { RequestHandler } from 'express'
+import fs from 'node:fs'
 import { CONSTANT } from '../config/constant.config'
 import { prisma } from '../db/prisma'
 import { numberUserIdSchema } from '../schemas/param.schema'
 import { createQuotationSchema } from '../schemas/quotation.schema'
+import { formatDateTimeToMonthDateYear, formatDecimalToPresentation } from '../utils/format.util'
 import { generateQuotationId } from '../utils/generate.util'
-import type { product } from '@prisma/client'
+
+const hardwareTemplate = fs.readFileSync('./templates/hardware-template.docx')
+const softwareTemplate = fs.readFileSync('./templates/software-template.docx')
 
 export const getQuotations: RequestHandler = async (req, res, next) => {
   try {
@@ -207,7 +212,39 @@ export const createQuotation: RequestHandler = async (req, res, next) => {
           },
         },
       },
+      include: {
+        client: true,
+        quotation_product: true,
+      },
     })
+
+    const templateData = {
+      ...quotation,
+      date: formatDateTimeToMonthDateYear(quotation.date),
+      expiry_date: formatDateTimeToMonthDateYear(quotation.expiry_date),
+      quotation_product: quotation.quotation_product.map((quotationProduct) => {
+        return {
+          ...quotationProduct,
+          vat_ex: formatDecimalToPresentation(quotationProduct.vat_ex),
+          vat_inc: formatDecimalToPresentation(quotationProduct.vat_inc),
+          display_price: formatDecimalToPresentation(
+            quotationProduct.vat_type === 'vat_ex'
+              ? quotationProduct.vat_ex
+              : quotationProduct.vat_inc,
+          ),
+          total_amount: formatDecimalToPresentation(quotationProduct.total_amount),
+        }
+      }),
+      grand_total: formatDecimalToPresentation(quotation.grand_total),
+    }
+
+    const buffer = await createReport({
+      template: quotation.type === 'hardware' ? hardwareTemplate : softwareTemplate,
+      data: templateData,
+    })
+    fs.writeFileSync(`./reports/report-${id}.docx`, buffer)
+
+    console.log(quotation)
 
     res.status(200).json({ data: quotation })
   } catch (err) {
