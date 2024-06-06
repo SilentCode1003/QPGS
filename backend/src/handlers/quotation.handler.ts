@@ -78,7 +78,6 @@ export const createQuotation: RequestHandler = async (req, res, next) => {
     }
 
     categoryId = categories.find((category) => category.name === validatedBody.data.type)!.id
-    console.log(categoryId)
   } catch (err) {
     next(err)
   }
@@ -122,8 +121,7 @@ export const createQuotation: RequestHandler = async (req, res, next) => {
       break
     }
 
-    // TODO: Make a hardware id constant
-    if (p.category_id === 1 && products[i]?.duration !== 1) {
+    if (p.category_id === 1 && products[i]?.duration !== CONSTANT.DB_HARDWARE_CATEGORY_ID) {
       isDurationIncorrect = true
     }
 
@@ -180,11 +178,16 @@ export const createQuotation: RequestHandler = async (req, res, next) => {
     })
   }
 
-  // -------------------------------Validate vat_ex and vat_inc
+  const calculatedGrandTotal = validatedProducts.reduce(
+    (prev, current) => prev + current.total_amount,
+    0,
+  )
 
-  // TODO: Validate grand total
-
-  const calculatedGrandTotal = products.reduce((prev, current) => prev + current.total_amount, 0)
+  if (calculatedGrandTotal !== validatedBody.data.grand_total) {
+    return res
+      .status(400)
+      .json({ message: `Wrong grand_total calculation, expected: ${calculatedGrandTotal}` })
+  }
 
   try {
     const { id, monthYear } = await generateQuotationId()
