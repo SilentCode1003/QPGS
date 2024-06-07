@@ -3,7 +3,7 @@ import type { RequestHandler } from 'express'
 import fs from 'node:fs'
 import { CONSTANT } from '../config/constant.config'
 import { prisma } from '../db/prisma'
-import { numberUserIdSchema } from '../schemas/param.schema'
+import { numberUserIdSchema, stringIdParamSchema } from '../schemas/param.schema'
 import { createQuotationSchema } from '../schemas/quotation.schema'
 import { formatDateTimeToMonthDateYear, formatDecimalToPresentation } from '../utils/format.util'
 import { generateQuotationId } from '../utils/generate.util'
@@ -98,6 +98,7 @@ export const createQuotation: RequestHandler = async (req, res, next) => {
   let isCategoryIncorrect = false
   let isDurationIncorrect = false
   let isComputationWrong = false
+  let wrongComputationProductId: number | undefined = undefined
 
   let computedVatEx: number | undefined = undefined
   let computedVatInc: number | undefined = undefined
@@ -128,6 +129,7 @@ export const createQuotation: RequestHandler = async (req, res, next) => {
 
     if (p.category_id === 1 && products[i]?.duration !== CONSTANT.DB_HARDWARE_CATEGORY_ID) {
       isDurationIncorrect = true
+      break
     }
 
     computedVatEx = (products[i]!.markup / 100) * p.price.toNumber() + p.price.toNumber()
@@ -143,6 +145,8 @@ export const createQuotation: RequestHandler = async (req, res, next) => {
       products[i]?.total_amount !== computedTotalAmount
     ) {
       isComputationWrong = true
+      wrongComputationProductId = products[i]!.id
+      break
     }
 
     validatedProducts[i] = {
@@ -179,7 +183,7 @@ export const createQuotation: RequestHandler = async (req, res, next) => {
 
   if (isComputationWrong) {
     return res.status(400).json({
-      message: `Wrong calculations: vat_ex: ${computedVatEx}, vat_inc: ${computedVatInc}, total_amount: ${computedTotalAmount}`,
+      message: `Wrong calculation for product id: ${wrongComputationProductId} vat_ex: ${computedVatEx}, vat_inc: ${computedVatInc}, total_amount: ${computedTotalAmount}`,
     })
   }
 
@@ -244,10 +248,42 @@ export const createQuotation: RequestHandler = async (req, res, next) => {
     })
     fs.writeFileSync(`./reports/report-${id}.docx`, buffer)
 
-    console.log(quotation)
+    res.status(200).json({ data: quotation })
+  } catch (err) {
+    next(err)
+  }
+}
+
+export const getQuotation: RequestHandler = async (req, res, next) => {
+  const validatedId = stringIdParamSchema.safeParse(req.params)
+
+  if (!validatedId.success) {
+    return res.status(400).json({ message: !validatedId.error.format() })
+  }
+
+  try {
+    const quotation = await prisma.quotation.findUnique({
+      where: {
+        id: validatedId.data.id,
+      },
+    })
 
     res.status(200).json({ data: quotation })
   } catch (err) {
     next(err)
   }
 }
+
+// export const updateQuotation: RequestHandler = async (req, res, next) => {
+//   const validatedId = stringIdParamSchema.safeParse(req.params)
+
+//   if (!validatedId.success) {
+//     return res.status(400).json({ message: !validatedId.error.format() })
+//   }
+
+//   try {
+//     const
+//   } catch (err) {
+//     next(err)
+//   }
+// }
