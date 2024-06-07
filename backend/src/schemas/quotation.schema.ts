@@ -22,3 +22,14 @@ export const createQuotationSchema = z.object({
   products: z.array(quotationProductSchema).nonempty(),
   grand_total: z.number().gt(0),
 })
+
+export const updateQuotationSchema = z.object({
+  type: z.string().trim().min(1, { message: 'Type is required' }),
+  subject: z.string().trim().min(1, { message: 'Subject is required' }),
+  date: z.string().datetime(),
+  expiry_date: z.string().datetime(),
+  note: z.string().trim().min(1, { message: 'Note is required' }),
+  terms_and_conditions: z.string().trim().min(1, { message: 'Terms and conditions is required' }),
+  client_id: z.number(),
+  grand_total: z.number().gt(0),
+})

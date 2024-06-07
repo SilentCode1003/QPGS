@@ -119,7 +119,7 @@ enum vat_type {
 model quotation_product {
   id                Int       @id @default(autoincrement())
   quotation_id      String
-  quotation         quotation @relation(fields: [quotation_id], references: [id])
+  quotation         quotation @relation(fields: [quotation_id], references: [id], onDelete: Cascade)
   product_id        Int
   product           product   @relation(fields: [product_id], references: [id])
   entry_name        String

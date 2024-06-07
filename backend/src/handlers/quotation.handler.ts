@@ -268,12 +268,17 @@ export const getQuotation: RequestHandler = async (req, res, next) => {
       },
     })
 
+    if (!quotation) {
+      return res.status(404).json({ message: 'Quotation not found' })
+    }
+
     res.status(200).json({ data: quotation })
   } catch (err) {
     next(err)
   }
 }
 
+// TODO: create updateQuotation handler
 // export const updateQuotation: RequestHandler = async (req, res, next) => {
 //   const validatedId = stringIdParamSchema.safeParse(req.params)
 
@@ -287,3 +292,54 @@ export const getQuotation: RequestHandler = async (req, res, next) => {
 //     next(err)
 //   }
 // }
+
+export const approveQuotation: RequestHandler = async (req, res, next) => {
+  const validatedId = stringIdParamSchema.safeParse(req.params)
+
+  if (!validatedId.success) {
+    return res.status(400).json({ message: !validatedId.error.format() })
+  }
+
+  try {
+    const quotation = await prisma.quotation.update({
+      where: {
+        id: validatedId.data.id,
+      },
+      data: {
+        // TODO: use ensureLogin middleware
+        // approved_by: req.session.user?.id,
+        approved_by: 1,
+        quotation_status_id: CONSTANT.DB_APPROVED_STATUS_ID,
+      },
+    })
+
+    res.status(200).json({ data: quotation })
+  } catch (err) {
+    next(err)
+  }
+}
+
+export const deleteQuotation: RequestHandler = async (req, res, next) => {
+  const validatedId = stringIdParamSchema.safeParse(req.params)
+
+  if (!validatedId.success) {
+    return res.status(400).json({ message: !validatedId.error.format() })
+  }
+
+  try {
+    const quotation = await prisma.quotation.delete({
+      where: {
+        id: validatedId.data.id,
+      },
+    })
+
+    fs.renameSync(
+      `./reports/report-${quotation.id}.docx`,
+      `./reports/report-${quotation.id}-deleted.docx`,
+    )
+
+    res.status(200).json({ data: quotation })
+  } catch (err) {
+    next(err)
+  }
+}
