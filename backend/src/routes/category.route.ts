@@ -6,6 +6,7 @@ import {
   getCategory,
   updateCategory,
 } from '../handlers/category.handler'
+import { isAdmin } from '../middlewares/auth.middleware'
 
 export const categoryRouter = express.Router()
 
@@ -13,13 +14,13 @@ export const categoryRouter = express.Router()
 categoryRouter.get('/', getCategories)
 
 // Only admin can add a category
-categoryRouter.post('/', createCategory)
+categoryRouter.post('/', isAdmin, createCategory)
 
 // Anyone can access category info
 categoryRouter.get('/:id', getCategory)
 
 // Only admin can edit a category
-categoryRouter.put('/:id', updateCategory)
+categoryRouter.put('/:id', isAdmin, updateCategory)
 
 // Only admin can delete a category
-categoryRouter.delete('/:id', deleteCategory)
+categoryRouter.delete('/:id', isAdmin, deleteCategory)

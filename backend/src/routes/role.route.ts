@@ -1,5 +1,6 @@
 import express from 'express'
 import { createRole, getRole, getRoles } from '../handlers/role.handler'
+import { isAdmin } from '../middlewares/auth.middleware'
 
 export const roleRouter = express.Router()
 
@@ -7,7 +8,7 @@ export const roleRouter = express.Router()
 roleRouter.get('/', getRoles)
 
 // Only admin can create a role
-roleRouter.post('/', createRole)
+roleRouter.post('/', isAdmin, createRole)
 
 // Anyone can get a role info
 roleRouter.get('/:id', getRole)

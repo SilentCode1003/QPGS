@@ -7,12 +7,13 @@ import {
   getComments,
   getQuotationComments,
 } from '../handlers/comment.handler'
+import { isAdmin } from '../middlewares/auth.middleware'
 import { quotationRouter } from './quotation.route'
 
 export const commentRouter = express.Router()
 
 // Only Admin can get all comments
-commentRouter.get('/', getComments)
+commentRouter.get('/', isAdmin, getComments)
 
 // Users can see comments on their own quotations
 // Admin can see comments on quotations

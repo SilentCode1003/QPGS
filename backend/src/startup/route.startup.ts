@@ -1,4 +1,5 @@
 import type { Express } from 'express'
+import { ensureLogin } from '../middlewares/auth.middleware.js'
 import { authRouter } from '../routes/auth.route.js'
 import { categoryRouter } from '../routes/category.route.js'
 import { clientRouter } from '../routes/client.route.js'
@@ -12,14 +13,14 @@ import { userRouter } from '../routes/user.route.js'
 
 // Init routes adds all routes to app
 export const initRoutes = (app: Express) => {
-  app.use('/users', userRouter)
   app.use('/auth', authRouter)
-  app.use('/roles', roleRouter)
-  app.use('/terms-and-conditions', termsAndConditionsRouter)
-  app.use('/clients', clientRouter)
-  app.use('/categories', categoryRouter)
-  app.use('/products', productRouter)
-  app.use('/statuses', statusRouter)
-  app.use('/quotations', quotationRouter)
-  app.use('/comments', commentRouter)
+  app.use('/users', ensureLogin, userRouter)
+  app.use('/roles', ensureLogin, roleRouter)
+  app.use('/terms-and-conditions', ensureLogin, termsAndConditionsRouter)
+  app.use('/clients', ensureLogin, clientRouter)
+  app.use('/categories', ensureLogin, categoryRouter)
+  app.use('/products', ensureLogin, productRouter)
+  app.use('/statuses', ensureLogin, statusRouter)
+  app.use('/quotations', ensureLogin, quotationRouter)
+  app.use('/comments', ensureLogin, commentRouter)
 }

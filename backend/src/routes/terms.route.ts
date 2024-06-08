@@ -6,6 +6,7 @@ import {
   getPresets,
   updatePreset,
 } from '../handlers/terms.handler'
+import { isAdmin } from '../middlewares/auth.middleware'
 
 export const termsAndConditionsRouter = express.Router()
 
@@ -13,13 +14,13 @@ export const termsAndConditionsRouter = express.Router()
 termsAndConditionsRouter.get('/', getPresets)
 
 // Only admin can create preset
-termsAndConditionsRouter.post('/', createPreset)
+termsAndConditionsRouter.post('/', isAdmin, createPreset)
 
 // Anyone can get preset
 termsAndConditionsRouter.get('/:id', getPreset)
 
 // Only admin can update a preset
-termsAndConditionsRouter.put('/:id', updatePreset)
+termsAndConditionsRouter.put('/:id', isAdmin, updatePreset)
 
 // Only admin cna delete a preset
-termsAndConditionsRouter.delete('/:id', deletePreset)
+termsAndConditionsRouter.delete('/:id', isAdmin, deletePreset)
