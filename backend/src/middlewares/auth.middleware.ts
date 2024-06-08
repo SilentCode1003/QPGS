@@ -29,7 +29,7 @@ export const naive_isClientCreatorOrAdmin: RequestHandler = async (req, res, nex
     throw new Error(`isAdmin middleware is used on route that doesn't use ensureLogin middleware`)
   }
 
-  if (req.session.user.id === CONSTANT.DB_ADMIN_ROLE_ID) {
+  if (req.session.user.role_id === CONSTANT.DB_ADMIN_ROLE_ID) {
     next()
     return
   }
@@ -60,7 +60,7 @@ export const naive_isUserOrAdmin: RequestHandler = async (req, res, next) => {
     throw new Error(`isAdmin middleware is used on route that doesn't use ensureLogin middleware`)
   }
 
-  if (req.session.user.id === CONSTANT.DB_ADMIN_ROLE_ID) {
+  if (req.session.user.role_id === CONSTANT.DB_ADMIN_ROLE_ID) {
     next()
     return
   }
@@ -76,4 +76,19 @@ export const naive_isUserOrAdmin: RequestHandler = async (req, res, next) => {
   }
 
   next()
+}
+
+export const naive_isQuotationOwnerOrAdmin: RequestHandler = (req, res, next) => {
+  if (!req.session.user) {
+    throw new Error(`isAdmin middleware is used on route that doesn't use ensureLogin middleware`)
+  }
+
+  if (req.session.user.id === CONSTANT.DB_ADMIN_ROLE_ID) {
+    next()
+    return
+  }
+
+  // if (Number(req.params.userId) !== req.session.) {
+
+  // }
 }
