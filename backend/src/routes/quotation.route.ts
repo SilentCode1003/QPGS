@@ -8,7 +8,11 @@ import {
   getQuotation,
   getQuotations,
 } from '../handlers/quotation.handler'
-import { isAdmin } from '../middlewares/auth.middleware'
+import {
+  isAdmin,
+  naive_isQuotationOwnerOrAdmin,
+  naive_isQuotationUserOrAdmin,
+} from '../middlewares/auth.middleware'
 import { userRouter } from './user.route'
 
 export const quotationRouter = express.Router()
@@ -18,7 +22,11 @@ quotationRouter.get('/', isAdmin, getQuotations)
 
 // Admin can view a user's quotations
 // Users can get their own quotations
-userRouter.get('/:userId/created-quotations', getCreatedQuotationsByUserId) // /users/1/created-quotations
+userRouter.get(
+  '/:userId/created-quotations',
+  naive_isQuotationUserOrAdmin,
+  getCreatedQuotationsByUserId,
+) // /users/1/created-quotations
 
 // Only admin can view an admin's approved quotations
 userRouter.get('/:userId/approved-quotations', isAdmin, getApprovedQuotationsByUserId) // /users/1/approved-quotations
@@ -28,7 +36,7 @@ quotationRouter.post('/', createQuotation)
 
 // Admin can view anyone's quotation
 // User can only view his/her own quotation
-quotationRouter.get('/:id', getQuotation)
+quotationRouter.get('/:id', naive_isQuotationOwnerOrAdmin, getQuotation)
 
 // Admin can edit anyone's quotation
 // User can only edit his/her own PENDING quotation
