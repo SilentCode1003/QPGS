@@ -140,7 +140,7 @@ model quotation_product {
 model quotation_comment {
   id           Int       @id @default(autoincrement())
   quotation_id String
-  quotation    quotation @relation(fields: [quotation_id], references: [id])
+  quotation    quotation @relation(fields: [quotation_id], references: [id], onDelete: Cascade)
   body         String    @db.Text
   commenter_id Int
   commenter    user      @relation(fields: [commenter_id], references: [id])

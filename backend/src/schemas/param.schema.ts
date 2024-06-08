@@ -12,3 +12,7 @@ export const stringIdParamSchema = z.object({
 export const numberUserIdSchema = z.object({
   userId: z.coerce.number(),
 })
+
+export const stringQuotationIdSchema = z.object({
+  quotationId: z.string(),
+})
