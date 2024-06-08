@@ -16,6 +16,5 @@ export const updateUserSchema = z.object({
   email: z.string().email().optional(),
   username: z.string().trim().min(1, { message: 'Username is required' }).optional(),
   password: z.string().trim().min(1, { message: 'Password is required' }).optional(),
-  role_id: z.number().optional(),
   job_title: z.string().trim().min(1, { message: 'Job title is required' }).optional(),
 })
