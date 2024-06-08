@@ -4,12 +4,12 @@ import { VatType } from './vat.enum'
 const quotationProductSchema = z.object({
   id: z.number(),
   markup: z.number().nonnegative(),
-  vat_ex: z.number().gt(0),
-  vat_inc: z.number().gt(0),
+  vat_ex: z.coerce.number().gt(0),
+  vat_inc: z.coerce.number().gt(0),
   vat_type: z.nativeEnum(VatType),
   duration: z.number().min(1),
   quantity: z.number().min(1),
-  total_amount: z.number().gt(0),
+  total_amount: z.coerce.number().gt(0),
 })
 
 export const createQuotationSchema = z.object({
@@ -21,7 +21,7 @@ export const createQuotationSchema = z.object({
   terms_and_conditions: z.string().trim().min(1, { message: 'Terms and conditions is required' }),
   client_id: z.number(),
   products: z.array(quotationProductSchema).nonempty(),
-  grand_total: z.number().gt(0),
+  grand_total: z.coerce.number().gt(0),
 })
 
 export const updateQuotationSchema = z.object({
