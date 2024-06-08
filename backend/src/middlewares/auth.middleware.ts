@@ -25,7 +25,11 @@ export const isAdmin: RequestHandler = (req, res, next) => {
 }
 
 export const naive_isClientCreatorOrAdmin: RequestHandler = async (req, res, next) => {
-  if (req.session.user!.id === CONSTANT.DB_ADMIN_ROLE_ID) {
+  if (!req.session.user) {
+    throw new Error(`isAdmin middleware is used on route that doesn't use ensureLogin middleware`)
+  }
+
+  if (req.session.user.id === CONSTANT.DB_ADMIN_ROLE_ID) {
     next()
     return
   }
@@ -44,7 +48,30 @@ export const naive_isClientCreatorOrAdmin: RequestHandler = async (req, res, nex
     next(err)
   }
 
-  if (client?.created_by_id !== req.session.user!.id) {
+  if (client?.created_by_id !== req.session.user.id) {
+    return res.status(403).json({ message: 'Operation not allowed' })
+  }
+
+  next()
+}
+
+export const naive_isUserOrAdmin: RequestHandler = async (req, res, next) => {
+  if (!req.session.user) {
+    throw new Error(`isAdmin middleware is used on route that doesn't use ensureLogin middleware`)
+  }
+
+  if (req.session.user.id === CONSTANT.DB_ADMIN_ROLE_ID) {
+    next()
+    return
+  }
+
+  const validatedId = numberIdParamSchema.safeParse(req.params)
+
+  if (!validatedId.success) {
+    return res.status(400).json({ message: validatedId.error.format() })
+  }
+
+  if (validatedId.data.id !== req.session.user.id) {
     return res.status(403).json({ message: 'Operation not allowed' })
   }
 
