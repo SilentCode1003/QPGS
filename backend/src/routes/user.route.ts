@@ -20,3 +20,5 @@ userRouter.patch('/:id', naive_isUserOrAdmin, updateUser)
 
 // Only admin can delete a user
 userRouter.delete('/:id', isAdmin, deleteUser)
+
+// TODO: Maybe add a change role route and handler
