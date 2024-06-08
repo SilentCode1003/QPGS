@@ -1,11 +1,12 @@
 import { z } from 'zod'
+import { VatType } from './vat.enum'
 
 const quotationProductSchema = z.object({
   id: z.number(),
   markup: z.number().nonnegative(),
   vat_ex: z.number().gt(0),
   vat_inc: z.number().gt(0),
-  vat_type: z.enum(['vat_ex', 'vat_inc']),
+  vat_type: z.nativeEnum(VatType),
   duration: z.number().min(1),
   quantity: z.number().min(1),
   total_amount: z.number().gt(0),
