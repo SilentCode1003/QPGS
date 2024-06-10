@@ -4,7 +4,7 @@ import fs from 'node:fs'
 import { CONSTANT } from '../config/constant.config'
 import { prisma } from '../db/prisma'
 import { numberUserIdSchema, stringIdParamSchema } from '../schemas/param.schema'
-import { createQuotationSchema } from '../schemas/quotation.schema'
+import { createQuotationSchema, updateQuotationSchema } from '../schemas/quotation.schema'
 import { formatDateTimeToMonthDateYear, formatDecimalToPresentation } from '../utils/format.util'
 import { generateQuotationId } from '../utils/generate.util'
 
@@ -127,7 +127,7 @@ export const createQuotation: RequestHandler = async (req, res, next) => {
       break
     }
 
-    if (p.category_id === 1 && products[i]?.duration !== CONSTANT.DB_HARDWARE_CATEGORY_ID) {
+    if (p.category_id === CONSTANT.DB_HARDWARE_CATEGORY_ID && products[i]!.duration >= 1) {
       isDurationIncorrect = true
       break
     }
@@ -199,6 +199,9 @@ export const createQuotation: RequestHandler = async (req, res, next) => {
   }
 
   try {
+    // ! THERE'S A RACE CONDITION WHEN THE CREATION OF QUOTATION IS TOO FAST
+    // The generated id will be duplicated when the creation of quotation is faster than checking the count of records
+    // One way to probably fix this is to use by  using db triggers
     const { id, monthYear } = await generateQuotationId()
 
     const quotation = await prisma.quotation.create({
@@ -276,20 +279,210 @@ export const getQuotation: RequestHandler = async (req, res, next) => {
   }
 }
 
-// TODO: create updateQuotation handler
-// export const updateQuotation: RequestHandler = async (req, res, next) => {
-//   const validatedId = stringIdParamSchema.safeParse(req.params)
+export const updateQuotation: RequestHandler = async (req, res, next) => {
+  // This (and the createQuotation) is an abomination of a function, I'm sorry
+  // This function does 3 steps: validation, update, and generating report
 
-//   if (!validatedId.success) {
-//     return res.status(400).json({ message: validatedId.error.format() })
-//   }
+  // -------------------------------VALIDATION
+  const validatedId = stringIdParamSchema.safeParse(req.params)
 
-//   try {
-//     const
-//   } catch (err) {
-//     next(err)
-//   }
-// }
+  if (!validatedId.success) {
+    return res.status(400).json({ message: validatedId.error.format() })
+  }
+
+  const validatedBody = updateQuotationSchema.safeParse(req.body)
+
+  if (!validatedBody.success) {
+    return res.status(400).json({ message: validatedBody.error.format() })
+  }
+
+  let quotationCategoryId: number | null = null
+
+  try {
+    const categories = await prisma.category.findMany()
+
+    if (!categories.some((category) => category.name === validatedBody.data.type)) {
+      return res.status(400).json({ message: 'Unknown category type' })
+    }
+
+    quotationCategoryId = categories.find(
+      (category) => category.name === validatedBody.data.type,
+    )!.id
+  } catch (err) {
+    next(err)
+  }
+
+  const { products, ...rest } = validatedBody.data
+
+  const hasSeenIds: number[] = []
+  let isDuplicatedId = false
+  let isNotFound = false
+  let isWrongCategory = false
+  let isDurationIncorrect = false
+  let isWrongCalculation = false
+
+  let calculatedVatEx: number | null = null
+  let calculatedVatInc: number | null = null
+  let calculatedTotalAmount: number | null = null
+  let wrongCalculationProductId: number | null = null
+
+  const validatedProducts = []
+
+  for (let i = 0; i < products.length; i++) {
+    if (hasSeenIds.some((id) => id === products[i]!.id)) {
+      isDuplicatedId = true
+      break
+    } else {
+      hasSeenIds.push(products[i]!.id)
+    }
+
+    const p = await prisma.product.findUnique({
+      where: {
+        id: products[i]!.id,
+      },
+    })
+
+    if (!p) {
+      isNotFound = true
+      break
+    }
+
+    if (
+      products[i]!.entry_category_id !== quotationCategoryId ||
+      p.category_id !== quotationCategoryId
+    ) {
+      isWrongCategory = true
+      break
+    }
+
+    if (
+      products[i]!.entry_category_id === 1 &&
+      products[i]?.duration !== CONSTANT.DB_HARDWARE_CATEGORY_ID
+    ) {
+      isDurationIncorrect = true
+      break
+    }
+
+    calculatedVatEx =
+      (products[i]!.markup / 100) * products[i]!.entry_price + products[i]!.entry_price
+    calculatedVatInc = calculatedVatEx * 1.12
+    calculatedTotalAmount =
+      products[i]!.vat_type === 'vat_ex'
+        ? calculatedVatEx * products[i]!.quantity * products[i]!.duration
+        : calculatedVatInc * products[i]!.quantity * products[i]!.duration
+
+    if (
+      calculatedVatEx !== products[i]!.vat_ex ||
+      calculatedVatInc !== products[i]!.vat_inc ||
+      calculatedTotalAmount !== products[i]!.total_amount
+    ) {
+      isWrongCalculation = true
+      wrongCalculationProductId = products[i]!.id
+      break
+    }
+
+    validatedProducts.push({
+      product_id: products[i]!.id,
+      quotation_id: validatedId.data.id,
+      entry_name: products[i]!.entry_name,
+      entry_description: products[i]!.entry_description,
+      entry_price: products[i]!.entry_price,
+      entry_category_id: products[i]!.entry_category_id,
+      markup: products[i]!.markup,
+      vat_ex: products[i]!.vat_ex,
+      vat_inc: products[i]!.vat_inc,
+      vat_type: products[i]!.vat_type,
+      duration: products[i]!.duration,
+      quantity: products[i]!.quantity,
+      total_amount: products[i]!.total_amount,
+    })
+  }
+
+  if (isDuplicatedId) {
+    return res.status(400).json({ message: 'Product id is not unique' })
+  }
+  if (isNotFound) {
+    return res.status(400).json({ message: 'Product not found' })
+  }
+  if (isWrongCategory) {
+    return res.status(400).json({ message: 'Wrong category on a product' })
+  }
+  if (isDurationIncorrect) {
+    return res
+      .status(400)
+      .json({ message: 'Duration can not be greater by 1 if the quotation type is hardware' })
+  }
+  if (isWrongCalculation) {
+    return res.status(400).json({
+      message: `Calculations do not match for product id: ${wrongCalculationProductId}, expected vat_ex: ${calculatedVatEx}, vat_inc: ${calculatedVatInc}, total_amount: ${calculatedTotalAmount}`,
+    })
+  }
+
+  const calculatedGrandTotal = products.reduce((prev, current) => prev + current.total_amount, 0)
+
+  if (calculatedGrandTotal !== validatedBody.data.grand_total) {
+    return res
+      .status(400)
+      .json({ message: `Calculations do not match, expected grand_total: ${calculatedGrandTotal}` })
+  }
+
+  // -------------------------------UPDATE
+  try {
+    const [deletedBatch, qproductBatch, quotation] = await prisma.$transaction([
+      prisma.quotation_product.deleteMany({
+        where: {
+          quotation_id: validatedId.data.id,
+        },
+      }),
+      prisma.quotation_product.createMany({
+        data: validatedProducts,
+      }),
+      prisma.quotation.update({
+        where: {
+          id: validatedId.data.id,
+        },
+        data: {
+          ...rest,
+        },
+        include: {
+          client: true,
+          quotation_product: true,
+        },
+      }),
+    ])
+
+    const templateData = {
+      ...quotation,
+      date: formatDateTimeToMonthDateYear(quotation.date),
+      expiry_date: formatDateTimeToMonthDateYear(quotation.expiry_date),
+      quotation_product: quotation.quotation_product.map((quotationProduct) => {
+        return {
+          ...quotationProduct,
+          vat_ex: formatDecimalToPresentation(quotationProduct.vat_ex),
+          vat_inc: formatDecimalToPresentation(quotationProduct.vat_inc),
+          display_price: formatDecimalToPresentation(
+            quotationProduct.vat_type === 'vat_ex'
+              ? quotationProduct.vat_ex
+              : quotationProduct.vat_inc,
+          ),
+          total_amount: formatDecimalToPresentation(quotationProduct.total_amount),
+        }
+      }),
+      grand_total: formatDecimalToPresentation(quotation.grand_total),
+    }
+
+    // -------------------------------GENERATE
+    const buffer = await createReport({
+      template: quotation.type === 'hardware' ? hardwareTemplate : softwareTemplate,
+      data: templateData,
+    })
+
+    fs.writeFileSync(`./reports/report-${quotation.id}.docx`, buffer)
+    res.status(200).json({ data: quotation })
+  } catch (err) {
+    next(err)
+  }
+}
 
 export const approveQuotation: RequestHandler = async (req, res, next) => {
   const validatedId = stringIdParamSchema.safeParse(req.params)

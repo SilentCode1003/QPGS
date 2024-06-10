@@ -7,6 +7,7 @@ import {
   getCreatedQuotationsByUserId,
   getQuotation,
   getQuotations,
+  updateQuotation,
 } from '../handlers/quotation.handler'
 import {
   isAdmin,
@@ -40,7 +41,7 @@ quotationRouter.get('/:id', naive_isQuotationOwnerOrAdmin, getQuotation)
 
 // Admin can edit anyone's quotation
 // User can only edit his/her own PENDING quotation
-quotationRouter.put('/:id')
+quotationRouter.put('/:id', naive_isQuotationOwnerOrAdmin, updateQuotation)
 
 // Only admin can approve
 quotationRouter.patch('/:id/approve', isAdmin, approveQuotation)
