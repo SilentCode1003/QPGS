@@ -89,7 +89,7 @@ export const naive_isQuotationUserOrAdmin: RequestHandler = (req, res, next) => 
     )
   }
 
-  if (req.session.user.id === CONSTANT.DB_ADMIN_ROLE_ID) {
+  if (req.session.user.role_id === CONSTANT.DB_ADMIN_ROLE_ID) {
     next()
     return
   }
@@ -108,7 +108,7 @@ export const naive_isQuotationOwnerOrAdmin: RequestHandler = async (req, res, ne
     )
   }
 
-  if (req.session.user.id === CONSTANT.DB_ADMIN_ROLE_ID) {
+  if (req.session.user.role_id === CONSTANT.DB_ADMIN_ROLE_ID) {
     next()
     return
   }
