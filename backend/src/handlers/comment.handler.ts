@@ -44,9 +44,7 @@ export const createComment: RequestHandler = async (req, res, next) => {
     const comment = await prisma.quotation_comment.create({
       data: {
         ...validatedBody.data,
-        // TODO: req.session.user.id should exist because of ensureLogin middleware
-        // commenter_id: req.session.user!.id,
-        commenter_id: 1,
+        commenter_id: req.session.user!.id,
       },
     })
 

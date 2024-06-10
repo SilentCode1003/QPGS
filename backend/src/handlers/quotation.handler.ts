@@ -206,9 +206,7 @@ export const createQuotation: RequestHandler = async (req, res, next) => {
         ...validatedDataWithoutProducts,
         id,
         month_year: monthYear,
-        // created_by: req.session.user.id ,
-        // TODO: req.session.user.id is undefined because ensureLogin middleware is not used
-        created_by: 1,
+        created_by: req.session.user!.id,
         quotation_status_id: CONSTANT.DB_PENDING_STATUS_ID,
         quotation_product: {
           createMany: {
@@ -306,9 +304,7 @@ export const approveQuotation: RequestHandler = async (req, res, next) => {
         id: validatedId.data.id,
       },
       data: {
-        // TODO: use ensureLogin middleware
-        // approved_by: req.session.user?.id,
-        approved_by: 1,
+        approved_by: req.session.user!.id,
         quotation_status_id: CONSTANT.DB_APPROVED_STATUS_ID,
       },
     })
