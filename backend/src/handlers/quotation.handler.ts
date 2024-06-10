@@ -258,7 +258,7 @@ export const getQuotation: RequestHandler = async (req, res, next) => {
   const validatedId = stringIdParamSchema.safeParse(req.params)
 
   if (!validatedId.success) {
-    return res.status(400).json({ message: !validatedId.error.format() })
+    return res.status(400).json({ message: validatedId.error.format() })
   }
 
   try {
@@ -283,7 +283,7 @@ export const getQuotation: RequestHandler = async (req, res, next) => {
 //   const validatedId = stringIdParamSchema.safeParse(req.params)
 
 //   if (!validatedId.success) {
-//     return res.status(400).json({ message: !validatedId.error.format() })
+//     return res.status(400).json({ message: validatedId.error.format() })
 //   }
 
 //   try {
@@ -297,7 +297,7 @@ export const approveQuotation: RequestHandler = async (req, res, next) => {
   const validatedId = stringIdParamSchema.safeParse(req.params)
 
   if (!validatedId.success) {
-    return res.status(400).json({ message: !validatedId.error.format() })
+    return res.status(400).json({ message: validatedId.error.format() })
   }
 
   try {
@@ -323,7 +323,7 @@ export const deleteQuotation: RequestHandler = async (req, res, next) => {
   const validatedId = stringIdParamSchema.safeParse(req.params)
 
   if (!validatedId.success) {
-    return res.status(400).json({ message: !validatedId.error.format() })
+    return res.status(400).json({ message: validatedId.error.format() })
   }
 
   try {
