@@ -116,7 +116,7 @@ export const naive_isQuotationOwnerOrAdmin: RequestHandler = async (req, res, ne
   const validatedId = stringIdParamSchema.safeParse(req.params)
 
   if (!validatedId.success) {
-    return res.status(400).json({ message: !validatedId.error.format() })
+    return res.status(400).json({ message: validatedId.error.format() })
   }
 
   let quotation: quotation | null = null
