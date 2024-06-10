@@ -1,0 +1,18 @@
+meta {
+  name: Comment on a quotation
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{BASE_URL}}/comments
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "quotation_id": "106-2024-0005",
+    "body": "test comment"
+  }
+}
