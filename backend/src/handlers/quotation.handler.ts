@@ -333,12 +333,16 @@ export const deleteQuotation: RequestHandler = async (req, res, next) => {
       },
     })
 
-    fs.renameSync(
+    fs.rename(
       `./reports/report-${quotation.id}.docx`,
       `./reports/report-${quotation.id}-deleted.docx`,
+      (err) => {
+        if (err) {
+          return res.status(500).json({ message: 'Cannot delete missing file' })
+        }
+        res.status(200).json({ data: quotation })
+      },
     )
-
-    res.status(200).json({ data: quotation })
   } catch (err) {
     next(err)
   }
