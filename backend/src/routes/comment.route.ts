@@ -29,7 +29,11 @@ quotationRouter.get(
 
 // Users can only comment on their own quotation
 // Admin can comment on any quotation
-commentRouter.post('/', naive_isQuotationOwnerOrAdminCommentRoute, createComment)
+quotationRouter.post(
+  '/:quotationId/comments',
+  naive_isQuotationOwnerOrAdminCommentRoute,
+  createComment,
+)
 
 // Users can get info on their own comments
 // Admin can get info on any comment

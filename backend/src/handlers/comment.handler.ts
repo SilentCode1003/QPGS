@@ -34,6 +34,12 @@ export const getQuotationComments: RequestHandler = async (req, res, next) => {
 }
 
 export const createComment: RequestHandler = async (req, res, next) => {
+  const validatedId = stringQuotationIdSchema.safeParse(req.params)
+
+  if (!validatedId.success) {
+    return res.status(400).json({ message: validatedId.error.format() })
+  }
+
   const validatedBody = createCommentSchema.safeParse(req.body)
 
   if (!validatedBody.success) {
@@ -44,6 +50,7 @@ export const createComment: RequestHandler = async (req, res, next) => {
     const comment = await prisma.quotation_comment.create({
       data: {
         ...validatedBody.data,
+        quotation_id: validatedId.data.quotationId,
         commenter_id: req.session.user!.id,
       },
     })
