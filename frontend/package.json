@@ -1,0 +1,41 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "dev:fast": "next dev --turbo",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@mantine/charts": "^7.10.1",
+    "@mantine/core": "^7.10.1",
+    "@mantine/dates": "^7.10.1",
+    "@mantine/form": "^7.10.1",
+    "@mantine/hooks": "^7.10.1",
+    "@mantine/notifications": "^7.10.1",
+    "@tanstack/react-query": "^5.40.1",
+    "@tanstack/react-query-devtools": "^5.40.1",
+    "axios": "^1.7.2",
+    "dayjs": "^1.11.11",
+    "next": "14.2.3",
+    "react": "^18",
+    "react-dom": "^18",
+    "recharts": "2",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@tanstack/eslint-plugin-query": "^5.43.1",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.3",
+    "postcss": "^8.4.38",
+    "postcss-preset-mantine": "^1.15.0",
+    "postcss-simple-vars": "^7.0.1",
+    "typescript": "^5"
+  }
+}
