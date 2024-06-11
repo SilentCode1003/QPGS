@@ -18,6 +18,7 @@ export function useUser() {
       const res = await apiClient.get<MeResponse>('/auth/me')
       return res.data.data
     },
+    retry: false,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,

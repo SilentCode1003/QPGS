@@ -3,7 +3,7 @@ import { Quotation } from '@/types/Quotation'
 import { useQuery } from '@tanstack/react-query'
 
 type AllQuotationsResponse = {
-  data: Quotation
+  data: Quotation[]
 }
 
 export function useGetAllQuotations() {
