@@ -1,0 +1,18 @@
+meta {
+  name: Update category
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{BASE_URL}}/categories/3
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "service",
+    "is_active": true
+  }
+}

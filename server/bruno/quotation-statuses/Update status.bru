@@ -1,0 +1,17 @@
+meta {
+  name: Update status
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{BASE_URL}}/quotation-statuses/1
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "approved"
+  }
+}

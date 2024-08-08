@@ -1,0 +1,55 @@
+{
+  "name": "server",
+  "version": "0.0.99",
+  "type": "module",
+  "scripts": {
+    "dev": "tsup src/index.ts  --watch --format esm --onSuccess \"node dist/index.js\"",
+    "build": "tsup src/index.ts --minify --format esm",
+    "start": "node dist/index.js",
+    "format": "prettier --write ./src/**/*.{js,ts}",
+    "lint": "eslint src/**/*"
+  },
+  "keywords": [],
+  "author": "",
+  "private": true,
+  "dependencies": {
+    "@prisma/client": "5.16.2",
+    "bcrypt": "^5.1.1",
+    "connect-mongo": "^5.1.0",
+    "cors": "^2.8.5",
+    "dayjs": "^1.11.12",
+    "docx-templates": "^4.13.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "morgan": "^1.10.0",
+    "nanoid": "^5.0.7",
+    "tsx": "^4.16.2",
+    "winston": "^3.13.0",
+    "winston-daily-rotate-file": "^5.0.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.6.0",
+    "@faker-js/faker": "^8.4.1",
+    "@types/bcrypt": "^5.0.2",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/express-session": "^1.18.0",
+    "@types/morgan": "^1.9.9",
+    "@types/node": "^20.14.10",
+    "eslint": "9.x",
+    "globals": "^15.8.0",
+    "prettier": "^3.3.2",
+    "prisma": "^5.16.2",
+    "tsup": "^8.1.0",
+    "typescript": "^5.5.3",
+    "typescript-eslint": "^7.16.0"
+  },
+  "tsup": {
+    "clean": true
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  }
+}

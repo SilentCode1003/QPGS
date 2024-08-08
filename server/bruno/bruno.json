@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "qpgsv99",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

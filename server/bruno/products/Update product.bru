@@ -1,0 +1,17 @@
+meta {
+  name: Update product
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{BASE_URL}}/products/1
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "is_active": true
+  }
+}

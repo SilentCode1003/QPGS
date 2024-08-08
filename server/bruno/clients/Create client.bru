@@ -1,0 +1,20 @@
+meta {
+  name: Create client
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{BASE_URL}}/clients
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "4L Problems",
+    "contact_no": "0929292922",
+    "email": "test@4LProblems.com",
+    "address": "123 St. Asdf, Zxcv, Bnm"
+  }
+}
