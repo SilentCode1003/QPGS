@@ -1,0 +1,38 @@
+meta {
+  name: Create quotation
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{BASE_URL}}/quotations
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "category_id": 1,
+    "subject": "Quotation for xdd",
+    "date": "2020-01-01T00:00:00Z",
+    "expiry_date": "2020-01-01T00:00:00Z",
+    "terms_and_conditions": "50% Downpayment required upon receipt of P.O.",
+    "client_id": 1,
+    "grand_total": "61524.28800000001",
+    "quotation_products": [
+      {
+        "product_id": 1,
+        "entry_name": "Chair",
+        "entry_description": "<ul><li><p>The slim & simple Maple Gaming Keyboard from Dev Byte comes with a sleek body and 7- Color RGB LED Back-lighting for smart functionality</p></li></ul>",
+        "entry_price": "45777",
+        "markup": 20,
+        "vat_ex": "54932.4",
+        "vat_inc": "61524.28800000001",
+        "vat_type": "vat_inc",
+        "duration": 1,
+        "quantity": 1,
+        "total_amount": "61524.28800000001"
+      }
+    ]
+  }
+}

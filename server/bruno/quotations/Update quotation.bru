@@ -1,0 +1,39 @@
+meta {
+  name: Update quotation
+  type: http
+  seq: 5
+}
+
+put {
+  url: {{BASE_URL}}/quotations/180
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "category_id": 1,
+    "subject": "Quotation for xdd",
+    "date": "2024-08-01T00:00:00Z",
+    "expiry_date": "3024-01-01T00:00:00Z",
+    "terms_and_conditions": "50% Downpayment required upon receipt of P.O.",
+    "client_id": 1,
+    "grand_total": "93705.36000000002",
+    "note": "No notes",
+    "quotation_products": [
+      {
+        "product_id": 1,
+        "entry_name": "Wow",
+        "entry_description": "<ul><li><p>The slim & simple Maple Gaming Keyboard from Dev Byte comes with a sleek body and 7- Color RGB LED Back-lighting for smart functionality</p></li></ul>",
+        "entry_price": "55777",
+        "markup": 50,
+        "vat_ex": "83665.5",
+        "vat_inc": "93705.36000000002",
+        "vat_type": "vat_inc",
+        "duration": 1,
+        "quantity": 1,
+        "total_amount": "93705.36000000002"
+      }
+    ]
+  }
+}

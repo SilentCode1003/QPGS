@@ -1,0 +1,17 @@
+meta {
+  name: Update comment
+  type: http
+  seq: 3
+}
+
+patch {
+  url: {{BASE_URL}}/comments/4
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "body": "lorem lorem lorem lorem lorem lorem lorem lorem lorem "
+  }
+}

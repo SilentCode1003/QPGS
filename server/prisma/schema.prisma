@@ -1,0 +1,157 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["omitApi"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model role {
+  id         Int      @id @default(autoincrement())
+  name       String   @unique
+  created_at DateTime @default(now())
+  user       user[]
+}
+
+model user {
+  id                  Int                 @id @default(autoincrement())
+  first_name          String
+  last_name           String
+  email               String              @unique
+  username            String              @unique
+  password            String              @db.Text
+  role_id             Int
+  role                role                @relation(fields: [role_id], references: [id])
+  job_title           String
+  signature           String?             @db.LongText
+  is_active           Boolean             @default(true)
+  created_at          DateTime            @default(now())
+  updated_at          DateTime            @updatedAt
+  client              client[]
+  created_quotations  quotation[]         @relation("created_quotations")
+  approved_quotations quotation[]         @relation("approved_quotations")
+  quotation_comment   quotation_comment[]
+}
+
+model terms_and_conditions_preset {
+  id         Int      @id @default(autoincrement())
+  summary    String   @unique
+  body       String   @db.Text
+  is_active  Boolean  @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model client {
+  id              Int         @id @default(autoincrement())
+  name            String      @unique
+  tel_no          String?
+  contact_no      String
+  email           String
+  address         String      @db.Text
+  created_by_id   Int
+  created_by_user user        @relation(fields: [created_by_id], references: [id])
+  is_active       Boolean     @default(true)
+  created_at      DateTime    @default(now())
+  updated_at      DateTime    @updatedAt
+  quotation       quotation[]
+}
+
+model category {
+  id         Int         @id @default(autoincrement())
+  name       String      @unique
+  is_active  Boolean     @default(true)
+  created_at DateTime    @default(now())
+  updated_at DateTime    @updatedAt
+  product    product[]
+  quotation  quotation[]
+}
+
+model product {
+  id                Int                 @id @default(autoincrement())
+  name              String              @unique
+  description       String              @db.Text
+  price             Decimal             @db.Decimal(10, 2)
+  category_id       Int
+  category          category            @relation(fields: [category_id], references: [id])
+  is_active         Boolean             @default(true)
+  created_at        DateTime            @default(now())
+  updated_at        DateTime            @updatedAt
+  quotation_product quotation_product[]
+}
+
+enum quotation_status {
+  pending
+  approved
+}
+
+model quotation {
+  id                   Int                 @id @default(autoincrement())
+  reference_id         String              @unique
+  month_year           String
+  category_id          Int
+  category             category            @relation(fields: [category_id], references: [id])
+  subject              String
+  date                 DateTime
+  expiry_date          DateTime
+  note                 String?             @db.Text
+  terms_and_conditions String              @db.Text
+  client_id            Int
+  client               client              @relation(fields: [client_id], references: [id])
+  grand_total          Decimal             @db.Decimal(10, 2)
+  quotation_status     quotation_status    @default(pending)
+  created_by_id        Int
+  created_by_user      user                @relation("created_quotations", fields: [created_by_id], references: [id])
+  approved_by_id       Int?
+  approved_by_user     user?               @relation("approved_quotations", fields: [approved_by_id], references: [id])
+  is_active            Boolean             @default(true)
+  created_at           DateTime            @default(now())
+  updated_at           DateTime            @updatedAt
+  quotation_product    quotation_product[]
+  quotation_comment    quotation_comment[]
+}
+
+enum vat_type {
+  vat_ex
+  vat_inc
+}
+
+model quotation_product {
+  id                Int       @id @default(autoincrement())
+  quotation_id      Int
+  quotation         quotation @relation(fields: [quotation_id], references: [id])
+  product_id        Int
+  product           product   @relation(fields: [product_id], references: [id])
+  entry_name        String
+  entry_description String    @db.Text
+  entry_price       Decimal   @db.Decimal(10, 2)
+  markup            Decimal   @db.Decimal(10, 2)
+  vat_ex            Decimal   @db.Decimal(10, 2)
+  vat_inc           Decimal   @db.Decimal(10, 2)
+  vat_type          vat_type
+  duration          Int
+  quantity          Int
+  total_amount      Decimal   @db.Decimal(10, 2)
+
+  @@unique([quotation_id, product_id])
+}
+
+model quotation_comment {
+  id             Int       @id @default(autoincrement())
+  quotation_id   Int
+  quotation      quotation @relation(fields: [quotation_id], references: [id])
+  body           String    @db.Text
+  commenter_id   Int
+  commenter_user user      @relation(fields: [commenter_id], references: [id])
+  is_active      Boolean   @default(true)
+  created_at     DateTime  @default(now())
+  updated_at     DateTime  @updatedAt
+}

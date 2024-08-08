@@ -1,0 +1,18 @@
+meta {
+  name: Create terms and conditions
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{BASE_URL}}/terms-and-conditions
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "summary": "50% Downpayment required",
+    "body": "50% Down payment required upon receipt of P.O"
+  }
+}
