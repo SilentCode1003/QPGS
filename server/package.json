@@ -7,7 +7,11 @@
     "build": "tsup src/index.ts --minify --format esm",
     "start": "node dist/index.js",
     "format": "prettier --write ./src/**/*.{js,ts}",
-    "lint": "eslint src/**/*"
+    "lint": "eslint src/**/*",
+    "db:setup": "prisma migrate dev && prisma db seed",
+    "db:migrate": "primsa migrate dev",
+    "db:reset": "prisma migrate reset",
+    "db:seed": "prisma db seed"
   },
   "keywords": [],
   "author": "",
