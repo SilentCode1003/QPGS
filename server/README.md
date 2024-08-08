@@ -47,6 +47,18 @@ npm run db:reset
 npm run db:seed
 ```
 
+5. To lint code using eslint, run:
+
+```sh
+npm run lint
+```
+
+6. To format code using prettier, run:
+
+```sh
+npm run format
+```
+
 ## Production
 
 1. Compile the source files:
