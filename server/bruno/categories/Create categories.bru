@@ -1,0 +1,17 @@
+meta {
+  name: Create categories
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{BASE_URL}}/categories
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "service"
+  }
+}

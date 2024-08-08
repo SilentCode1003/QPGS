@@ -1,0 +1,19 @@
+meta {
+  name: Get all quotations
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{BASE_URL}}/quotations
+  body: none
+  auth: none
+}
+
+query {
+  ~category_id: 2
+  ~client_id: 1
+  ~quotation_status_id: 3
+  ~created_by_id: 1
+  ~approved_by_id: 1
+}

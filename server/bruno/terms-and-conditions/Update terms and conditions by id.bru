@@ -1,0 +1,17 @@
+meta {
+  name: Update terms and conditions by id
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{BASE_URL}}/terms-and-conditions/1
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "is_active": true
+  }
+}

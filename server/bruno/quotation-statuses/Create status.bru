@@ -1,0 +1,17 @@
+meta {
+  name: Create status
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{BASE_URL}}/quotation-statuses
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "pending"
+  }
+}

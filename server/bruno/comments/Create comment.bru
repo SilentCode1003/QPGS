@@ -1,0 +1,17 @@
+meta {
+  name: Create comment
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{BASE_URL}}/quotations/182/comments
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "body": "hello"
+  }
+}
