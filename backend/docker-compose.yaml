@@ -1,8 +1,0 @@
-services:
-  db:
-    image: mysql
-    environment:
-      - MYSQL_ROOT_PASSWORD=password
-      - MYSQL_DATABASE=quotation_system
-    ports:
-      - 3307:3306
