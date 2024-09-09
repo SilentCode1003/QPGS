@@ -10,7 +10,7 @@ const origin: string[] =
 
 const options: cors.CorsOptions = {
   credentials: true, // Accept cookies
-  exposedHeaders: ['Content-Disposition'],
+  exposedHeaders: ['Content-Disposition'], // To expose file name to client
   origin,
 }
 

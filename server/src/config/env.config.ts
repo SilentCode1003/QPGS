@@ -1,3 +1,6 @@
+// Validates .env
+// Remember to add new env variables to envSchema
+
 import 'dotenv/config'
 import { z } from 'zod'
 

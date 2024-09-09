@@ -1,3 +1,7 @@
+// The Logger that acts like a singleton(because it does not check if there's only one instance running)
+// Logs to console and file if in production
+// Logs to console if in development
+
 import { CONFIG_ENV } from '@/config/env.config'
 import winston from 'winston'
 import 'winston-daily-rotate-file'

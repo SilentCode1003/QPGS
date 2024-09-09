@@ -5,6 +5,7 @@
 - [ ] Node.js v18 or greater
 - [ ] MySQL 8.3.0
 - [ ] MongoDB 7.0.6
+- [ ] [Bruno](https://github.com/usebruno/bruno) (optional)
 
 ## Setup
 
