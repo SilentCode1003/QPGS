@@ -9,7 +9,7 @@
     "format": "prettier --write ./src/**/*.{js,ts}",
     "lint": "eslint src/**/*",
     "db:setup": "prisma migrate dev && prisma db seed",
-    "db:migrate": "primsa migrate dev",
+    "db:migrate": "prisma migrate dev",
     "db:reset": "prisma migrate reset",
     "db:seed": "prisma db seed"
   },
