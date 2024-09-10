@@ -1,9 +1,21 @@
 import dayjs from 'dayjs'
 
+/**
+ * Generates string with current month and year in MMYYYY format
+ * @example
+ * // returns "092024"
+ * generateCurrentMonthYear(new Date())
+ */
 export const generateCurrentMonthYear = (currentDate: dayjs.Dayjs) => {
   return currentDate.format('MMYYYY')
 }
 
+/**
+ * Generates a new quotation reference id with 1MM-YYYY-XXXX format
+ * @example
+ * // returns 109-2024-0002
+ * generateQuotationReferenceId(1, new Date())
+ */
 export const generateQuotationReferenceId = (count: number, currentDate: dayjs.Dayjs) => {
   /**
    * The required reference id example is:  107-       2024-        0001

@@ -1,3 +1,7 @@
+/**
+ * Passes morgan logs to winston Logger
+ */
+
 import { Logger } from '@/utils/logger.util'
 import morgan from 'morgan'
 

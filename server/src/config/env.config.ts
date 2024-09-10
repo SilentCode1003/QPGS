@@ -1,3 +1,6 @@
+// Validates .env
+// Remember to add new env variables to envSchema
+
 import 'dotenv/config'
 import { z } from 'zod'
 
@@ -22,17 +25,28 @@ if (!validatedEnv.success) {
   throw new Error('Invalid .env: ' + JSON.stringify(validatedEnv.error.flatten().fieldErrors))
 }
 
+const {
+  NODE_ENV,
+  DATABASE_URL,
+  MONGODB_URL,
+  SERVER_PORT,
+  SERVER_LOGGING_LEVEL,
+  SERVER_SESSION_SECRET,
+  SERVER_IS_HTTPS,
+  CLIENT_ORIGIN,
+} = validatedEnv.data
+
 export const CONFIG_ENV = {
-  NODE_ENV: validatedEnv.data.NODE_ENV,
+  NODE_ENV,
 
-  DATABASE_URL: validatedEnv.data.DATABASE_URL,
+  DATABASE_URL,
 
-  MONGODB_URL: validatedEnv.data.MONGODB_URL,
+  MONGODB_URL,
 
-  SERVER_PORT: validatedEnv.data.SERVER_PORT,
-  SERVER_LOGGING_LEVEL: validatedEnv.data.SERVER_LOGGING_LEVEL,
-  SERVER_SESSION_SECRET: validatedEnv.data.SERVER_SESSION_SECRET,
-  SERVER_IS_HTTPS: validatedEnv.data.SERVER_IS_HTTPS,
+  SERVER_PORT,
+  SERVER_LOGGING_LEVEL,
+  SERVER_SESSION_SECRET,
+  SERVER_IS_HTTPS,
 
-  CLIENT_ORIGIN: validatedEnv.data.CLIENT_ORIGIN,
+  CLIENT_ORIGIN,
 } as const

@@ -1,36 +1,58 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+# Client
 
-First, run the development server:
+## Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- [ ] Node.js v18 or greater
+
+## Setup
+
+1. Install packages by running:
+
+```sh
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Create a _.env_ file using the _.env.example_ file as a template.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Development
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+1. Start server in watch mode:
 
-## Learn More
+```sh
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+2. To lint code using eslint, run:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```sh
+npm run lint
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Production
 
-## Deploy on Vercel
+1. Compile the source files:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```sh
+npm run build
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+2. Start the server:
+
+```sh
+npm start
+```
+
+## Project Structure
+
+This project's folder structure has taken inspiration from [bulletproof-react](https://github.com/alan2207/bulletproof-react). If you aren't sure about where to create files, read the bulletproof-react docs.
+
+    .
+    ├── api           # React query wrapper hooks for connecting to API
+    ├── app           # Next routes
+    ├── components    # Components that can be used globally
+    ├── config        # Env and constant value data
+    ├── lib           # Api clients
+    ├── public        # Unchanging assets
+    └── utils         # Various utility functions
