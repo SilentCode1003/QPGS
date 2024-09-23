@@ -1,0 +1,1736 @@
+openapi: 3.0.0
+info:
+  title: QPGS Server API
+  description: QPGS API routes list
+  version: 0.0.1
+
+servers:
+  - url: http://localhost:3000/v1
+
+paths:
+  ############################## auth ##############################
+
+  /auth/me:
+    get:
+      tags:
+        - auth
+      summary: Returns the current logged in user information
+      responses:
+        '200':
+          description: The current logged in user information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+
+  /auth/login:
+    post:
+      tags:
+        - auth
+      summary: Log in
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Log in success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+
+  /auth/logout:
+    delete:
+      tags:
+        - auth
+      summary: Log out
+      responses:
+        '200':
+          description: Log out success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+
+  ############################## users ##############################
+
+  /users:
+    get:
+      tags:
+        - users
+      summary: Returns the list of users
+      responses:
+        '200':
+          description: Array of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+
+    post:
+      tags:
+        - users
+      summary: Create a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                last_name:
+                  type: string
+                email:
+                  type: string
+                username:
+                  type: string
+                password:
+                  type: string
+                role_id:
+                  type: number
+                job_title:
+                  type: string
+                signature:
+                  type: string
+                  nullable: true
+      responses:
+        '200':
+          description: User creation success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+
+  /users/{userId}:
+    get:
+      tags:
+        - users
+      summary: Returns a user by id
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: User
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+        '404':
+          description: User not found
+
+    patch:
+      tags:
+        - users
+      summary: Update a user by id
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                is_active:
+                  type: boolean
+                  nullable: true
+                first_name:
+                  type: string
+                  nullable: true
+                last_name:
+                  type: string
+                  nullable: true
+                email:
+                  type: string
+                  nullable: true
+                username:
+                  type: string
+                  nullable: true
+                password:
+                  type: string
+                  nullable: true
+                role_id:
+                  type: number
+                  nullable: true
+                job_title:
+                  type: string
+                  nullable: true
+                signature:
+                  type: string
+                  nullable: true
+      responses:
+        '200':
+          description: User
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+        '404':
+          description: User not found
+
+    delete:
+      tags:
+        - users
+      summary: Delete a user by id
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: User
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+        '404':
+          description: User not found
+
+  /users/password:
+    post:
+      tags:
+        - users
+      summary: Change current logged in user's password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Password change success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+
+  ############################## roles ##############################
+
+  /roles:
+    get:
+      tags:
+        - roles
+      summary: Returns the list of roles
+      responses:
+        '200':
+          description: Array of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Role'
+        '401':
+          description: Invalid credentials
+
+    post:
+      tags:
+        - roles
+      summary: Create a role
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        '200':
+          description: Role creation success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Role'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+
+  /roles/{roleId}:
+    get:
+      tags:
+        - roles
+      summary: Returns a role by id
+      parameters:
+        - name: roleId
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Role
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Role'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+        '404':
+          description: Role not found
+
+    put:
+      tags:
+        - roles
+      summary: Update role by id
+      parameters:
+        - name: roleId
+          in: path
+          required: true
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        '200':
+          description: Role
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Role'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+        '404':
+          description: Role not found
+
+  ############################## terms-and-conditions ##############################
+
+  /terms-and-conditions:
+    get:
+      tags:
+        - terms-and-conditions
+      summary: Returns the list of terms and conditions presets
+      parameters:
+        - in: query
+          name: is_active
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: TermsAndConditions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TermsAndConditions'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+
+    post:
+      tags:
+        - terms-and-conditions
+      summary: Create a terms and conditions preset
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                body:
+                  type: string
+                summary:
+                  type: string
+      responses:
+        '200':
+          description: TermsAndConditions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TermsAndConditions'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+
+  /terms-and-conditions/{termsAndConditionsId}:
+    get:
+      tags:
+        - terms-and-conditions
+      summary: Return the terms and conditions preset by id
+      parameters:
+        - name: termsAndConditionsId
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: TermsAndConditions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TermsAndConditions'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+        '404':
+          description: Terms and conditions preset not found
+
+    patch:
+      tags:
+        - terms-and-conditions
+      summary: Update a terms and conditions preset by id
+      parameters:
+        - name: termsAndConditionsId
+          in: path
+          required: true
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                is_active:
+                  type: boolean
+                  nullable: true
+                body:
+                  type: string
+                  nullable: true
+                summary:
+                  type: string
+                  nullable: true
+      responses:
+        '200':
+          description: TermsAndConditions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TermsAndConditions'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+        '404':
+          description: Terms and conditions preset not found
+
+    delete:
+      tags:
+        - terms-and-conditions
+      summary: Delete a terms and conditions preset by id
+      parameters:
+        - name: termsAndConditionsId
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: TermsAndConditions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TermsAndConditions'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+        '404':
+          description: Terms and conditions preset not found
+
+  ############################## clients ##############################
+
+  /clients:
+    get:
+      tags:
+        - clients
+      summary: Returns the list of clients
+      parameters:
+        - in: query
+          name: is_active
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Client
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Client'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+
+    post:
+      tags:
+        - clients
+      summary: Create a client
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                name:
+                  type: string
+                tel_no:
+                  type: string
+                  nullable: true
+                contact_no:
+                  type: string
+                address:
+                  type: string
+      responses:
+        '200':
+          description: Client
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+
+  /clients/{clientId}:
+    get:
+      tags:
+        - clients
+      summary: Return a client by id
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Client
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+        '404':
+          description: Client not found
+
+    patch:
+      tags:
+        - clients
+      summary: Update a client by id
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                is_active:
+                  type: boolean
+                  nullable: true
+                email:
+                  type: string
+                  nullable: true
+                name:
+                  type: string
+                  nullable: true
+                tel_no:
+                  type: string
+                  nullable: true
+                contact_no:
+                  type: string
+                  nullable: true
+                address:
+                  type: string
+                  nullable: true
+      responses:
+        '200':
+          description: Client
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+        '404':
+          description: Client not found
+
+    delete:
+      tags:
+        - clients
+      summary: Delete a client by id
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Client
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+        '404':
+          description: Client not found
+
+  ############################## categories ##############################
+
+  /categories:
+    get:
+      tags:
+        - categories
+      summary: Returns the list of categories
+      parameters:
+        - in: query
+          name: is_active
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Category
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+
+    post:
+      tags:
+        - categories
+      summary: Create a category
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        '200':
+          description: Category
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+
+  /categories/{categoryId}:
+    get:
+      tags:
+        - categories
+      summary: Return a category by id
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Category
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+        '404':
+          description: Category not found
+
+    patch:
+      tags:
+        - categories
+      summary: Update a category by id
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                is_active:
+                  type: boolean
+                  nullable: true
+                name:
+                  type: string
+                  nullable: true
+      responses:
+        '200':
+          description: Category
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+        '404':
+          description: Category not found
+
+    delete:
+      tags:
+        - categories
+      summary: Delete a category by id
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Category
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+        '404':
+          description: Category not found
+
+  ############################## products ##############################
+
+  /products:
+    get:
+      tags:
+        - products
+      summary: Returns the list of products
+      parameters:
+        - in: query
+          name: is_active
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Product
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+
+    post:
+      tags:
+        - products
+      summary: Create a product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                category_id:
+                  type: number
+                description:
+                  type: string
+                price:
+                  type: number
+      responses:
+        '200':
+          description: Product
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+
+  /products/{productId}:
+    get:
+      tags:
+        - products
+      summary: Return a product by id
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Product
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+        '404':
+          description: Product not found
+
+    patch:
+      tags:
+        - products
+      summary: Update a product by id
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                is_active:
+                  type: boolean
+                  nullable: true
+                name:
+                  type: string
+                  nullable: true
+                category_id:
+                  type: number
+                  nullable: true
+                description:
+                  type: string
+                  nullable: true
+                price:
+                  type: number
+                  nullable: true
+      responses:
+        '200':
+          description: Product
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+        '404':
+          description: Product not found
+
+    delete:
+      tags:
+        - products
+      summary: Delete a product by id
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Product
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+        '404':
+          description: Product not found
+
+  ############################## quotations ##############################
+
+  /quotations:
+    get:
+      tags:
+        - quotations
+      summary: Returns the list of quotations
+      parameters:
+        - in: query
+          name: is_active
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Quotation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Quotation'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+
+    post:
+      tags:
+        - quotations
+      summary: Create a quotation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                category_id:
+                  type: number
+                subject:
+                  type: string
+                date:
+                  type: string
+                expiry_date:
+                  type: string
+                note:
+                  type: string
+                terms_and_conditions:
+                  type: string
+                client_id:
+                  type: number
+                grand_total:
+                  type: number
+                quotation_products:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      product_id:
+                        type: number
+                      entry_name:
+                        type: string
+                      entry_description:
+                        type: string
+                      entry_price:
+                        type: number
+                      markup:
+                        type: number
+                      vat_ex:
+                        type: number
+                      vat_inc:
+                        type: number
+                      vat_type:
+                        type: string
+                        enum: [vat_ex, vat_inc]
+                      duration:
+                        type: number
+                      quantity:
+                        type: number
+                      total_amount:
+                        type: string
+      responses:
+        '200':
+          description: Quotation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Quotation'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+
+  /quotations/recent:
+    get:
+      tags:
+        - quotations
+      summary: Get a list of all quotations sorted by date descending
+      responses:
+        '200':
+          description: Quotation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Quotation'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+
+  /quotations/pending:
+    get:
+      tags:
+        - quotations
+      summary: Get a list of all pending quotations
+      responses:
+        '200':
+          description: Quotation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Quotation'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+
+  /quotations/{quotationId}:
+    get:
+      tags:
+        - quotations
+      summary: Return a quotation by id
+      parameters:
+        - name: quotationId
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Quotation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Quotation'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+        '404':
+          description: Quotation not found
+
+    put:
+      tags:
+        - quotations
+      summary: Update a quotation by id
+      parameters:
+        - name: quotationId
+          in: path
+          required: true
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                category_id:
+                  type: number
+                subject:
+                  type: string
+                date:
+                  type: string
+                expiry_date:
+                  type: string
+                note:
+                  type: string
+                terms_and_conditions:
+                  type: string
+                client_id:
+                  type: number
+                grand_total:
+                  type: number
+                quotation_products:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      product_id:
+                        type: number
+                      entry_name:
+                        type: string
+                      entry_description:
+                        type: string
+                      entry_price:
+                        type: number
+                      markup:
+                        type: number
+                      vat_ex:
+                        type: number
+                      vat_inc:
+                        type: number
+                      vat_type:
+                        type: string
+                        enum: [vat_ex, vat_inc]
+                      duration:
+                        type: number
+                      quantity:
+                        type: number
+                      total_amount:
+                        type: string
+      responses:
+        '200':
+          description: Quotation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Quotation'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+        '404':
+          description: Quotation not found
+
+    delete:
+      tags:
+        - quotations
+      summary: Delete a quotation by id
+      parameters:
+        - name: quotationId
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Quotation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Quotation'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+        '404':
+          description: Quotation not found
+
+  /quotations/{quotationId}/approve:
+    put:
+      tags:
+        - quotations
+      summary: Approve a quotation by id
+      parameters:
+        - name: quotationId
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Quotation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Quotation'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+        '404':
+          description: Quotation not found
+
+  /quotations/{quotationId}/generate:
+    get:
+      tags:
+        - quotations
+      summary: Generate quotation by id
+      parameters:
+        - name: quotationId
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: The generated report
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+        '404':
+          description: Quotation not found
+
+  ############################## comments ##############################
+
+  /quotations/{quotationId}/comments:
+    get:
+      tags:
+        - comments
+      summary: Returns the list of comments
+      parameters:
+        - in: path
+          name: quotationId
+          required: true
+          schema:
+            type: number
+        - in: query
+          name: is_active
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Comment
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+
+    post:
+      tags:
+        - comments
+      summary: Create a comment
+      parameters:
+        - in: path
+          name: quotationId
+          required: true
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                body:
+                  type: string
+      responses:
+        '200':
+          description: Comment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+
+  /comments/{commentId}:
+    patch:
+      tags:
+        - comments
+      summary: Update a comment by id
+      parameters:
+        - name: commentId
+          in: path
+          required: true
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                is_active:
+                  type: boolean
+                  nullable: true
+                body:
+                  type: string
+                  nullable: true
+      responses:
+        '200':
+          description: Comment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+        '404':
+          description: Comment not found
+
+    delete:
+      tags:
+        - comments
+      summary: Delete a comment by id
+      parameters:
+        - name: commentId
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Comment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+        '404':
+          description: Comment not found
+
+  ############################## dashboard ##############################
+
+  /dashboard/quotations-per-month:
+    get:
+      tags:
+        - dashboard
+      summary: Returns the number of quotations per month intended to be visualized in a graph
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        count:
+                          type: number
+                        date:
+                          type: string
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+
+  /dashboard/most-quoted-products:
+    get:
+      tags:
+        - dashboard
+      summary: Returns the number of most quoted products intended to be visualized in a graph
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        value:
+                          type: number
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+
+  /dashboard/pending-count:
+    get:
+      tags:
+        - dashboard
+      summary: Returns the count of pending quotations
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: number
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+
+  /dashboard/current-approved-count:
+    get:
+      tags:
+        - dashboard
+      summary: Returns the count of approved quotations this month with its margin percentage vs the previous month
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      changePercent:
+                        type: number
+                        nullable: true
+                      currentMonthTotalCount:
+                        type: number
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+
+  /dashboard/current-approved-amount:
+    get:
+      tags:
+        - dashboard
+      summary: Returns the total amount of approved quotations this month with its margin percentage the vs previous month
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      changePercent:
+                        type: number
+                        nullable: true
+                      currentMonthTotalAmount:
+                        type: number
+        '400':
+          description: Invalid client input
+        '401':
+          description: Invalid credentials
+
+###################################################################################################################
+#                                                   Components                                                    #
+###################################################################################################################
+
+components:
+  schemas:
+    Role:
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        created_at:
+          type: string
+          format: date
+
+    User:
+      properties:
+        id:
+          type: number
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+        username:
+          type: string
+        password:
+          type: string
+        role_id:
+          type: number
+        job_title:
+          type: string
+        signature:
+          type: string
+          nullable: true
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date
+        updated_at:
+          type: string
+          format: date
+
+    TermsAndConditions:
+      properties:
+        id:
+          type: number
+        summary:
+          type: string
+        body:
+          type: string
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date
+        updated_at:
+          type: string
+          format: date
+
+    Client:
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        tel_no:
+          type: string
+          nullable: true
+        contact_no:
+          type: string
+        email:
+          type: string
+        address:
+          type: string
+        created_by_id:
+          type: number
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date
+        updated_at:
+          type: string
+          format: date
+
+    Category:
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date
+        updated_at:
+          type: string
+          format: date
+
+    Product:
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        category_id:
+          type: number
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date
+        updated_at:
+          type: string
+          format: date
+
+    Quotation:
+      properties:
+        id:
+          type: number
+        reference_id:
+          type: string
+        month_year:
+          type: string
+        category_id:
+          type: number
+        subject:
+          type: string
+        date:
+          type: string
+          format: date
+        expiry_date:
+          type: string
+          format: date
+        note:
+          type: string
+          nullable: true
+        terms_and_conditions:
+          type: string
+        client_id:
+          type: number
+        grand_total:
+          type: string
+        quotation_status:
+          type: string
+          enum: ['pending', 'approved']
+        created_by_id:
+          type: number
+        approved_by_id:
+          type: number
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date
+        updated_at:
+          type: string
+          format: date
+        quotation_product:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuotationProduct'
+
+    QuotationProduct:
+      properties:
+        id:
+          type: number
+        quotation_id:
+          type: number
+        product_id:
+          type: number
+        entry_name:
+          type: string
+        entry_description:
+          type: string
+        entry_price:
+          type: string
+        markup:
+          type: string
+        vat_ex:
+          type: string
+        vat_inc:
+          type: string
+        vat_type:
+          type: string
+          enum: ['vat_ex', 'vat_inc']
+        duration:
+          type: number
+        quantity:
+          type: number
+        total_amount:
+          type: string
+
+    Comment:
+      properties:
+        id:
+          type: number
+        quotation_id:
+          type: number
+        body:
+          type: string
+        commenter_id:
+          type: number
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date
+        updated_at:
+          type: string
+          format: date

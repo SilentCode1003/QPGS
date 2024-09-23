@@ -16,7 +16,8 @@ const envSchema = z.object({
   SERVER_SESSION_SECRET: z.string().trim().min(1),
   SERVER_IS_HTTPS: z.enum(['true', 'false']).transform((value) => value === 'true'),
 
-  CLIENT_ORIGIN: z.string().trim().min(1),
+  CLIENT_ORIGIN_DEV: z.string().trim().min(1),
+  CLIENT_ORIGIN_PROD: z.string().trim().min(1),
 })
 
 const validatedEnv = envSchema.safeParse(process.env)
@@ -33,7 +34,8 @@ const {
   SERVER_LOGGING_LEVEL,
   SERVER_SESSION_SECRET,
   SERVER_IS_HTTPS,
-  CLIENT_ORIGIN,
+  CLIENT_ORIGIN_DEV,
+  CLIENT_ORIGIN_PROD,
 } = validatedEnv.data
 
 export const CONFIG_ENV = {
@@ -48,5 +50,6 @@ export const CONFIG_ENV = {
   SERVER_SESSION_SECRET,
   SERVER_IS_HTTPS,
 
-  CLIENT_ORIGIN,
+  CLIENT_ORIGIN_DEV,
+  CLIENT_ORIGIN_PROD,
 } as const

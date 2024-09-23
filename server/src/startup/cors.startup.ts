@@ -5,8 +5,8 @@ import type { Express } from 'express'
 
 const origin: string[] =
   CONFIG_ENV.NODE_ENV === 'development'
-    ? ['http://localhost:5173', 'http://localhost:3001']
-    : CONFIG_ENV.CLIENT_ORIGIN.split(',')
+    ? CONFIG_ENV.CLIENT_ORIGIN_DEV.split(',')
+    : CONFIG_ENV.CLIENT_ORIGIN_PROD.split(',')
 
 const options: cors.CorsOptions = {
   credentials: true, // Accept cookies

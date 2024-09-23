@@ -56,3 +56,22 @@ This project's folder structure has taken inspiration from [bulletproof-react](h
     ├── lib           # Api clients
     ├── public        # Unchanging assets
     └── utils         # Various utility functions
+
+## Naming Conventions
+
+### Folders
+
+- Prefer one word if possible
+- Use kebab-case
+
+### Pages
+
+- Use kebab-case
+- Use `[id]` on dynamic routes
+- Use `_components` on one time use component on pages
+
+## Notes
+
+- This project uses [Mantine](https://mantine.dev/) component library.
+- API calls should only be called using a react-query wrapper hook (ex. `api/auth/login.ts`)
+- API hooks are organized by resource names (ex. /auth, /clients, etc.)
