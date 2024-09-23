@@ -97,43 +97,41 @@ export default function Review({ prevStep, payload }: CompleteProps) {
 
   return (
     <div>
-      <Container size="sm">
-        <Paper withBorder p={30} mt={30} radius="md">
-          <Title>Review your quotation</Title>
+      <Paper withBorder p={30} mt={30} radius="md">
+        <Title>Review your quotation</Title>
 
-          <ReviewCategory payload={payload} />
+        <ReviewCategory payload={payload} />
 
-          <ReviewInformation payload={payload} />
+        <ReviewInformation payload={payload} />
 
-          <ReviewClient payload={payload} />
+        <ReviewClient payload={payload} />
 
-          <ReviewProducts payload={payload} />
+        <ReviewProducts payload={payload} />
 
-          <Group justify="center">
-            <Text size="lg" fw={700}>
-              Grand Total:{' '}
-            </Text>
-            <Text size="lg" fw={700} c="green">
-              <NumberFormatter
-                prefix="₱"
-                value={payload.grand_total}
-                thousandSeparator=","
-                decimalSeparator="."
-                decimalScale={2}
-              />
-            </Text>
-          </Group>
+        <Group justify="center">
+          <Text size="lg" fw={700}>
+            Grand Total:{' '}
+          </Text>
+          <Text size="lg" fw={700} c="green">
+            <NumberFormatter
+              prefix="₱"
+              value={payload.grand_total}
+              thousandSeparator=","
+              decimalSeparator="."
+              decimalScale={2}
+            />
+          </Text>
+        </Group>
 
-          <Group mt={48} justify="end">
-            <Button type="button" onClick={prevStep} variant="default">
-              Back
-            </Button>
-            <Button onClick={handleCreate} disabled={shouldDisable || isPending}>
-              Create
-            </Button>
-          </Group>
-        </Paper>
-      </Container>
+        <Group mt={48} justify="end">
+          <Button type="button" onClick={prevStep} variant="default">
+            Back
+          </Button>
+          <Button onClick={handleCreate} disabled={shouldDisable || isPending}>
+            Create
+          </Button>
+        </Group>
+      </Paper>
     </div>
   )
 }

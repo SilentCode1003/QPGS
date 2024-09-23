@@ -1,3 +1,5 @@
+// Needed for production
+
 import { CONFIG_ENV } from '@/config/env.config'
 import { Logger } from '@/utils/logger.util'
 import type { Express } from 'express'

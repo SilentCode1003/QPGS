@@ -129,40 +129,38 @@ export default function Step4({
 
   return (
     <div>
-      <Container size="lg">
-        <Paper withBorder p={30} mt={30} radius="md">
-          <Title mb={36}>Quotation Products</Title>
+      <Paper withBorder p={30} mt={30} radius="md">
+        <Title mb={36}>Quotation Products</Title>
 
-          <form onSubmit={form.onSubmit(handleSubmit)}>
-            <Button onClick={handleAddProduct}>Add product</Button>
+        <form onSubmit={form.onSubmit(handleSubmit)}>
+          <Button onClick={handleAddProduct}>Add product</Button>
 
-            <ScrollArea py="lg" scrollbars="x">
-              {fields}
-            </ScrollArea>
+          <ScrollArea py="lg" scrollbars="x">
+            {fields}
+          </ScrollArea>
 
-            <NumberInput
-              className="font-bold"
-              label="Grand Total"
-              prefix="₱"
-              readOnly
-              allowNegative={false}
-              decimalScale={2}
-              fixedDecimalScale={true}
-              decimalSeparator="."
-              thousandSeparator=","
-              key={form.key('grand_total')}
-              {...form.getInputProps('grand_total')}
-            />
+          <NumberInput
+            className="font-bold"
+            label="Grand Total"
+            prefix="₱"
+            readOnly
+            allowNegative={false}
+            decimalScale={2}
+            fixedDecimalScale={true}
+            decimalSeparator="."
+            thousandSeparator=","
+            key={form.key('grand_total')}
+            {...form.getInputProps('grand_total')}
+          />
 
-            <Group mt={48} justify="end">
-              <Button type="button" onClick={prevStep} variant="default">
-                Back
-              </Button>
-              <Button type="submit">Next</Button>
-            </Group>
-          </form>
-        </Paper>
-      </Container>
+          <Group mt={48} justify="end">
+            <Button type="button" onClick={prevStep} variant="default">
+              Back
+            </Button>
+            <Button type="submit">Next</Button>
+          </Group>
+        </form>
+      </Paper>
     </div>
   )
 }

@@ -11,8 +11,6 @@ import {
   Button,
   Container,
   Divider,
-  Flex,
-  Grid,
   Group,
   NumberFormatter,
   Paper,
@@ -26,6 +24,7 @@ import { IconCheck, IconFileTypeDocx } from '@tabler/icons-react'
 import { useRef } from 'react'
 import DescriptionRender from '../../_components/DescriptionRender'
 import Comments from './_components/Comments'
+import ReviewProductItem from '@/app/(create)/quotations/create/_components/ReviewProductItem'
 
 export default function QuotationPage({ params }: { params: { id: string } }) {
   const { data, isLoading, isError } = useGetQuotationById(Number(params.id))
@@ -90,223 +89,225 @@ export default function QuotationPage({ params }: { params: { id: string } }) {
     <div>
       <Title my={32}>Quotation Information</Title>
 
-      <Container size="xs">
-        <Paper withBorder p={30} mt={30} radius="md">
-          {isError && <p>Quotation not found</p>}
-          {isLoading ? (
-            <SlugLoading />
-          ) : (
-            quotation && (
-              <Stack>
-                <Text size="lg" fw={700}>
-                  Details
+      <Paper withBorder p={30} mt={30} radius="md">
+        {isError && <p>Quotation not found</p>}
+        {isLoading ? (
+          <SlugLoading />
+        ) : (
+          quotation && (
+            <Stack>
+              <Text size="lg" fw={700}>
+                Details
+              </Text>
+
+              <div>
+                <Text size="sm">Id</Text>
+                <Text>{quotation.id}</Text>
+              </div>
+
+              <div>
+                <Text size="sm">Reference Id</Text>
+                <Text>{quotation.reference_id}</Text>
+              </div>
+
+              <div>
+                <Text size="sm">Category</Text>
+                <Text>{quotation.category.name}</Text>
+              </div>
+
+              <div>
+                <Text size="sm">Subject</Text>
+                <Text>{quotation.subject}</Text>
+              </div>
+
+              <div>
+                <Text size="sm">Date</Text>
+                <Text>{formatDateTimeToMonthDateYear(quotation.date)}</Text>
+              </div>
+
+              <div>
+                <Text size="sm">Expiry Date</Text>
+                <Text>{formatDateTimeToMonthDateYear(quotation.expiry_date)}</Text>
+              </div>
+
+              <div>
+                <Text size="sm">Note</Text>
+                {quotation.note ? <Text>{quotation.note}</Text> : <Text c="dimmed">Empty</Text>}
+              </div>
+
+              <div>
+                <Text size="sm">Terms and Conditions</Text>
+                <Text>{quotation.terms_and_conditions}</Text>
+              </div>
+
+              <div>
+                <Text size="sm">Client</Text>
+                <Text>{quotation.client.name}</Text>
+              </div>
+
+              <div>
+                <Text size="sm">Grand Total</Text>
+                <NumberFormatter
+                  prefix="₱"
+                  value={quotation.grand_total}
+                  thousandSeparator=","
+                  decimalSeparator="."
+                  decimalScale={2}
+                />
+              </div>
+
+              <div>
+                <Group justify="space-between">
+                  <div>
+                    <Text size="sm">Status</Text>
+                    <QuotationStatusBadge status={quotation.quotation_status} />
+                  </div>
+                </Group>
+              </div>
+
+              {/* TODO: create created_by component */}
+              <div>
+                <Text size="sm">Created By</Text>
+                <Text>
+                  {quotation.created_by_user.first_name + ' ' + quotation.created_by_user.last_name}
                 </Text>
+              </div>
 
-                <div>
-                  <Text size="sm">Id</Text>
-                  <Text>{quotation.id}</Text>
-                </div>
-
-                <div>
-                  <Text size="sm">Reference Id</Text>
-                  <Text>{quotation.reference_id}</Text>
-                </div>
-
-                <div>
-                  <Text size="sm">Category</Text>
-                  <Text>{quotation.category.name}</Text>
-                </div>
-
-                <div>
-                  <Text size="sm">Subject</Text>
-                  <Text>{quotation.subject}</Text>
-                </div>
-
-                <div>
-                  <Text size="sm">Date</Text>
-                  <Text>{formatDateTimeToMonthDateYear(quotation.date)}</Text>
-                </div>
-
-                <div>
-                  <Text size="sm">Expiry Date</Text>
-                  <Text>{formatDateTimeToMonthDateYear(quotation.expiry_date)}</Text>
-                </div>
-
-                <div>
-                  <Text size="sm">Note</Text>
-                  {quotation.note ? <Text>{quotation.note}</Text> : <Text c="dimmed">Empty</Text>}
-                </div>
-
-                <div>
-                  <Text size="sm">Terms and Conditions</Text>
-                  <Text>{quotation.terms_and_conditions}</Text>
-                </div>
-
-                <div>
-                  <Text size="sm">Client</Text>
-                  <Text>{quotation.client.name}</Text>
-                </div>
-
-                <div>
-                  <Text size="sm">Grand Total</Text>
-                  <NumberFormatter
-                    prefix="₱"
-                    value={quotation.grand_total}
-                    thousandSeparator=","
-                    decimalSeparator="."
-                    decimalScale={2}
-                  />
-                </div>
-
-                <div>
-                  <Group justify="space-between">
-                    <div>
-                      <Text size="sm">Status</Text>
-                      <QuotationStatusBadge status={quotation.quotation_status} />
-                    </div>
-                  </Group>
-                </div>
-
-                {/* TODO: create created_by component */}
-                <div>
-                  <Text size="sm">Created By</Text>
+              {/* TODO: create created_by component */}
+              <div>
+                <Text size="sm">Approved By</Text>
+                {quotation.approved_by_user ? (
                   <Text>
-                    {quotation.created_by_user.first_name +
+                    {quotation.approved_by_user.first_name +
                       ' ' +
-                      quotation.created_by_user.last_name}
+                      quotation.approved_by_user.last_name}
                   </Text>
-                </div>
+                ) : (
+                  <Text c="dimmed">Not yet approved</Text>
+                )}
+              </div>
 
-                {/* TODO: create created_by component */}
-                <div>
-                  <Text size="sm">Approved By</Text>
-                  {quotation.approved_by_user ? (
-                    <Text>
-                      {quotation.approved_by_user.first_name +
-                        ' ' +
-                        quotation.approved_by_user.last_name}
-                    </Text>
-                  ) : (
-                    <Text c="dimmed">Not yet approved</Text>
-                  )}
-                </div>
+              {/* TODO: create is_active component */}
+              <div>
+                <Text size="sm">Is Active</Text>
+                <Text>{quotation.is_active.toString()}</Text>
+              </div>
 
-                {/* TODO: create is_active component */}
-                <div>
-                  <Text size="sm">Is Active</Text>
-                  <Text>{quotation.is_active.toString()}</Text>
-                </div>
+              <div>
+                <Text size="sm">Created At</Text>
+                <Text>{formatDateTimeToMonthDateYearTime(quotation.created_at)}</Text>
+              </div>
 
-                <div>
-                  <Text size="sm">Created At</Text>
-                  <Text>{formatDateTimeToMonthDateYearTime(quotation.created_at)}</Text>
-                </div>
+              <div>
+                <Text size="sm">Updated At</Text>
+                <Text>{formatDateTimeToMonthDateYearTime(quotation.updated_at)}</Text>
+              </div>
 
-                <div>
-                  <Text size="sm">Updated At</Text>
-                  <Text>{formatDateTimeToMonthDateYearTime(quotation.updated_at)}</Text>
-                </div>
+              <Divider />
 
-                <Divider />
+              <div>
+                <Stack>
+                  <Text size="lg" fw={700}>
+                    Products
+                  </Text>
 
-                <div>
-                  <Stack>
-                    <Text size="lg" fw={700}>
-                      Products
-                    </Text>
+                  {quotation.quotation_product.map((qp) => (
+                    // TODO: Fix this
+                    // @ts-ignore
+                    <ReviewProductItem key={qp.id} qp={qp} />
+                  ))}
 
-                    {quotation.quotation_product.map((qp) => (
-                      <Paper withBorder p={30} key={qp.id} radius="sm">
-                        <Stack>
-                          <div>
-                            <Text size="xs">Name</Text>
-                            <Text>{qp.entry_name}</Text>
-                          </div>
+                  {/* {quotation.quotation_product.map((qp) => (
+                    <Paper withBorder p={30} key={qp.id} radius="sm">
+                      <Stack>
+                        <div>
+                          <Text size="xs">Name</Text>
+                          <Text>{qp.entry_name}</Text>
+                        </div>
 
-                          <div className="text-sm">
-                            <Text size="xs">Description</Text>
-                            <DescriptionRender content={qp.entry_description} />
-                          </div>
+                        <div className="text-sm">
+                          <Text size="xs">Description</Text>
+                          <DescriptionRender content={qp.entry_description} />
+                        </div>
 
-                          <div className="text-sm">
-                            <Text size="xs">Price</Text>
-                            <NumberFormatter
-                              prefix="₱"
-                              value={qp.entry_price}
-                              thousandSeparator=","
-                              decimalSeparator="."
-                              decimalScale={2}
-                            />
-                          </div>
+                        <div className="text-sm">
+                          <Text size="xs">Price</Text>
+                          <NumberFormatter
+                            prefix="₱"
+                            value={qp.entry_price}
+                            thousandSeparator=","
+                            decimalSeparator="."
+                            decimalScale={2}
+                          />
+                        </div>
 
-                          <div>
-                            <Text size="xs">Markup</Text>
-                            <NumberFormatter
-                              suffix="%"
-                              value={qp.markup}
-                              thousandSeparator=","
-                              decimalSeparator="."
-                              decimalScale={2}
-                            />
-                          </div>
+                        <div>
+                          <Text size="xs">Markup</Text>
+                          <NumberFormatter
+                            suffix="%"
+                            value={qp.markup}
+                            thousandSeparator=","
+                            decimalSeparator="."
+                            decimalScale={2}
+                          />
+                        </div>
 
-                          <div>
-                            <Text size="xs">VAT Excluded Price</Text>
-                            <NumberFormatter
-                              prefix="₱"
-                              value={qp.vat_ex}
-                              thousandSeparator=","
-                              decimalSeparator="."
-                              decimalScale={2}
-                            />
-                          </div>
+                        <div>
+                          <Text size="xs">VAT Excluded Price</Text>
+                          <NumberFormatter
+                            prefix="₱"
+                            value={qp.vat_ex}
+                            thousandSeparator=","
+                            decimalSeparator="."
+                            decimalScale={2}
+                          />
+                        </div>
 
-                          <div>
-                            <Text size="xs">VAT Included Price</Text>
-                            <NumberFormatter
-                              prefix="₱"
-                              value={qp.vat_inc}
-                              thousandSeparator=","
-                              decimalSeparator="."
-                              decimalScale={2}
-                            />
-                          </div>
+                        <div>
+                          <Text size="xs">VAT Included Price</Text>
+                          <NumberFormatter
+                            prefix="₱"
+                            value={qp.vat_inc}
+                            thousandSeparator=","
+                            decimalSeparator="."
+                            decimalScale={2}
+                          />
+                        </div>
 
-                          <div>
-                            <Text size="xs">Selected VAT Type</Text>
-                            <Text size="xs">{qp.vat_type}</Text>
-                          </div>
+                        <div>
+                          <Text size="xs">Selected VAT Type</Text>
+                          <Text size="xs">{qp.vat_type}</Text>
+                        </div>
 
-                          <div>
-                            <Text size="xs">Duration</Text>
-                            <NumberFormatter value={qp.duration} thousandSeparator="," />
-                          </div>
+                        <div>
+                          <Text size="xs">Duration</Text>
+                          <NumberFormatter value={qp.duration} thousandSeparator="," />
+                        </div>
 
-                          <div>
-                            <Text size="xs">Quantity</Text>
-                            <NumberFormatter value={qp.quantity} thousandSeparator="," />
-                          </div>
+                        <div>
+                          <Text size="xs">Quantity</Text>
+                          <NumberFormatter value={qp.quantity} thousandSeparator="," />
+                        </div>
 
-                          <div>
-                            <Text size="xs">Total Amount</Text>
-                            <NumberFormatter
-                              prefix="₱"
-                              value={qp.total_amount}
-                              thousandSeparator=","
-                              decimalSeparator="."
-                              decimalScale={2}
-                            />
-                          </div>
-                        </Stack>
-                      </Paper>
-                    ))}
-                  </Stack>
-                </div>
-              </Stack>
-            )
-          )}
-        </Paper>
-      </Container>
+                        <div>
+                          <Text size="xs">Total Amount</Text>
+                          <NumberFormatter
+                            prefix="₱"
+                            value={qp.total_amount}
+                            thousandSeparator=","
+                            decimalSeparator="."
+                            decimalScale={2}
+                          />
+                        </div>
+                      </Stack>
+                    </Paper>
+                  ))} */}
+                </Stack>
+              </div>
+            </Stack>
+          )
+        )}
+      </Paper>
 
       {!isLoading && !userIsLoading && !isError && (
         <Container size="xs">
