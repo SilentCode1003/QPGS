@@ -1,11 +1,16 @@
 import { CONFIG_CONSTANT } from '@/config/constants.config'
 import { CONFIG_ENV } from '@/config/env.config'
+import { mongooseClient } from '@/db/mongoose'
 import MongoStore from 'connect-mongo'
 import type { Express } from 'express'
 import session from 'express-session'
 
 const options: session.SessionOptions = {
-  store: new MongoStore({ mongoUrl: CONFIG_ENV.MONGODB_URL }),
+  store: MongoStore.create({
+    clientPromise: mongooseClient,
+    dbName: 'quotation_system_session',
+    stringify: false,
+  }),
   name: CONFIG_CONSTANT.SESSION_COOKIE_NAME,
   secret: CONFIG_ENV.SERVER_SESSION_SECRET,
   resave: false,

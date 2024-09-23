@@ -4,6 +4,7 @@ import { prisma } from '@/db/prisma'
 import { notFoundMiddleware } from '@/middlewares/404.middleware'
 import { errorMiddleware } from '@/middlewares/error.middleware'
 import { httpLoggerMiddleware } from '@/middlewares/http-logger.middleware'
+import { initDocs } from '@/providers/swagger.provider'
 import { initCors } from '@/startup/cors.startup'
 import { initProxy } from '@/startup/proxy.startup'
 import { initRoutes } from '@/startup/routes.startup'
@@ -35,6 +36,9 @@ const startServer = () => {
 
   Logger.info('Setting up routes')
   initRoutes(app)
+
+  Logger.info('Setting up swagger docs')
+  initDocs(app)
 
   Logger.info('Adding not found middleware')
   app.use(notFoundMiddleware)

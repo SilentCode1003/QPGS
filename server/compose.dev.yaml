@@ -6,3 +6,8 @@ services:
       - MYSQL_DATABASE=quotation_system
     ports:
       - 3307:3306
+
+  session:
+    image: mongo
+    ports:
+      - 27018:27017
